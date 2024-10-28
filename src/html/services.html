@@ -101,23 +101,39 @@
             margin: 20px 0;
         }
 
+        .chats {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+
+        #imgChats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        #imgChats img {
+            width: 30%; 
+            height: auto;
+        }
+
+        #textChats {
+            font-size: 16px;
+            color: #333;
+            width: 100%;
+            margin: 0 auto; 
+            box-sizing: border-box;
+            text-align: left;
+        }
+
+
     </style>
 
 </head>
 
 <body>
-    <!-- Topbar Start -->
-    <div class="container-fluid bg-light pt-3 d-none d-lg-block ">
-        <div class="container">
-            <div class="row no-gutters">
-                <div class="col-lg-12 text-center text-lg-left mb-2 mb-lg-0">
-                     <div class="d-inline-flex align-items-center w-100 justify-content-between">
-                        <!-- Encima de todo -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="container-fluid position-relative nav-bar p-0">
         <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
@@ -133,8 +149,8 @@
                         <a href="" class="nav-item nav-link active">Home</a> 
                         <a href="" class="nav-item nav-link active">Log In</a>
                         <a href="" class="nav-item nav-link">Register</a>
-                        <a href=""  class="nav-item nav-link">About Us</a> 
-                        <a href="" class="nav-item nav-link">Services</a>
+                        <a href="aboutus.html"  class="nav-item nav-link">About Us</a> 
+                        <a href="services.html" class="nav-item nav-link">Services</a>
                         <a href=""  class="nav-item nav-link">Contact Us</a>
                     </div>
                 </div>
@@ -142,101 +158,6 @@
         </div>
     </div>
     <!-- Navbar End -->
-
-   <!-- About Us Start -->
-    <div class="container">
-        <h1>About Us</h1>
-        <div class="imgparagraph">
-            <!-- Hay que adaptarlo a Movil!! -->
-            <div class="imgtext">
-                <img src="../img/logo.png"> <!-- Insertar Imagen de CashMe -->
-                <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
-                <div id="animatedText"></div>
-            </div>
-            <p class="paragraphNext">En nuestro cuarto año de carrera, somos un equipo entusiasta y comprometido que se ha unido para desarrollar "CashMe", una innovadora aplicación de finanzas personales. Nuestro objetivo es gamificar la gestión financiera, haciendo que el manejo del dinero sea más accesible y divertido para todos. Nos sentimos muy motivados por la posibilidad de empoderar a los usuarios en su viaje hacia la salud financiera, proporcionando herramientas que les ayuden a ahorrar, gastar sabiamente y alcanzar sus metas económicas. Creemos que, al transformar la forma en que las personas interactúan con sus finanzas, podemos hacer una diferencia significativa en sus vidas.</p> 
-        </div>
-
-    </div>
-    <!-- About Us End -->
-
-    <script>
-        const texts = ["CashMe", "Finanzas Personales"];
-        const animatedTextElement = document.getElementById("animatedText");
-
-        function animateText(text, delay) {
-            let fullText = "";
-
-            // Mostrar el texto de forma incremental
-            for (let i = 0; i <= text.length; i++) {
-                setTimeout(() => {
-                    animatedTextElement.innerText = fullText + text.substring(0, i);
-                }, delay * i);
-            }
-
-            // Mostrar el texto de forma decreciente
-            const decrementDelay = delay * text.length; // Tiempo total para mostrar el texto completo
-            setTimeout(() => {
-                for (let i = text.length; i >= 0; i--) {
-                    setTimeout(() => {
-                        animatedTextElement.innerText = fullText + text.substring(0, i);
-                    }, delay * (text.length - i));
-                }
-            }, decrementDelay);
-            
-            return decrementDelay + (delay * text.length); // Retorna el tiempo total que toma mostrar y ocultar el texto
-        }
-
-        function startAnimation() {
-            let delay = 150; // Tiempo en milisegundos entre cada letra
-            let currentTextIndex = 0;
-
-            function animateNextText() {
-                const duration = animateText(texts[currentTextIndex], delay);
-                currentTextIndex = (currentTextIndex + 1) % texts.length; // Cambiar de texto circularmente
-
-                setTimeout(animateNextText, duration + delay); // Esperar a que termine la animación del texto actual
-            }
-
-            animateNextText();
-        }
-
-        // Iniciar la animación al cargar la página
-        window.onload = startAnimation;
-
-    </script>
-
-      <!-- Team Start -->
-      <div class="container">
-        <h1>Team</h1>
-        <div class="allTeam">
-            <div class="memberTeam">
-                <img src="../img/paloma.png" class="foto">
-                <p class="descripcion">Carlos Moragón es un estudiante de Matrícula de Honor. A participado en numerosos proyectos como TruthPaper o un predictor de moléculas. Actualmente se encuentra haciendo prácticas de ciberseguridad mientras termina su grado de Ingeniería de Sistemas de Información y su Máster en Videojuegos.</p>
-            </div>
-            <div class="memberTeam">
-                <img src="../img/paloma.png" class="foto">
-                <p class="descripcion">Carlos Moragón es un estudiante de Matrícula de Honor. A participado en numerosos proyectos como TruthPaper o un predictor de moléculas. Actualmente se encuentra haciendo prácticas de ciberseguridad mientras termina su grado de Ingeniería de Sistemas de Información y su Máster en Videojuegos.</p>
-            </div>
-            <div class="memberTeam">
-                <img src="../img/paloma.png" class="foto">
-                <p class="descripcion">Carlos Moragón es un estudiante de Matrícula de Honor. A participado en numerosos proyectos como TruthPaper o un predictor de moléculas. Actualmente se encuentra haciendo prácticas de ciberseguridad mientras termina su grado de Ingeniería de Sistemas de Información y su Máster en Videojuegos.</p>
-            </div>
-            <div class="memberTeam">
-                <img src="../img/paloma.png" class="foto">
-                <p class="descripcion">Carlos Moragón es un estudiante de Matrícula de Honor. A participado en numerosos proyectos como TruthPaper o un predictor de moléculas. Actualmente se encuentra haciendo prácticas de ciberseguridad mientras termina su grado de Ingeniería de Sistemas de Información y su Máster en Videojuegos.</p>
-            </div>
-            <div class="memberTeam">
-                <img src="../img/paloma.png" class="foto">
-                <p class="descripcion">Carlos Moragón es un estudiante de Matrícula de Honor. A participado en numerosos proyectos como TruthPaper o un predictor de moléculas. Actualmente se encuentra haciendo prácticas de ciberseguridad mientras termina su grado de Ingeniería de Sistemas de Información y su Máster en Videojuegos.</p>
-            </div>
-            <div class="memberTeam">
-                <img src="../img/paloma.png" class="foto">
-                <p class="descripcion">Carlos Moragón es un estudiante de Matrícula de Honor. A participado en numerosos proyectos como TruthPaper o un predictor de moléculas. Actualmente se encuentra haciendo prácticas de ciberseguridad mientras termina su grado de Ingeniería de Sistemas de Información y su Máster en Videojuegos.</p>
-            </div>
-        </div>
-
-    </div>
-    <!-- Team End -->
 
     <!--Services Start-->
     <div class="container">
@@ -313,6 +234,31 @@
                 </div>  
             </div>
             <!-- Rewards End -->
+
+            <!-- Chats Start -->
+            <h2>Chats</h2>
+            <div class="chats">
+                <div id="imgChats">
+                    <img src="../img/anadirgastos.png">
+                    <img src="../img/anadirgastos.png">
+                    <img src="../img/anadirgastos.png">
+                </div>
+                <div id="textChats">
+                    <ul>
+                        <li>
+                            Nuestro Servicio de Mensajería te permite mantener una comunicación fluida tanto con tus amigos como con el administrador de la aplicación. Comparte tus experiencias, consejos y metas financieras en un entorno seguro y privado.
+                        </li>
+                        <li>
+                            Puedes enviar mensajes directos a tus amigos para motivarlos y celebrar logros juntos, así como consultar al administrador sobre dudas o sugerencias que tengas sobre la aplicación.
+                        </li>
+                        <li>
+                            La mensajería es una herramienta esencial para crear una comunidad activa y solidaria, donde cada usuario puede recibir apoyo y compartir sus progresos. ¡Conéctate y disfruta de la interacción social mientras gestionas tus finanzas!
+                        </li>
+                    </ul>
+                    
+                </div>
+            </div>
+            <!-- Chats End -->
         </div>
         
     </div>
