@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>CashMe</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon (falta por añadir) -->
+    <link href="../imgs/logoCashMe.jpg" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../static/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../css/paloma.css" rel="stylesheet">
+
+    <link href="../css/home.css" rel="stylesheet">
+
+    <style>
+        /* Solución overflow */
+        html, body {
+            overflow-x: hidden;
+            overflow-y: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 5%;
+            max-width: 100%;
+        }
+
+        .imgparagraph {
+            display: flex;
+            align-items: flex-start;
+            flex-wrap: wrap; 
+        }
+
+        .imgtext {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
+            
+        }
+
+        .imgtext img {
+            width: 100%;
+            height: auto;
+            max-width: 300px; /* Evitar imágenes excesivamente grandes */
+            object-fit: contain;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        #animatedText {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 24px;
+            text-align: center;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .paragraphNext {
+            flex: 2;
+            max-width: 600px;
+            margin: 1%;
+            overflow-wrap: break-word; /* Prevenir overflow en texto */
+        }
+
+        .allTeam {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .memberTeam {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .foto {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid #333;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .descripcion {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .ServiceNum h2 {
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid green;
+            padding: 10px;
+            margin: 20px 0;
+        }
+
+
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid position-relative nav-bar p-0">
+        <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
+            <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
+                <a href="" class="navbar-brand"> <!-- href a HOME -->
+                    <h1 class="m-0 text-primary"><span class="text-dark">Cash</span>Me</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                    <div class="navbar-nav ml-auto py-0">
+                        <a href="" class="nav-item nav-link active">Home</a> 
+                        <a href="" class="nav-item nav-link active">Log In</a>
+                        <a href="" class="nav-item nav-link">Register</a>
+                        <a href=""  class="nav-item nav-link">About Us</a> 
+                        <a href="" class="nav-item nav-link">Services</a>
+                        <a href=""  class="nav-item nav-link">Contact Us</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+<!-- About Us Start -->
+<div class="container">
+    <div class="imgparagraph">
+        <div class="imgtext">
+            <div class="slogan-container">
+                <span class="main-text">CASH ME</span>
+                <span id="animatedText"></span>
+            </div>
+            <div class="conteudo">
+                <div class="carrosel">
+                    <div class="caixa__card cc__1">ENTIENDE TUS FINANZAS</div>
+                    <div class="caixa__card cc__2">AUMENTA TUS AHORROS</div>
+                    <div class="caixa__card cc__3">GESTIONA TU DINERO</div>
+                    <div class="caixa__card cc__4">PLANIFICA TU FUTURO</div>
+                    <div class="caixa__card cc__5">GESTIONA TUS GASTOS</div>
+                    <div class="caixa__card cc__6">VISUALIZA TU DINERO DE FORMA SENCILLA</div>
+                    <div class="caixa__card cc__7">EL FUTURO YA ESTA AQUI</div>
+                    <div class="caixa__card cc__8">
+                        <img src="../img/logo.png" width="60px">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="imgtext" style="margin-left: 20px;">
+            <img src="../img/logo.png" alt="CashMe Logo" style="width: 100%; height: auto;">
+            <div>
+                <button type="button" class="btn btn-primary btn-custom mr-2">Log IN</button>
+                <button type="button" class="btn btn-secondary btn-custom">Register</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- About Us End -->
+
+    <script>
+        const texts = [" te guia", " te ayuda", " te enseña", " te entiende"];
+        const animatedTextElement = document.getElementById("animatedText");
+
+        function animateText(text, delay) {
+            let fullText = "";
+
+            // Mostrar el texto de forma incremental
+            for (let i = 0; i <= text.length; i++) {
+                setTimeout(() => {
+                    animatedTextElement.innerText = fullText + text.substring(0, i);
+                }, delay * i);
+            }
+
+            // Mostrar el texto de forma decreciente
+            const decrementDelay = delay * text.length; // Tiempo total para mostrar el texto completo
+            setTimeout(() => {
+                for (let i = text.length; i >= 0; i--) {
+                    setTimeout(() => {
+                        animatedTextElement.innerText = fullText + text.substring(0, i);
+                    }, delay * (text.length - i));
+                }
+            }, decrementDelay);
+            
+            return decrementDelay + (delay * text.length); // Retorna el tiempo total que toma mostrar y ocultar el texto
+        }
+
+        function startAnimation() {
+            let delay = 150; // Tiempo en milisegundos entre cada letra
+            let currentTextIndex = 0;
+
+            function animateNextText() {
+                const duration = animateText(texts[currentTextIndex], delay);
+                currentTextIndex = (currentTextIndex + 1) % texts.length; // Cambiar de texto circularmente
+
+                setTimeout(animateNextText, duration + delay); // Esperar a que termine la animación del texto actual
+            }
+
+            animateNextText();
+        }
+
+        // Iniciar la animación al cargar la página
+        window.onload = startAnimation;
+
+    </script>
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 py-3 px-sm-2 px-lg-3" style="margin-top: 30px; overflow-x: hidden; margin-bottom: 1000% !important; padding-bottom: 1000% !important; ">
+        <div class="row pt-3">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <a href="" class="navbar-brand">
+                    <h1 class="text-primary"><span class="text-white">Cash</span>Me</h1>
+                </a>
+                <p>Un proyecto hecho por: Daniel Fernández, Ángel Castillo, Orianna Milone, Javier Martínez, Carlos Moragón y Paloma Pérez de Madrid.</p>
+                <h6 class="text-white text-uppercase mt-3 mb-2" style="letter-spacing: 5px;">Contact me</h6>
+                <div class="d-flex justify-content-start">
+                    <a class="btn btn-outline-primary btn-square mr-2" href="https://github.com/carlosMoragon/CashMe"><i class="fab fa-github"></i></a>
+                    <a class="btn btn-outline-primary btn-square mr-2" href="mailto:example@email.com?subject=Contact%20with%20CashMe"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid bg-dark text-white border-top py-2 px-sm-2 px-md-3" style="border-color: rgba(0, 0, 0, .1) !important;">
+            <div class="row">
+                <div class="col-lg-6 text-center text-md-left mb-2 mb-md-0">
+                    <p class="m-0 text-white-50">Copyright &copy; . All Rights Reserved.</p>
+                </div>
+                <div class="col-lg-6 text-center text-md-right">
+                    <p class="m-0 text-white-50">Designed by <a href="https://github.com/carlosMoragon/CashMe">CashMe Team</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col text-right">
+                <img src="../img/logo.png" alt="Daniel Fernández" class="img-fluid mx-1" style="max-width: 100px;">
+                <img src="../img/logo.png" alt="Ángel Castillo" class="img-fluid mx-1" style="max-width: 100px;">
+                <img src="../img/logo.png" alt="Orianna Milone" class="img-fluid mx-1" style="max-width: 100px;">
+                <img src="../img/logo.png" alt="Javier Martínez" class="img-fluid mx-1" style="max-width: 100px;">
+                <img src="../img/logo.png" alt="Carlos Moragón" class="img-fluid mx-1" style="max-width: 100px;">
+                <img src="../img/logo.png" alt="Paloma Pérez de Madrid" class="img-fluid mx-1" style="max-width: 100px;">
+            </div>
+        </div>
+    </div>
+        
+    <!-- Footer End -->
+
+    <!-- Back to Top -->
+    <!--<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>-->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../static/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../static/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../static/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="../static/js/main.js"></script>
+</body>
+
+</html>
