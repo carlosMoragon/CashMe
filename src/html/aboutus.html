@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>CashMe</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon (falta por añador) -->
+    <link href="../static/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../static/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../css/paloma.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="container-fluid position-relative nav-bar p-0" id="top">
+        <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
+            <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
+                <a href="" class="navbar-brand"> <!-- href a HOME -->
+                    <h1 class="m-0 text-primary"><span class="text-dark">Cash</span>Me</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                    <div class="navbar-nav ml-auto py-0">
+                        <a href="" class="nav-item nav-link active">Home</a> 
+                        <a href="" class="nav-item nav-link active">Log In</a>
+                        <a href="" class="nav-item nav-link">Register</a>
+                        <a href="aboutus.html"  class="nav-item nav-link">About Us</a> 
+                        <a href="services.html" class="nav-item nav-link">Services</a>
+                        <a href=""  class="nav-item nav-link">Contact Us</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+   <!-- About Us Start -->
+    <div class="container">
+        <h1>About Us</h1>
+        <div class="imgparagraph">
+            <!-- Hay que adaptarlo a Movil!! -->
+            <div class="imgtext">
+                <img src="../img/logo.png"> <!-- Insertar Imagen de CashMe -->
+                <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+                <div id="animatedText"></div>
+            </div>
+            <p class="paragraphNext">In our fourth year of studies, we are an enthusiastic and dedicated team that has come together to develop "CashMe," an innovative personal finance app. Our goal is to gamify financial management, making money handling more accessible and enjoyable for everyone. We feel highly motivated by the possibility of empowering users on their journey toward financial health, providing tools to help them save, spend wisely, and achieve their financial goals. We believe that by transforming how people interact with their finances, we can make a significant difference in their lives.</p>
+        </div>
+
+    </div>
+    <!-- About Us End -->
+    <script>
+        const texts = ["CashMe", "Personal Finance"];
+        const animatedTextElement = document.getElementById("animatedText");
+
+        function animateText(text, delay) {
+            let fullText = "";
+
+            // Mostrar el texto de forma incremental
+            for (let i = 0; i <= text.length; i++) {
+                setTimeout(() => {
+                    animatedTextElement.innerText = fullText + text.substring(0, i);
+                }, delay * i);
+            }
+
+            // Mostrar el texto de forma decreciente
+            const decrementDelay = delay * text.length; // Tiempo total para mostrar el texto completo
+            setTimeout(() => {
+                for (let i = text.length; i >= 0; i--) {
+                    setTimeout(() => {
+                        animatedTextElement.innerText = fullText + text.substring(0, i);
+                    }, delay * (text.length - i));
+                }
+            }, decrementDelay);
+            
+            return decrementDelay + (delay * text.length); // Retorna el tiempo total que toma mostrar y ocultar el texto
+        }
+
+        function startAnimation() {
+            let delay = 150; // Tiempo en milisegundos entre cada letra
+            let currentTextIndex = 0;
+
+            function animateNextText() {
+                const duration = animateText(texts[currentTextIndex], delay);
+                currentTextIndex = (currentTextIndex + 1) % texts.length; // Cambiar de texto circularmente
+
+                setTimeout(animateNextText, duration + delay); // Esperar a que termine la animación del texto actual
+            }
+
+            animateNextText();
+        }
+
+        // Iniciar la animación al cargar la página
+        window.onload = startAnimation;
+
+    </script>
+
+    <!-- Team Start -->
+    <div class="container">
+        <h1>Team</h1>
+        <div class="allTeam">
+            <div class="memberTeam">
+                <img src="../img/paloma.png" class="foto">
+                <p class="descripcion">Carlos Moragón is an Honors student who has participated in numerous projects, including TruthPaper and a molecular predictor. He is currently doing an internship in cybersecurity while completing his degree in Information Systems Engineering and his Master’s in Video Game Development.</p>
+            </div>
+            <div class="memberTeam">
+                <img src="../img/paloma.png" class="foto">
+                <p class="descripcion"> Orianna pon lo que quieras no seas pesada </p>
+            </div>
+            <div class="memberTeam">
+                <img src="../img/paloma.png" class="foto">
+                <p class="descripcion">Javi pon lo que te salga del papo</p>
+            </div>
+            <div class="memberTeam">
+                <img src="../img/paloma.png" class="foto">
+                <p class="descripcion">Dani tu tb y pon tu foto!!</p>
+            </div>
+            <div class="memberTeam">
+                <img src="../img/paloma.png" class="foto">
+                <p class="descripcion">Ángel tu lo mismo, fotito y texto de presentación</p>
+            </div>
+            <div class="memberTeam">
+                <img src="../img/paloma.png" class="foto">
+                <p class="descripcion">Paloma Pérez de Madrid, a Computer Engineering student from Madrid, has made significant contributions to various projects, including TruthPaper, Kambur (a Kubeflow MLOps pipeline), and DoveCoin. She is currently gaining practical experience through an internship in the Data department, where she is applying her skills to real-world challenges.</p>
+            </div>
+        </div>
+
+    </div>
+    <!-- Team End -->
+
+    <!-- Back to Top Button -->
+    <a href="#top" class="btn btn-lg btn-primary btn-lg-square back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+
+    <!-- Canvas divertido Start -->
+    <div class="container">
+        <button id="toggleBubbles" class="easter-egg-btn">Do not Push</button>
+        <canvas id="bubbleCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('bubbleCanvas');
+        const ctx = canvas.getContext('2d');
+        const toggleButton = document.getElementById('toggleBubbles');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let bubbles = [];
+        let animationFrame;
+        let isAnimating = false;
+
+        function createBubble() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 10 + 5,
+                speed: Math.random() * 3 + 1,
+                direction: Math.random() * Math.PI * 2
+            };
+        }
+
+        for (let i = 0; i < 100; i++) {
+            bubbles.push(createBubble());
+        }
+
+        function drawBubbles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(0, 123, 255, 0.5)';
+            bubbles.forEach((bubble, index) => {
+                bubble.x += Math.cos(bubble.direction) * bubble.speed;
+                bubble.y += Math.sin(bubble.direction) * bubble.speed;
+
+                if (bubble.x < 0 || bubble.x > canvas.width || bubble.y < 0 || bubble.y > canvas.height) {
+                    bubbles[index] = createBubble();
+                }
+
+                ctx.beginPath();
+                ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            animationFrame = requestAnimationFrame(drawBubbles);
+        }
+
+        // Toggle the animation on button click
+        toggleButton.addEventListener('click', function() {
+            if (!isAnimating) {
+                canvas.style.display = 'block';
+                drawBubbles();
+                toggleButton.textContent = "Okay... so you did push...";
+            } else {
+                cancelAnimationFrame(animationFrame);
+                canvas.style.display = 'none';
+                toggleButton.textContent = "Do not Push";
+            }
+            isAnimating = !isAnimating;
+        });
+
+    </script>
+    <!-- Canvas divertido End -->
+
+
+    <!-- Footer Start -->
+    
+    <footer>
+        <div class="container-fluid bg-dark text-white py-5" style="margin-top: 90px;">
+            <h1 class="text-primary">Cash<span class="text-white">Me</span></h1>
+            <p>Created by Daniel Fernández, Ángel Castillo, Orianna Milone, Javier Martínez, Carlos Moragón, and Paloma Pérez de Madrid.</p>
+            <h6 class="text-uppercase mt-4">Contact</h6>
+            <div class="d-flex">
+                <a class="btn btn-outline-primary btn-square mr-2" href="https://github.com/carlosMoragon/CashMe"><i class="fab fa-github"></i></a>
+                <a class="btn btn-outline-primary btn-square mr-2" href="mailto:example@email.com?subject=Contact%20with%20CashMe"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+        <div class="container-fluid bg-dark text-white border-top py-4">
+            <p class="m-0 text-center">&copy; 2024 CashMe. All Rights Reserved.</p>
+            <p class="m-0 text-center">Designed by <a href="https://github.com/carlosMoragon/CashMe" class="text-white">CashMe Team</a></p>
+        </div>
+    </footer>
+    
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../static/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../static/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../static/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="../static/js/main.js"></script>
+</body>
+
+</html>
