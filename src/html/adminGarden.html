@@ -24,9 +24,10 @@
     <link href="../css/paloma.css" rel="stylesheet">
 
     <style>
-        .container{
+        .container {
             margin: 5%;
         }
+
         .imgparagraph {
             display: flex;
             align-items: flex-start;
@@ -75,14 +76,14 @@
         }
 
         .foto {
-            
+
             width: 100px;
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 10px;
-            margin: 0 auto 4%; 
-            border: 3px solid #333; 
+            margin: 0 auto 4%;
+            border: 3px solid #333;
             display: block;
         }
 
@@ -98,36 +99,73 @@
             padding: 10px;
             margin: 20px 0;
         }
-        #activityCarousel {
-            max-width: 500px; /* Ajusta el ancho del carrusel */
-            margin: 0 auto; /* Centra el carrusel */
+
+        #easter-egg-img {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+            display: none;
+            transition: transform 0.1s ease;
         }
-        .carousel-img {
-            height: 300px; /* Ajusta la altura aquí */
-            object-fit: cover; /* Para que la imagen se ajuste sin distorsionarse */
+
+        .slider-container {
+            display: flex;
+            width: 60%;
+            height: 70vh;
+            overflow: hidden;
+            /* Oculta los elementos que no están visibles */
+            position: relative;
+            transition: transform 0.3s ease-in-out;
         }
+        .slider-container {
+            display: flex;
+            width: 60%;
+            /* Ajusta este ancho según lo necesites */
+            margin-left: 27%;
+            /* Ajusta el margen según prefieras */
+            overflow: hidden;
+        }
+        .slider-container {
+            display: flex;
+            width: 45%;
+            height: 80vh;
+            overflow-x: scroll;
+        }
+
+        .slider-container img {
+            flex: 0 0 100%;
+            width: 100%;
+            object-fit: cover;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+       
     </style>
 
+    <img id="easter-egg-img" src="../img/egg.jpg" alt="Easter Egg">
 </head>
 
 <body>
-<!--Header-->
+    <!--Header-->
     <div class="container-fluid position-relative nav-bar p-0">
         <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
             <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
                 <a href="" class="navbar-brand"> <!-- href a HOME -->
-                    <h1 class="m-0 text-primary"><span class="text-dark">Cash</span>Me <h3>Admin</h3></h1>
+                    <h1 class="m-0 text-primary"><span class="text-dark">Cash</span>Me <h3>Admin</h3>
+                    </h1>
                 </a>
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                     <div class="navbar-nav ml-auto py-0">
-                        <a href="./admin.html" class="nav-item nav-link active">Home</a> 
+                        <a href="./admin.html" class="nav-item nav-link active">Home</a>
                         <a href="" class="nav-item nav-link">Statistics</a>
                         <a href="" class="nav-item nav-link">Users</a>
-                        <a href=""  class="nav-item nav-link">Garden</a> 
-                        <a href=""  class="nav-item nav-link">Profile</a>
+                        <a href="" class="nav-item nav-link">Garden</a>
+                        <!--<a href="" class="nav-item nav-link">Profile</a>-->
                     </div>
                 </div>
             </nav>
@@ -139,85 +177,106 @@
     <!--Garden Options-->
     <div class="container">
         <h1>Garden</h1>
-        <h3>Management</h3> 
+        <h3>Management</h3>
         <div class="ServiceNum">
-             <!-- New Activity Start -->
-             <h2>New Activity</h2>
-             <div id="activityCarousel" class="carousel slide" data-bs-ride="carousel">
-                 <div class="carousel-inner">
-                     <!-- Primera imagen -->
-                     <div class="carousel-item active">
-                         <img src="../img/planta1.jpg" class="d-block w-100 carousel-img" alt="Primera Imagen">
-                     </div>
-                     <!-- Segunda imagen -->
-                     <div class="carousel-item">
-                         <img src="../img/planta2.jpg" class="d-block w-100 carousel-img" alt="Segunda Imagen">
-                     </div>
-                     <!-- Tercera imagen -->
-                     <div class="carousel-item">
-                         <img src="../img/planta3.jpg" class="d-block w-100 carousel-img" alt="Tercera Imagen">
-                     </div>
-                 </div>
-                 <!-- Controles del carrusel -->
-                 <button class="carousel-control-prev" type="button" data-bs-target="#activityCarousel" data-bs-slide="prev">
-                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                     <span class="visually-hidden">Previous</span>
-                 </button>
-                 <button class="carousel-control-next" type="button" data-bs-target="#activityCarousel" data-bs-slide="next">
-                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                     <span class="visually-hidden">Next</span>
-                 </button>
-             </div>
-             <!-- Indicadores del carrusel como botones -->
-             <div class="carousel-indicators mt-3">
-                <button type="button" data-bs-target="#activityCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#activityCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#activityCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <!-- New Activity Start -->
+            <h2 id="new-garden-activity">New Activity</h2>
+            <div class="slider-container">
+                <img class="slider-item" src="../img/planta1.jpg" />
+                <img class="slider-item" src="../img/planta2.jpg" />
+                <img class="slider-item" src="../img/planta3.jpg" />
             </div>
-             <!-- New Activity End -->
-     
-             <!-- Garden Factory Start -->
-             <h2>Garden Factory</h2>
-             <div class="imgparagraph">
-                 <div class="imgtext">
-                     <img src="../img/rewardTree.png">   
-                 </div>
-                 <div class="paragraphNext">
-                     <p>
-                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus ipsa dolor ab magnam corrupti excepturi qui veritatis ipsam cum iste ullam hic in error, nesciunt et accusantium esse molestias eius.
-                         Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam odio in expedita velit rem. Blanditiis modi ab ratione nobis odit, unde esse ipsa vel. Cupiditate perferendis animi veniam.
-                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt fuga dolore cumque nulla laudantium harum quam, distinctio nesciunt earum, perferendis provident sequi eveniet enim blanditiis facere, explicabo ipsam voluptates labore!    
-                     </p>
-                     <button class="btn btn-primary rounded-pill px-3" type="button">New activity</button>
-                     <button class="btn btn-primary rounded-pill px-3" type="button">Garden Factory</button>
-                     <button class="btn btn-primary rounded-pill px-3" type="button">Incidents</button>
-                 </div>  
-             </div>
-             <!-- Garden Factory End -->
-         </div>
-     </div>
-     <!-- Content End -->
+            <!-- New Activity End -->
+
+            <!-- Garden Factory Start -->
+            <h2 id="garden-factory">Garden Factory</h2>
+
+            <div class="container text-center">
+                <div class="row row-cols-auto">
+                    <div class="col">
+                        <button id="add-plant" class="btn btn-primary rounded-pill px-3" type="button">Add
+                            Plant</button>
+                    </div>
+                    <div class="col"> <button id="remove-plant" class="btn btn-primary rounded-pill px-3"
+                            type="button">Remove
+                            Plant</button></div>
+                    <div class="col"> <button id="easter-egg" class="btn btn-primary rounded-pill px-3"
+                            type="button">Easter Egg</button>
+                    </div>
+                    <div id="img-container" class="imgtext">
+                        <!-- Aquí se agregarán o removerán imágenes según los botones -->
+                    </div>
+                </div>
 
 
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
-        <div class="row pt-5">
-            <div class="col-lg-3 col-md-6 mb-5">
-                <a href="" class="navbar-brand">
-                    <h1 class="text-primary"><span class="text-white">Cash</span>Me</h1>
-                </a>
-                <p>Un proyecto hecho por: Daniel Fernández, Ángel Castillo, Orianna Milone, Javier Martínez, Carlos Moragón y Paloma Pérez de Madrid.</p>
+                <!-- Garden Factory End -->
+
+                <script>
+                    // Seleccionar el contenedor donde estarán las imágenes
+                    const imgContainer = document.getElementById('img-container');
+
+                    // Función para agregar una planta (imagen)
+                    document.getElementById('add-plant').addEventListener('click', () => {
+                        const img = document.createElement('img');
+                        img.src = '../img/planta2.jpg';
+                        img.alt = 'Plant';
+                        img.classList.add('plant-image');
+                        imgContainer.appendChild(img);
+                    });
+
+                    // Función para eliminar la última planta agregada
+                    document.getElementById('remove-plant').addEventListener('click', () => {
+                        const plants = imgContainer.getElementsByClassName('plant-image');
+                        if (plants.length > 0) {
+                            imgContainer.removeChild(plants[plants.length - 1]);
+                        }
+                    });
+
+                    // Selección del botón y la imagen del Easter Egg
+                    const easterEggButton = document.getElementById('easter-egg');
+                    const easterEggImg = document.getElementById('easter-egg-img');
+
+                    // Función para activar el Easter Egg
+                    easterEggButton.addEventListener('click', () => {
+                        easterEggImg.style.display = 'block'; // Muestra la imagen
+                    });
+
+                    // Función para mover la imagen con el cursor
+                    document.addEventListener('mousemove', (event) => {
+                        if (easterEggImg.style.display === 'block') {
+                            easterEggImg.style.left = `${event.pageX + 10}px`; // Posición horizontal con un pequeño desplazamiento
+                            easterEggImg.style.top = `${event.pageY + 10}px`;  // Posición vertical con un pequeño desplazamiento
+                        }
+                    });
+                </script>
+
+            </div>
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
+            <div class="row pt-5">
+                <div class="col-lg-3 col-md-6 mb-5">
+                    <a href="" class="navbar-brand">
+                        <h1 class="text-primary"><span class="text-white">Cash</span>Me</h1>
+                    </a>
+                    <p>Un proyecto hecho por: Daniel Fernández, Ángel Castillo, Orianna Milone, Javier Martínez, Carlos
+                        Moragón y Paloma Pérez de Madrid.</p>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
+    <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5"
+        style="border-color: rgba(256, 256, 256, .1) !important;">
         <div class="row">
             <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
                 <p class="m-0 text-white-50">Copyright &copy; . All Rights Reserved.</p>
             </div>
             <div class="col-lg-6 text-center text-md-right">
-                <p class="m-0 text-white-50">Designed by <a href="https://github.com/carlosMoragon/CashMe">CashMe Team</a></p>
+                <p class="m-0 text-white-50">Designed by <a href="https://github.com/carlosMoragon/CashMe">CashMe
+                        Team</a></p>
             </div>
         </div>
     </div>
@@ -239,4 +298,3 @@
 </body>
 
 </html>
-
