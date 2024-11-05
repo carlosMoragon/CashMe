@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>CashMe</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon (falta por añadir) -->
+    <link href="../imgs/logoCashMe.jpg" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../static/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="..\css\pagina_error.css" rel="stylesheet">
+
+    <style>
+        html, body {
+            overflow-x: hidden;
+            overflow-y: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: url('https://cdn.pixabay.com/photo/2015/09/09/23/13/vintage-933793_1280.jpg'); /* Cambia la ruta a la de tu imagen */
+            background-size: cover; /* Ajusta la imagen para que cubra toda la pantalla */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            background-position: center; /* Centra la imagen */
+            background-attachment: fixed;
+        }
+
+        .container {
+            margin: 1%;
+            max-width: 100%;
+            height: fit-content;
+        }
+
+        .center {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        #foto_persona404 {
+            width: 300px;
+            background-color: transparent;
+        }
+
+        #container_foto_persona404 {
+            margin-left: 30px;
+            width: 100%;
+            width: fit-content;
+        }
+
+        #imagen_integral {
+            width: 500px;
+            border-style: groove;
+            border-radius: 10px;
+        }
+
+        #content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        #fullscreenMessage {
+            display: none; /* Inicialmente oculto */
+            position: fixed; /* Posición fija para cubrir toda la pantalla */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex; 
+            flex-direction: column; /* Alinear los elementos verticalmente */
+            justify-content: center; /* Centrar verticalmente */
+            align-items: center; /* Centrar horizontalmente */
+        }
+
+        body.blorred {
+            filter: blur(5px); /* Borra el fondo */
+        }
+
+        canvas {
+            border: 1px solid #000;
+            cursor: crosshair; /* Cambia el cursor al pasar sobre el lienzo */
+            background-color: white;
+            border-radius: 20;
+        }  
+        
+        #pizarra, #formulario {
+            margin: 10px;
+        }
+
+        #formulario *, #pizarra *{
+            margin: 5px;
+        }
+    </style>
+
+    <script defer>
+
+        function enterFullscreen() {
+            const elem = document.documentElement; // Selecciona el documento completo
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari y Opera
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen();
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.getElementById('enableFullscreen').addEventListener('click', function() {
+                enterFullscreen()
+                document.getElementById('fullscreenMessage').style.display = 'none'; // Oculta el mensaje
+                document.body.classList.remove('blorred'); // Remueve el desenfoque al salir del mensaje
+            });
+        });
+
+        function esCorrecto(event){
+            event.preventDefault();
+            let resultado = document.getElementById("input").value;
+
+
+            if(resultado=="-8/3"){
+                window.location.href = "https://www.google.com";
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+    </script>
+
+    
+</head>
+<body>
+    <div id="fullscreenMessage">
+        <h2>¡Por favor, activa el modo de pantalla completa!</h2>
+        
+        <h3>Para una mejor experiencia, por favor permite que esta página se muestre en pantalla completa.</h3>
+        
+        <button id="enableFullscreen" style="border-style: groove;">Activar Pantalla Completa</button>
+    </div>
+
+    <div id="content">
+        <div class="container">
+            <div class="center">
+                <h1>404: NOT FOUND</h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row" style="display: flex; padding:2%;">
+                <div id="container_foto_persona404" class="col-12 col-md-8">
+                    <img id="foto_persona404" class="center" src="../img/foto_404.png" alt="Foto Persona 404">
+                    <h1 class="center" style="width: fit-content;">¿QUÉ INTENTAS?</h1>
+                </div>
+                <div class="col-12 col-md-1" style="width: fit-content;">
+                    <img id="imagen_integral" src="https://cdn-blog.superprof.com/blog_all/wp-content/uploads/latex/c89918a0fc4ebc8f56ec9e59e2726b81e52f6c97.png" alt="Imagen Integral">
+                    <div id="pizarra">
+                        <label>TU PIZARRA</label><br>
+
+                        <canvas id="drawingCanvas" width="800" height="300"></canvas>
+                    </div>
+                    
+                    <form id="formulario">
+                        <label>Introduce la solución:</label><br> <!--(-8/3)-->
+                        <input id="input" type="text"><br>  
+                        <button class="button" onclick="esCorrecto(event)" type="sumit">enviar</button>
+                    </form>
+                        
+                    
+                </div>
+                
+            </div>
+            <div>
+                <h1>¿QUIERES IR A LA PÁGINA PRINCIPAL? RESUELVE LA INTEGRAL.</h1>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx2 = canvas.getContext('2d');
+        let painting = false;
+        let brushSize = 5; // Tamaño del pincel
+        let brushColor = '#000000'; // Color por defecto
+
+        function startPosition(e) {
+            painting = true;
+            draw(e); 
+        }
+
+        function endPosition() {
+            painting = false;
+            ctx2.beginPath(); // Reinicia el trazo
+        }
+
+        function draw(e) {
+            if (!painting) return; // Si no estamos pintando, salimos
+            ctx2.lineWidth = brushSize; // Establece el tamaño del pincel
+            ctx2.lineCap = 'round'; // Hace que el borde del trazo sea redondeado
+            ctx2.strokeStyle = brushColor; // Establece el color del pincel
+
+            // Dibuja la línea desde la posición anterior a la nueva posición
+            ctx2.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            ctx2.stroke(); // Realiza el trazo
+            ctx2.beginPath(); // Reinicia el trazo
+            ctx2.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop); // Mueve la posición inicial
+        }
+
+        // Eventos del mouse
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
+
+        // Cambiar color del pincel
+        document.getElementById('colorPicker').addEventListener('input', (e) => {
+            brushColor = e.target.value; // Actualiza el color según la selección del usuario
+        });
+
+        // Cambiar tamaño del pincel
+        document.getElementById('brushSize').addEventListener('input', (e) => {
+            brushSize = e.target.value; // Actualiza el tamaño según la selección del usuario
+        });
+
+        // Limpiar el canvas
+        document.getElementById('clear').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpia todo el canvas
+        });
+    </script>
+
+</body>
+
+</html>
