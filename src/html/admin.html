@@ -117,10 +117,10 @@
                 <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                     <div class="navbar-nav ml-auto py-0">
                         <a href="" class="nav-item nav-link active">Home</a> 
-                        <a href="" class="nav-item nav-link">Statistics</a>
-                        <a href="" class="nav-item nav-link">Users</a>
+                        <a href="./admin.html#statistics-display" class="nav-item nav-link">Statistics</a>
+                        <a href="./admin.html#users-display" class="nav-item nav-link">Users</a>
                         <a href="./adminGarden.html"  class="nav-item nav-link">Garden</a> 
-                        <a href=""  class="nav-item nav-link">Profile</a>
+                        <!--<a href=""  class="nav-item nav-link">Profile</a>-->
                     </div>
                 </div>
             </nav>
@@ -134,7 +134,7 @@
         <h1>DashBoard </h1>
         <div class="ServiceNum">
             <!-- Statistics Start -->
-            <h2>Statistics</h2>
+            <h2 id="statistics-display">Statistics</h2>
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="color: #333; border-color: #333;">
               <canvas class="my-4 w-100" id="myChart" width="880" height="371" style="display: block; box-sizing: border-box; height: 330px; width: 782px;"></canvas>
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -164,7 +164,7 @@
            </div>
            <!-- Statistics End-->
            <!-- Users --> 
-           <h2> Users </h2>
+           <h2 id="users-display"> Users </h2>
            <div class="imgparagraph">
             <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
                 <div class="list-group">
@@ -215,8 +215,12 @@
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam odio in expedita velit rem. Blanditiis modi ab ratione nobis odit, unde esse ipsa vel. Cupiditate perferendis animi veniam.
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt fuga dolore cumque nulla laudantium harum quam, distinctio nesciunt earum, perferendis provident sequi eveniet enim blanditiis facere, explicabo ipsam voluptates labore!    
                     </p>
-                    <button class="btn btn-primary rounded-pill px-3" type="button">New activity</button>
-                    <button class="btn btn-primary rounded-pill px-3" type="button">Garden Factory</button>
+                    <a href="./adminGarden.html#new-garden-activity">
+                        <button class="btn btn-primary rounded-pill px-3" type="button">New activity</button>
+                    </a>
+                    <a href="./adminGarden.html#garden-factory">
+                        <button class="btn btn-primary rounded-pill px-3" type="button">Garden Factory</button>
+                    </a>
                 </div>  
             </div>
             <!-- Rewards End -->
