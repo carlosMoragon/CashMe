@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Movimientos - CashMe</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon (falta por añadir) -->
+    <link href="../static/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../static/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../css/paloma.css" rel="stylesheet">
+
+    <style>
+        /* Estilos para el botón personalizado */
+        .button {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 1em 0em 1em 1em;
+            background-color: #28a745; /* Color verde */
+            color: #fff; /* Color blanco para el texto */
+            cursor: pointer;
+            box-shadow: 4px 6px 0px black;
+            border: 4px solid #fff; /* Borde blanco */
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            z-index: 100;
+            transition: box-shadow 250ms, transform 250ms, filter 50ms;
+        }
+        .button:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 3px 0px black;
+        }
+        .button:active {
+            filter: saturate(0.75);
+        }
+        .button::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: #fff; /* Fondo blanco en hover */
+            z-index: -1;
+            transform: translateX(-100%);
+            transition: transform 250ms;
+        }
+        .button:hover::after {
+            transform: translateX(0);
+        }
+        .bgContainer {
+            position: relative;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            overflow: hidden;
+            max-width: 35%;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .bgContainer span {
+            position: relative;
+            transform: translateX(-100%);
+            transition: all 250ms;
+        }
+        .button:hover .bgContainer > span {
+            transform: translateX(0);
+        }
+        .arrowContainer {
+            padding: 1em;
+            margin-inline-end: 1em;
+            border: 4px solid #fff; /* Borde blanco */
+            border-radius: 50%;
+            background-color: #fff; /* Fondo blanco */
+            position: relative;
+            overflow: hidden;
+            transition: transform 250ms, background-color 250ms;
+            z-index: 100;
+        }
+        .arrowContainer::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background-color: #28a745; /* Color verde */
+            transform: translateX(-100%);
+            z-index: -1;
+            transition: transform 250ms ease-in-out;
+        }
+        .button:hover .arrowContainer::after {
+            transform: translateX(0);
+        }
+        .button:hover .arrowContainer {
+            transform: translateX(5px);
+        }
+        .button:active .arrowContainer {
+            transform: translateX(8px);
+        }
+        .arrowContainer svg {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar Start -->
+    <div class="container-fluid position-relative nav-bar p-0" id="top">
+        <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
+            <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
+                <a href="home.html" class="navbar-brand">
+                    <h1 class="m-0 text-primary"><span class="text-dark">Cash</span>Me</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                    <div class="navbar-nav ml-auto py-0">
+                        <a href="home.html" class="nav-item nav-link active">Home</a>
+                        <a href="login.html" class="nav-item nav-link">Log In</a>
+                        <a href="register.html" class="nav-item nav-link">Register</a>
+                        <a href="aboutus.html" class="nav-item nav-link">About Us</a>
+                        <a href="services.html" class="nav-item nav-link">Services</a>
+                        <a href="contact.html" class="nav-item nav-link">Contact Us</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+    <!-- Movimientos Section Start -->
+    <div class="container mt-4">
+        <h2 class="text-center">Usuario - MOVIMIENTOS</h2>
+
+        <!-- Filtros -->
+        <div class="d-flex justify-content-center mb-3">
+            <button class="btn btn-outline-secondary mx-2">Filtro 1</button>
+            <button class="btn btn-secondary mx-2">Filtro 2</button>
+            <button class="btn btn-outline-secondary mx-2">Filtro 3</button>
+            <button class="btn btn-outline-secondary mx-2">Filtro 4</button>
+            <button class="btn btn-outline-secondary mx-2">Filtro 5</button>
+        </div>
+
+        <div class="border-top mb-4"></div>
+        <div class="text-center mb-3">
+            <h5>Mis movimientos</h5>
+        </div>
+
+        <!-- Lista de Movimientos -->
+        <div class="list-group">
+            <!-- Botón guay 1 -->
+            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div>Movimiento 1</div>
+                </div>
+                <button class="button">
+                    <div class="bgContainer">
+                        <span>Detalles</span>
+                        <span>Detalles</span>
+                    </div>
+                    <div class="arrowContainer">
+                        <svg width="25" height="25" viewBox="0 0 45 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M43.7678 20.7678C44.7441 19.7915 44.7441 18.2085 43.7678 17.2322L27.8579 1.32233C26.8816 0.34602 25.2986 0.34602 24.3223 1.32233C23.346 2.29864 23.346 3.88155 24.3223 4.85786L38.4645 19L24.3223 33.1421C23.346 34.1184 23.346 35.7014 24.3223 36.6777C25.2986 37.654 26.8816 37.654 27.8579 36.6777L43.7678 20.7678ZM0 21.5L42 21.5V16.5L0 16.5L0 21.5Z" fill="black"></path>
+                        </svg>
+                    </div>
+                </button>
+            </a>
+            <!-- Botón guay -->
+            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div>Movimiento 2</div>
+                </div>
+                <button class="button">
+                    <div class="bgContainer">
+                        <span>Detalles</span>
+                        <span>Detalles</span>
+                    </div>
+                    <div class="arrowContainer">
+                        <svg width="25" height="25" viewBox="0 0 45 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M43.7678 20.7678C44.7441 19.7915 44.7441 18.2085 43.7678 17.2322L27.8579 1.32233C26.8816 0.34602 25.2986 0.34602 24.3223 1.32233C23.346 2.29864 23.346 3.88155 24.3223 4.85786L38.4645 19L24.3223 33.1421C23.346 34.1184 23.346 35.7014 24.3223 36.6777C25.2986 37.654 26.8816 37.654 27.8579 36.6777L43.7678 20.7678ZM0 21.5L42 21.5V16.5L0 16.5L0 21.5Z" fill="black"></path>
+                        </svg>
+                    </div>
+                </button>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div>Movimiento 3</div>
+                </div>
+                <button class="button">
+                    <div class="bgContainer">
+                        <span>Detalles</span>
+                        <span>Detalles</span>
+                    </div>
+                    <div class="arrowContainer">
+                        <svg width="25" height="25" viewBox="0 0 45 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M43.7678 20.7678C44.7441 19.7915 44.7441 18.2085 43.7678 17.2322L27.8579 1.32233C26.8816 0.34602 25.2986 0.34602 24.3223 1.32233C23.346 2.29864 23.346 3.88155 24.3223 4.85786L38.4645 19L24.3223 33.1421C23.346 34.1184 23.346 35.7014 24.3223 36.6777C25.2986 37.654 26.8816 37.654 27.8579 36.6777L43.7678 20.7678ZM0 21.5L42 21.5V16.5L0 16.5L0 21.5Z" fill="black"></path>
+                        </svg>
+                    </div>
+                </button>
+            </a>
+        </div>
+    </div>
+    <!-- Movimientos Section End -->
+
+    <!-- Back to Top Button -->
+    <a href="#top" class="btn btn-lg btn-primary btn-lg-square back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Footer Start -->
+    <footer>
+        <div class="container-fluid bg-dark text-white py-5" style="margin-top: 90px;">
+            <h1 class="text-primary">Cash<span class="text-white">Me</span></h1>
+            <p>Created by Daniel Fernández, Ángel Castillo, Orianna Milone, Javier Martínez, Carlos Moragón, and Paloma Pérez de Madrid.</p>
+            <h6 class="text-uppercase mt-4">Contact</h6>
+            <div class="d-flex">
+                <a class="btn btn-outline-primary btn-square mr-2" href="https://github.com/carlosMoragon/CashMe"><i class="fab fa-github"></i></a>
+                <a class="btn btn-outline-primary btn-square mr-2" href="mailto:example@email.com?subject=Contact%20with%20CashMe"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+        <div class="container-fluid bg-dark text-white border-top py-4">
+            <p class="m-0 text-center">&copy; 2024 CashMe. All Rights Reserved.</p>
+            <p class="m-0 text-center">Designed by <a href="https://github.com/carlosMoragon/CashMe" class="text-white">CashMe Team</a></p>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../static/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../static/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../static/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="../static/js/main.js"></script>
+</body>
+
+</html>
