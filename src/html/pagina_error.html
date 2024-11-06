@@ -23,6 +23,7 @@
 
     <style>
         html, body {
+            font-family: sans-serif;
             overflow-x: hidden;
             overflow-y: hidden;
             width: 100%;
@@ -145,10 +146,24 @@
                 window.location.href = "https://www.google.com";
                 return true;
             }else{
+                document.getElementById("ip").innerText = "Esa no es la \nsolución"
                 return false;
             }
         }
 
+    </script>
+    <script>
+        // Usa el servicio ipify para obtener la IP
+        fetch("https://api.ipify.org?format=json")
+            .then(response => response.json())
+            .then(data => {
+                // Muestra la IP en el elemento con id 'user-ip'
+                document.getElementById("ip").innerText = `¿Te has perdido\n${data.ip}?`;
+            })
+            .catch(error => {
+                console.error("Error obteniendo la IP:", error);
+                document.getElementById("user-ip").innerText = "?";
+            });
     </script>
 
     
@@ -172,7 +187,7 @@
             <div class="row" style="display: flex; padding:2%;">
                 <div id="container_foto_persona404" class="col-12 col-md-8">
                     <img id="foto_persona404" class="center" src="../img/foto_404.png" alt="Foto Persona 404">
-                    <h1 class="center" style="width: fit-content;">¿QUÉ INTENTAS?</h1>
+                    <h1 id="ip" class="center" style="width: fit-content;"></h1>
                 </div>
                 <div class="col-12 col-md-1" style="width: fit-content;">
                     <img id="imagen_integral" src="https://cdn-blog.superprof.com/blog_all/wp-content/uploads/latex/c89918a0fc4ebc8f56ec9e59e2726b81e52f6c97.png" alt="Imagen Integral">
