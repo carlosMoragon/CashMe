@@ -1,0 +1,229 @@
+/* General reset and styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif; /* Ensures all elements use the same font as paloma.css */
+}
+
+body {
+    background-color: #f4f4f9;
+}
+
+/* Navbar styling */
+.nav-bar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar-brand h1 {
+    font-size: 24px;
+    color: #000;
+}
+
+.nav-item {
+    font-size: 18px;
+    color: #333;
+}
+
+.nav-item:hover {
+    color: #40c9ff;
+}
+
+/* Analysis Layout */
+.analysis-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Top Buttons */
+.top-buttons, .middle-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.button {
+    width: 60px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #e0e0e0;
+}
+
+.button.active {
+    background-color: #999999;
+}
+
+.button.large {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+}
+
+.button.small {
+    width: 60px;
+    height: 30px;
+    border-radius: 15px;
+}
+
+/* Statistics Section */
+.statistics {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Cards Container */
+.cards-container {
+    display: flex;
+    gap: 10px;
+    justify-content: space-around;
+    text-align: center;
+}
+
+/* Card Styling */
+.card {
+    position: relative;
+    width: 190px;
+    height: 254px;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 12px;
+    gap: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: -5px;
+    margin: auto;
+    width: 200px;
+    height: 264px;
+    border-radius: 10px;
+    background: linear-gradient(-45deg, #054d1a 0%, #3a6f41 100%);
+    z-index: -10;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg, #67a84b 0%, #8ed775 100%);
+    transform: translate3d(0, 0, 0) scale(0.95);
+    filter: blur(20px);
+    transition: background 0.6s ease;
+}
+
+.card:hover::before {
+    transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
+}
+
+.card:hover::after {
+    background: linear-gradient(-45deg, #88e67e 0%, #b2f4a4 100%);
+    filter: blur(30px);
+}
+
+.heading {
+    font-size: 20px;
+    text-transform: capitalize;
+    font-weight: 700;
+    color: #7bf57b;
+}
+
+.card p:not(.heading) {
+    font-size: 14px;
+}
+
+.card p:last-child {
+    color: #7bf57b;
+    font-weight: 600;
+}
+
+/* List Section */
+.list-section {
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+}
+
+.list {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.list li {
+    height: 30px;
+    background-color: #e0e0e0;
+    border: 1px solid #ddd;
+}
+
+.list h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.list ul {
+    position: relative;
+}
+
+.list ul li {
+    position: relative;
+    left: 0;
+    color: #ffffff;
+    list-style: none;
+    margin: 4px 0;
+    border-left: 2px solid #058523;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.list ul li:hover {
+    left: 10px;
+}
+
+.list ul li span {
+    position: relative;
+    padding: 8px;
+    padding-left: 12px;
+    display: inline-block;
+    z-index: 1;
+    transition: 0.5s;
+}
+
+.list ul li:hover span {
+    color: #111;
+}
+
+.list ul li:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #058523;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: 0.5s;
+}
+
+.list ul li:hover:before {
+    transform: scaleX(1);
+}
