@@ -6,8 +6,7 @@
     <title>CashMe</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!-- Favicon (falta por añador) -->
-    <link href="../static/img/favicon.ico" rel="icon">
+    <link href="../imgs/logoCashMe.jpg" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -53,7 +52,7 @@
     <!-- Navbar End -->
 
     <!--Services Start-->
-    <div class="container">
+    <div class="container" id="top">
         <h1>Services </h1>
         <div class="ServiceNum">
             <!-- DashBoard Start -->
@@ -155,6 +154,7 @@
     <!-- Easter egg Start -->
     <button id="startButton"class="btn-primary" style="margin-left:20%;">Easter Egg</button>
     <canvas id="canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;"></canvas>
+    
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -183,20 +183,20 @@
 
         // Evento de teclado para detectar las flechas
         document.addEventListener('keydown', function(event) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas antes de dibujar el nuevo emoji
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
 
             switch (event.code) {
                 case 'ArrowUp':
-                    drawEmoji(emojis.ArrowUp); // Dibuja el emoji de billete en una posición aleatoria
+                    drawEmoji(emojis.ArrowUp); 
                     break;
                 case 'ArrowDown':
-                    drawEmoji(emojis.ArrowDown); // Dibuja el emoji de dinero volando en una posición aleatoria
+                    drawEmoji(emojis.ArrowDown); 
                     break;
                 case 'ArrowLeft':
-                    drawEmoji(emojis.ArrowLeft); // Dibuja el emoji de bolsa de dinero en una posición aleatoria
+                    drawEmoji(emojis.ArrowLeft); 
                     break;
                 case 'ArrowRight':
-                    drawEmoji(emojis.ArrowRight); // Dibuja el emoji de tarjeta de crédito en una posición aleatoria
+                    drawEmoji(emojis.ArrowRight); 
                     break;
             }
         });
@@ -209,9 +209,6 @@
         });
     </script>
     <!-- Easter egg End-->
-
-
-
 
 
     <!-- Footer Start -->
