@@ -1,0 +1,206 @@
+<!-- Customized Bootstrap Stylesheet -->
+<link href="../css/paloma.css" rel="stylesheet">
+<div class="container">
+    <h1>Team</h1>
+    <div class="allTeam">
+    <style>
+      .paragraphNext {
+        flex: 2;
+        max-width: 50%;
+        margin: 1%;
+        text-align: justify;
+        }
+
+        .allTeam {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5%;
+        }
+
+        .memberTeam {
+        margin-bottom: 5%;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 5%;
+        box-shadow: 0 2% 8% rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+
+        .foto {
+        width: 50%;
+        height: auto;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 5%;
+        border: 3px solid #333;
+        display: block;
+        }
+
+        .descripcion {
+        font-size: 1em;
+        color: #333;
+        }
+
+        .allTeam {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5%;
+        }
+
+        .memberTeam {
+        background: #2cb5a0;
+        width: 13rem;
+        padding-top: 25px;
+        padding-bottom: 25px;
+        padding-left: 20px;
+        padding-right: 20px;
+        border: 4px solid #7cdacc;
+        box-shadow: 0 6px 10px rgba(207, 212, 222, 1);
+        border-radius: 10px;
+        text-align: center;
+        color: #fff;
+        font-family: "Poppins", sans-serif;
+        transition: all 0.3s ease;
+        }
+
+        .memberTeam:hover {
+        transform: translateY(-10px);
+        }
+
+        .foto {
+        overflow: hidden;
+        object-fit: cover;
+        width: 5rem;
+        height: 5rem;
+        border: 4px solid #7cdacc;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        }
+
+        .foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        }
+
+        .descripcion {
+        margin-top: 20px;
+        font-weight: 600;
+        font-size: 18px;
+        color: #fff;
+        }
+
+        .descripcion span {
+        display: block;
+        font-weight: 200;
+        font-size: 16px;
+        }
+
+        .social-media:before {
+        content: " ";
+        display: block;
+        width: 100%;
+        height: 2px;
+        margin: 20px 0;
+        background: #7cdacc;
+        }
+
+        .social-media a {
+        position: relative;
+        margin-right: 15px;
+        text-decoration: none;
+        color: inherit;
+        }
+
+        .social-media a:last-child {
+        margin-right: 0;
+        }
+
+        .social-media a svg {
+        width: 1.1rem;
+        fill: currentColor;
+        }
+
+        /*-- Tooltip Social Media --*/
+        .tooltip-social {
+        background: #262626;
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        padding: 0.5rem 0.4rem;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, -90%);
+        transition: all 0.2s ease;
+        z-index: 1;
+        }
+
+        .tooltip-social:after {
+        content: " ";
+        position: absolute;
+        bottom: 1px;
+        left: 50%;
+        border: solid;
+        border-width: 10px 10px 0 10px;
+        border-color: transparent;
+        transform: translate(-50%, 100%);
+        }
+
+        .social-media a .tooltip-social:after {
+        border-top-color: #262626;
+        }
+
+        .social-media a:hover .tooltip-social {
+        opacity: 1;
+        transform: translate(-50%, -130%);
+        }
+
+        @media (max-width: 768px) {
+        .allTeam {
+            grid-template-columns: 1fr;
+        }
+
+        .memberTeam {
+            padding: 3%;
+            margin-bottom: 3%;
+        }
+        }
+
+    </style>
+
+    <div class="allTeam">
+        <div class="memberTeam">
+            <img src="../img/paloma.png" class="foto">
+            <p class="descripcion">Carlos Moragón is an Honors student who has participated in numerous projects, including TruthPaper and a molecular predictor. He is currently doing an internship in cybersecurity while completing his degree in Information Systems Engineering and his Master’s in Video Game Development.</p>
+        </div>
+        <div class="memberTeam">
+            <img src="../img/paloma.png" class="foto">
+            <p class="descripcion"> Orianna pon lo que quieras no seas pesada </p>
+        </div>
+        <div class="memberTeam">
+            <img src="../img/paloma.png" class="foto">
+            <p class="descripcion">Javi Martinez, a technology enthusiast currently completing my Bachelor's degree in Information Systems Engineering. I have hands-on implementing Machine Learning and Deep Learning models. With Cashme, my goal is to revolutionize the world of digital finance, I am committed to building a platform that empowers people to manage their finances effortlessly and intuitively, giving them full control over their money.</p>
+        </div>
+        <div class="memberTeam">
+            <img src="../img/paloma.png" class="foto">
+            <p class="descripcion">Dani tu tb y pon tu foto!!</p>
+        </div>
+        <div class="memberTeam">
+            <img src="../img/paloma.png" class="foto">
+            <p class="descripcion">Ángel tu lo mismo, fotito y texto de presentación</p>
+        </div>
+        <div class="memberTeam">
+            <img src="../img/paloma.png" class="foto">
+            <p class="descripcion">Paloma Pérez de Madrid, a Computer Engineering student from Madrid, has made significant contributions to various projects, including TruthPaper, Kambur (a Kubeflow MLOps pipeline), and DoveCoin.</p>
+        </div>
+    </div>
+</div>
