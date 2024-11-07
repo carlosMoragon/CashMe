@@ -118,6 +118,7 @@
             position: relative;
             transition: transform 0.3s ease-in-out;
         }
+
         .slider-container {
             display: flex;
             width: 60%;
@@ -126,6 +127,7 @@
             /* Ajusta el margen según prefieras */
             overflow: hidden;
         }
+
         .slider-container {
             display: flex;
             width: 45%;
@@ -140,8 +142,6 @@
             margin-left: auto;
             margin-right: auto;
         }
-
-       
     </style>
 
     <img id="easter-egg-img" src="../img/egg.jpg" alt="Easter Egg">
@@ -162,8 +162,8 @@
                 <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                     <div class="navbar-nav ml-auto py-0">
                         <a href="./admin.html" class="nav-item nav-link active">Home</a>
-                        <a href="" class="nav-item nav-link">Statistics</a>
-                        <a href="" class="nav-item nav-link">Users</a>
+                        <a href="./admin.html#statistics-display" class="nav-item nav-link">Statistics</a>
+                        <a href="./admin.html#users-display" class="nav-item nav-link">Users</a>
                         <a href="" class="nav-item nav-link">Garden</a>
                         <!--<a href="" class="nav-item nav-link">Profile</a>-->
                     </div>
@@ -192,13 +192,13 @@
             <h2 id="garden-factory">Garden Factory</h2>
 
             <div class="container text-center">
-                <div class="row row-cols-auto">
-                    <div class="paragraphNext">
-                        <p>
-                            <button id="add-plant" class="btn btn-primary rounded-pill px-3" type="button">Add Plant</button>
-                            <button id="remove-plant" class="btn btn-primary rounded-pill px-3" type="button">Remove Plant</button>
-                            <button id="easter-egg" class="btn btn-primary rounded-pill px-3" type="button">Easter Egg</button>
-                        </p>
+                <div class="paragraphNext">
+                    <button id="add-plant" class="btn btn-primary rounded-pill px-3" type="button">Add
+                        Plant</button>
+                    <button id="remove-plant" class="btn btn-primary rounded-pill px-3" type="button">Remove
+                        Plant</button>
+                    <button id="easter-egg" class="btn btn-primary rounded-pill px-3" type="button">Easter
+                        Egg</button>
                     <div id="img-container" class="imgtext">
                         <!-- Aquí se agregarán o removerán imágenes según los botones -->
                     </div>
@@ -258,7 +258,8 @@
                     <a href="" class="navbar-brand">
                         <h1 class="text-primary"><span class="text-white">Cash</span>Me</h1>
                     </a>
-                    <p>Un proyecto hecho por: Daniel Fernández, Ángel Castillo, Orianna Milone, Javier Martínez, Carlos
+                    <p>Un proyecto hecho por: Daniel Fernández, Ángel Castillo, Orianna Milone, Javier Martínez,
+                        Carlos
                         Moragón y Paloma Pérez de Madrid.</p>
                 </div>
             </div>
