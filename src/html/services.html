@@ -152,65 +152,6 @@
 
     <!-- Services Stop -->
 
-    <!-- Easter egg Start -->
-    <button id="startButton"class="btn-primary" style="margin-left:20%;">Easter Egg</button>
-    <canvas id="canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;"></canvas>
-    
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-
-        // Ajustar el tamaño del canvas al tamaño de la ventana
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        // Emojis relacionados con el dinero
-        const emojis = {
-            ArrowUp: '💵',  // Billete
-            ArrowDown: '💸', // Dinero volando
-            ArrowLeft: '💰', // Bolsa de dinero
-            ArrowRight: '💳' // Tarjeta de crédito
-        };
-
-        // Función para dibujar el emoji en el canvas en una posición aleatoria
-        function drawEmoji(emoji) {
-            // Generar posiciones aleatorias dentro del canvas
-            const x = Math.floor(Math.random() * (canvas.width - 32)); // 32 es el ancho máximo del emoji
-            const y = Math.floor(Math.random() * (canvas.height - 32)); // 32 es el alto máximo del emoji
-
-            ctx.font = '32px serif'; // Tamaño de la fuente del emoji (ajustado a 32px)
-            ctx.fillText(emoji, x, y); // Dibuja el emoji en el canvas
-        }
-
-        // Evento de teclado para detectar las flechas
-        document.addEventListener('keydown', function(event) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); 
-
-            switch (event.code) {
-                case 'ArrowUp':
-                    drawEmoji(emojis.ArrowUp); 
-                    break;
-                case 'ArrowDown':
-                    drawEmoji(emojis.ArrowDown); 
-                    break;
-                case 'ArrowLeft':
-                    drawEmoji(emojis.ArrowLeft); 
-                    break;
-                case 'ArrowRight':
-                    drawEmoji(emojis.ArrowRight); 
-                    break;
-            }
-        });
-
-        // Ajustar el tamaño del canvas cuando se redimensione la ventana
-        window.addEventListener('resize', function() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas al redimensionar
-        });
-    </script>
-    <!-- Easter egg End-->
-
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
