@@ -9851,14 +9851,15 @@ h6,
 }
 
 .foto {
-  width: 50%;
-  height: auto;
-  border-radius: 50%;
-  object-fit: cover;
+  width: 50%; 
+  aspect-ratio: 1 / 1; /* Mantiene un contenedor cuadrado */
+  border-radius: 50%; 
+  object-fit: cover; 
   margin-bottom: 5%;
   border: 3px solid white;
   display: block;
 }
+
 
 .descripcion {
   font-size: 1em;
