@@ -9848,7 +9848,7 @@ h6,
 
 .memberTeam:hover {
   transform: translateY(-10px);
-  }
+}
 
 .foto {
   width: 50%;
@@ -9865,13 +9865,15 @@ h6,
   color: white;
   padding-bottom: 5%;
   border-bottom: 2px solid white;
+  margin-bottom: 5%;
+  flex-grow: 1;
 }
 
-.social-media-member{
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+.social-media-member {
+  display: flex;
+  justify-content: center
 }
+
 
 .social-media-member a {
     display: flex;
