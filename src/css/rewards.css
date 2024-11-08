@@ -1,26 +1,4 @@
 /* Navbar Styling */
-.container-fluid.nav-bar {
-    background-color: #f8f9fa;
-}
-.navbar-brand h1 {
-    font-size: 1.5rem;
-    color: #007bff;
-    margin: 0;
-}
-.navbar-brand h1 .text-dark {
-    color: #333;
-}
-.navbar-nav .nav-link {
-    color: #555;
-    margin-right: 1rem;
-}
-.navbar-nav .nav-link:hover {
-    color: #007bff;
-}
-.nav-item.active .nav-link {
-    font-weight: bold;
-    color: #007bff;
-}
 
 /* Rewards Page Styling */
 .rewards-container {
