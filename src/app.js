@@ -4,8 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// Os propongo estas rutas y que el resto estén derivadas en los archivos de rutas
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+//var indexRouter = require('./routes/admin');
+//var indexRouter = require('./routes/home');
 
 var app = express();
 
