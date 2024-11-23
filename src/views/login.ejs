@@ -1,0 +1,152 @@
+<%- include('header') %> 
+            <style>
+                #registerIndex {
+                    background-color: #08142d;
+                    padding: 5% 2%;
+
+                }
+
+                form {
+                    padding: 1% 1% ;
+                    border-radius: 5px;
+                    width: auto;
+                }
+                label {
+                    margin-top: 0.5%;
+                }
+                input {
+                    width: 100%;
+                    padding: 1% ;
+                    margin: 2% ;
+                }
+                button {
+                    margin-top: 15px;
+                    padding: 10px 15px;
+                    cursor: pointer;
+                }
+                .hidden {
+                    display: none;
+                }
+                #contactForm, #RegisterForm {
+                    background-color: #f9f9f9;
+                    padding: 1% 1% ;
+                    border-radius: 5px;
+                    width: auto;
+                }
+
+                .text-danger{
+                    margin-left: 5%;
+                }
+
+            </style>
+
+            <!-- Log In Start -->
+            <!-- Formulario oculto inicialmente -->
+            <div class="container-fluid py-5 hidden" id="main-container"> <!-- añadimos class hidden -->
+                <div class="container py-5">
+                    <div class="text-center mb-3 pb-3">
+                        <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Log In </h6>
+                        <h1>Enter the world of CashMe</h1>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="contact-form bg-white" style="padding: 2%;">
+                                <div id="success"></div>
+                                <!-- FORMULARIO!!! -->
+                                <form name="sentLogIn" action="/login" method="POST" id="contactForm" novalidate="novalidate">
+                                    <div class="form-row">
+                                        <div class="control-group col-sm-6">
+                                            <input type="email" class="form-control p-4" name="email" id="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                        <div class="control-group col-sm-6">
+                                            <input type="password" class="form-control p-4" id="passwd" name="passwd" placeholder="Password" required="required" data-validation-required-message="Please enter your password" />
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-primary py-3 px-4" type="submit" id="submitLoginButton">Sumbmit</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- Botón para mostrar formulario registro -->
+                            <div class="text-center mt-4">
+                                <button class="btn btn-secondary py-3 px-4" id="showNewFormBtn">Do not have an account? Register Here!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Log In End -->
+
+            <!-- Formulario inicialmente -->
+            <div class="container-fluid py-5" id="newFormContainer">
+                <div class="container py-5">
+                    <div class="text-center mb-3 pb-3">
+                        <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Register</h6>
+                        <h1>Create an account at CashMe</h1>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="contact-form bg-white" style="padding: 2%;">
+
+                                <form id="RegisterForm" action="/registerClient" method="POST">
+                                    <div class="control-group">
+                                        <input type="text" class="form-control p-4" id="newName" name="name" placeholder="Name" required>
+                                        <p class="help-block text-danger" id="nameError" style="display: none;"></p>
+                                    </div>
+                                    <div class="control-group">
+                                        <input type="email" class="form-control p-4" id="newEmail" name="email" placeholder="Email" required>
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="control-group">
+                                        <input type="password" class="form-control p-4" id="newPassword" name="password" placeholder="Password" required>
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-primary py-3 px-4" type="submit">Submit</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <div class="text-center mt-4">
+                                <button class="btn btn-secondary py-3 px-4" type="button" id="hideNewFormBtn"> Already have an account? log in here</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                const mainContainer = document.getElementById('main-container');
+                const newFormContainer = document.getElementById('newFormContainer');
+                const showNewFormBtn = document.getElementById('showNewFormBtn');
+                const hideNewFormBtn = document.getElementById('hideNewFormBtn');
+                const registerForm = document.getElementById('RegisterForm');
+                const loginForm = document.forms['sentLogIn'];
+
+                // Mostrar el formulario LogIn y ocultar el contenido principal Register
+                showNewFormBtn.addEventListener('click', function() {
+                    mainContainer.classList.add('hidden');
+                    newFormContainer.classList.remove('hidden');
+                });
+
+                // Ocultar Register y mostrar el Login
+                hideNewFormBtn.addEventListener('click', function() {
+                    newFormContainer.classList.add('hidden');
+                    mainContainer.classList.remove('hidden');
+                });
+
+
+    </script>
+
+    <!-- Admin Start -->
+    <div class="container-fluid py-5" id="newFormContainer">
+        <a href="#adminCAMBIARESTO!!!" class="btn btn-secondary mt-3">Admin</a>
+    </div>
+    <!-- Admin End -->
+        
+<%- include('footer') %>
+
+
+        
