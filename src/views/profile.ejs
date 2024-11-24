@@ -36,9 +36,6 @@
             .carousel-item.active:hover {
                 cursor: pointer; /* Cambia el cursor a una mano */
             }
-        
-
-
         </style>
 
         <div class="text-center mt-4">
@@ -140,7 +137,11 @@
                 <tbody>
                     <tr>
                         <td class="font-weight-bold">Name:</td>
-                        <td>{{ data.name }}</td>
+                        <% if (email) { %>
+                            <td><%= email %></td>
+                        <% } else { %>
+                            <td>Not Authenticated</td>
+                        <% } %>
                     </tr>
                     <tr>
                         <td class="font-weight-bold">Email:</td>

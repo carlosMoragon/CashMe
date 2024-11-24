@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session');
 
 // Os propongo estas rutas y que el resto estén derivadas en los archivos de rutas
 
@@ -12,6 +13,11 @@ var profileRouter = require('./routes/profile');
 var loginRouter = require('./routes/login');
 //var indexRouter = require('./routes/admin');
 //var indexRouter = require('./routes/home');
+
+
+// Base de Datos
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('../cashme.db');
 
 var app = express();
 
@@ -25,10 +31,37 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Sesión del usuario
+app.use(session({
+  secret: 'CLAVE_SECRETA', 
+  resave: false,
+  saveUninitialized: true
+}));
+
 app.use('/', indexRouter);
-app.use('/profile', profileRouter);
+app.use('/profile', checkAuthenticated, profileRouter);
 app.use('/login', loginRouter)
 app.use('/users', usersRouter);
+
+
+// Middleware para verificar si el usuario está logueado
+function checkAuthenticated(req, res, next) {
+  console.log(req.session); 
+  if (!req.session.email) {  
+    return res.redirect('/login'); 
+  }
+  next();  
+}
+
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log("==> Error: ", err) 
+    }
+    console.log("==> The user has log out")
+    res.redirect('/'); 
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
