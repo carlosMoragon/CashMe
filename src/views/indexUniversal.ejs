@@ -1,4 +1,28 @@
-<%- include('header') %> 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>CashMe</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon (falta por añadir) -->
+    <link href="/images/logoCashMe.jpg" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../static/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/stylesheets/paloma.css" rel="stylesheet">
 
     <link href="/stylesheets/index.css" rel="stylesheet">
 
@@ -6,8 +30,8 @@
         /* Solución overflow */
         html,
         body {
-            /* overflow-x: hidden; */
-            /* overflow-y: hidden; */
+            overflow-x: hidden;
+            overflow-y: hidden;
             width: 100%;
             margin: 0;
             padding: 0;
@@ -120,6 +144,34 @@
 
     </style>
 
+</head>
+
+<body>
+    <!-- Navbar Start -->
+    <div class="container-fluid position-relative nav-bar p-0">
+        <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
+            <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
+                <a href="" class="navbar-brand"> <!-- href a HOME -->
+                    <h1 class="m-0 text-primary"><span class="text-dark">Cash</span>Me</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                    <div class="navbar-nav ml-auto py-0">
+                        <a href="home.html" class="nav-item nav-link active">Home</a>
+                        <a href="/login" class="nav-item nav-link active">Log In</a>
+                        <a href="register.html" class="nav-item nav-link">Register</a>
+                        <a href="aboutus.html" class="nav-item nav-link">About Us</a>
+                        <a href="services.html" class="nav-item nav-link">Services</a>
+                        <a href="contactus.html" class="nav-item nav-link">Contact Us</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
     <!-- About Us Start -->
     <div class="container">
         <div class="imgparagraph">
@@ -229,17 +281,17 @@
                     </div>
                 </div>
                 <div class="col text-right">
-                    <img src="/images/daniprofile.jpg" alt="Daniel Fernández" class="img-fluid mx-1 rounded"
+                    <img src="/images/logo.png" alt="Daniel Fernández" class="img-fluid mx-1 rounded"
                         style="max-width: 150px;">
-                    <img src="/images/FotoAngel.png" alt="Ángel Castillo" class="img-fluid mx-1 rounded"
+                    <img src="/images/logo.png" alt="Ángel Castillo" class="img-fluid mx-1 rounded"
                         style="max-width: 150px;">
                     <img src="/images/oriannaprofile.jpg" alt="Orianna Milone" class="img-fluid mx-1 rounded"
                         style="max-width: 150px;">
-                    <img src="/images/foto_javi.png" alt="Javier Martínez" class="img-fluid mx-1 rounded"
+                    <img src="/images/logo.png" alt="Javier Martínez" class="img-fluid mx-1 rounded"
                         style="max-width: 150px;">
                     <img src="/images/moragonprofile.png" alt="Carlos Moragón" class="img-fluid mx-1 rounded"
                         style="max-width: 150px;">
-                    <img src="/images/palomaMember.png" alt="Paloma Pérez de Madrid" class="img-fluid mx-1 rounded"
+                    <img src="/images/paloma.png" alt="Paloma Pérez de Madrid" class="img-fluid mx-1 rounded"
                         style="max-width: 150px;">
                 </div>
             </div>
