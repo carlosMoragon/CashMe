@@ -2,38 +2,63 @@
 
    
     <!-- Contact Start -->
+     <style>
+        .notification {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .notification.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .notification.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .d-none {
+            display: none;
+        }
+
+    </style>
     <div class="container-fluid py-5">
         <div class="container py-5">
             <div class="text-center mb-3 pb-3">
                 <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Contact</h6>
-                <h1>Contact For Any Query</h1>
+                <h1>Contact Us for Any Query</h1>
             </div>
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="contact-form bg-white" style="padding: 30px;">
-                        <div id="success"></div>
-                        <form name="sentMessage" id="contactForm" novalidate="novalidate">
+                        <form name="contactForm" id="contactForm" novalidate="novalidate" action="/contact/save-message" method="POST">
+                            <div id="notification" class="notification d-none"></div>
                             <div class="form-row">
                                 <div class="control-group col-sm-6">
-                                    <input type="text" class="form-control p-4" id="name" placeholder="Your Name"
-                                        required="required" data-validation-required-message="Please enter your name" />
+                                    <input type="text" class="form-control p-4" name="nombre" id="name" placeholder="Your Name"
+                                        required="required" />
                                     <p class="help-block text-danger"></p>
                                 </div>
                                 <div class="control-group col-sm-6">
-                                    <input type="email" class="form-control p-4" id="email" placeholder="Your Email"
-                                        required="required" data-validation-required-message="Please enter your email" />
+                                    <input type="email" class="form-control p-4" name="correo" id="email" placeholder="Your Email"
+                                        required="required" />
                                     <p class="help-block text-danger"></p>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <input type="text" class="form-control p-4" id="subject" placeholder="Subject"
-                                    required="required" data-validation-required-message="Please enter a subject" />
+                                <input type="text" class="form-control p-4" name="asunto" id="subject" placeholder="Subject"
+                                    required="required" />
                                 <p class="help-block text-danger"></p>
                             </div>
                             <div class="control-group">
-                                <textarea class="form-control py-3 px-4" rows="5" id="message" placeholder="Message"
-                                    required="required"
-                                    data-validation-required-message="Please enter your message"></textarea>
+                                <textarea class="form-control py-3 px-4" rows="5" name="mensaje" id="message" placeholder="Message"
+                                    required="required"></textarea>
                                 <p class="help-block text-danger"></p>
                             </div>
                             <div class="text-center">
@@ -45,6 +70,38 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const form = document.getElementById('contactForm');
+        const notification = document.getElementById('notification');
+    
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Evita que el formulario se envíe directamente al servidor.
+    
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+    
+            if (name && email && subject && message) {
+                // Mostrar notificación de éxito
+                notification.textContent = 'Message sent successfully!';
+                notification.className = 'notification success';
+                notification.classList.remove('d-none');
+    
+                // Opcional: Enviar el formulario después de mostrar la notificación
+                setTimeout(() => form.submit(), 2000);
+            } else {
+                // Mostrar notificación de error
+                notification.textContent = 'Please fill in all fields.';
+                notification.className = 'notification error';
+                notification.classList.remove('d-none');
+            }
+        });
+    </script>
+    
+    
     <!-- Contact End -->
+
 
 <%- include('footer') %>
