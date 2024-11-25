@@ -16,14 +16,11 @@ var aboutusRouter = require('./routes/aboutus');
 var servicesRouter = require('./routes/services');
 var contactRouter = require('./routes/contact');
 var adminblogRouter = require('./routes/adminBlog');
+var admincontactRouter = require('./routes/adminContact');
 
 //var indexRouter = require('./routes/admin');
 //var indexRouter = require('./routes/home');
 
-
-// Base de Datos
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('../cashme');
 
 var app = express();
 
@@ -53,6 +50,7 @@ app.use('/aboutus', aboutusRouter);
 app.use('/services', servicesRouter);
 app.use('/adminBlog', adminblogRouter); // HAY QUE METERLO EN ADMIN
 app.use('/contact', contactRouter);
+app.use('/adminContact', admincontactRouter);
 
 
 
