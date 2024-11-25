@@ -5,6 +5,9 @@ const db = require('sqlite3').verbose();
 // Configuración de la base de datos
 const database = new db.Database('../cashme');
 
+router.get('/', function(req, res, next) {
+    res.render('adminBlog', { });
+  });
 
 router.post('/add-entry', (req, res) => {
     const { titulo, resumen, contenido, fecha_publicacion } = req.body;

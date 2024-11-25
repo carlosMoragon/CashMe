@@ -14,8 +14,9 @@ var loginRouter = require('./routes/login');
 var blogRouter = require('./routes/financeBlog');
 var aboutusRouter = require('./routes/aboutus');
 var servicesRouter = require('./routes/services');
-var adminBlogRouter = require('./routes/adminBlog');
 var contactRouter = require('./routes/contact');
+var adminblogRouter = require('./routes/adminBlog');
+
 //var indexRouter = require('./routes/admin');
 //var indexRouter = require('./routes/home');
 
@@ -50,7 +51,7 @@ app.use('/users', usersRouter);
 app.use('/blog', blogRouter);
 app.use('/aboutus', aboutusRouter);
 app.use('/services', servicesRouter);
-app.use('/adminBlog', adminBlogRouter); // HAY QUE METERLO EN ADMIN
+app.use('/adminBlog', adminblogRouter); // HAY QUE METERLO EN ADMIN
 app.use('/contact', contactRouter);
 
 

@@ -1,0 +1,68 @@
+<%- include('header') %> 
+    <div class="container mt-5">
+        <h1 class="mb-4">Add a New Blog Entry</h1>
+        <form id="add-entry-form">
+            <div class="mb-3">
+                <label for="titulo" class="form-label">Title</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" required>
+            </div>
+            <div class="mb-3">
+                <label for="resumen" class="form-label">Summary</label>
+                <textarea class="form-control" id="resumen" name="resumen" rows="2" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="contenido" class="form-label">Content</label>
+                <textarea class="form-control" id="contenido" name="contenido" rows="5" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="fecha_publicacion" class="form-label">Publication Date</label>
+                <input type="date" class="form-control" id="fecha_publicacion" name="fecha_publicacion" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Entry</button>
+        </form>
+        <div id="response-message" class="mt-3"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#add-entry-form').on('submit', function(e) {
+                e.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+
+                const entryData = {
+                    titulo: $('#titulo').val(),
+                    resumen: $('#resumen').val(),
+                    contenido: $('#contenido').val(),
+                    fecha_publicacion: $('#fecha_publicacion').val()
+                };
+
+                $.ajax({
+                    url: '/adminBlog/add-entry', // Endpoint en el backend para manejar la inserción
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(entryData),
+                    success: function(response) {
+                        $('#response-message').html(
+                            `<div class="alert alert-success">Entry added successfully!</div>`
+                        );
+                        $('#add-entry-form')[0].reset(); // Reinicia el formulario
+                    },
+                    error: function() {
+                        $('#response-message').html(
+                            `<div class="alert alert-danger">Failed to add the entry. Please try again.</div>`
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+    
+    
+    <!-- Blog End -->
+
+
+        
+<%- include('footer') %>
+
+
+        
