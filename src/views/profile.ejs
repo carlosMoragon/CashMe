@@ -4,7 +4,7 @@
             .avatar-selection img {
                 cursor: pointer;
                 margin: 5px;
-                transition: transform 0.3s ease, border 0.3s ease; /* Transición suave para el hover y el borde */
+                transition: transform 0.3s ease, border 0.3s ease; 
             }
 
             .carousel-inner img {
@@ -28,12 +28,12 @@
             .carousel-control-next-icon {
                 background-color: gray;
                 border-radius: 50%; 
-                width: 30px; /* Ajusta el tamaño de las flechas */
+                width: 30px; 
                 height: 30px; 
             }
             
             .carousel-item.active:hover {
-                cursor: pointer; /* Cambia el cursor a una mano */
+                cursor: pointer; 
             }
         </style>
 
@@ -54,19 +54,19 @@
             <div id="avatar-carousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="images/avatar1.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 1" onclick="selectAvatar('images/avatar1.jpg')">
+                        <img src="/images/avatar1.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 1" onclick="selectAvatar('/images/avatar1.jpg')">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/avatar2.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 2" onclick="selectAvatar('images/avatar2.jpg')">
+                        <img src="/images/avatar2.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 2" onclick="selectAvatar('/images/avatar2.jpg')">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/avatar3.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 3" onclick="selectAvatar('images/avatar3.jpg')">
+                        <img src="/images/avatar3.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 3" onclick="selectAvatar('/images/avatar3.jpg')">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/avatar4.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 4" onclick="selectAvatar('images/avatar4.jpg')">
+                        <img src="/images/avatar4.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 4" onclick="selectAvatar('/images/avatar4.jpg')">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/avatar5.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 5" onclick="selectAvatar('images/avatar5.jpg')">
+                        <img src="/images/avatar5.jpg" id="avatarelemnt" class="d-block w-100" alt="Avatar 5" onclick="selectAvatar('/images/avatar5.jpg')">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#avatar-carousel" role="button" data-slide="prev">
@@ -187,7 +187,7 @@
             .garden {
                 width: 100%;
                 height: 500px;
-                background-image: url('images/jardin.jpg'); /* Imagen de jardín */
+                background-image: url('/images/jardin.jpg'); /* Imagen de jardín */
                 background-size: cover;
                 position: relative;
                 border: 2px solid #000;
@@ -240,16 +240,16 @@
             <!-- Contenedor de las plantas disponibles -->
             <div class="plant-container">
                 <div class="plant-item">
-                    <img src="images/planta1.jpg" alt="Plant 1" id="plant1-img">
-                    <button class="buy-plant-btn" onclick="buyPlant('planta1', 'images/planta1.jpg')">Buy Plant 1</button>
+                    <img src="/images/planta1.jpg" alt="Plant 1" id="plant1-img">
+                    <button class="buy-plant-btn" onclick="buyPlant('planta1', '/images/planta1.jpg')">Buy Plant 1</button>
                 </div>
                 <div class="plant-item">
-                    <img src="images/planta2.jpg" alt="Plant 2" id="plant2-img">
-                    <button class="buy-plant-btn" onclick="buyPlant('planta2', 'images/planta2.jpg')">Buy Plant 2</button>
+                    <img src="/images/planta2.jpg" alt="Plant 2" id="plant2-img">
+                    <button class="buy-plant-btn" onclick="buyPlant('planta2', '/images/planta2.jpg')">Buy Plant 2</button>
                 </div>
                 <div class="plant-item">
-                    <img src="images/planta3.jpg" alt="Plant 3" id="plant3-img">
-                    <button class="buy-plant-btn" onclick="buyPlant('planta3', 'images/planta3.jpg')">Buy Plant 3</button>
+                    <img src="/images/planta3.jpg" alt="Plant 3" id="plant3-img">
+                    <button class="buy-plant-btn" onclick="buyPlant('planta3', '/images/planta3.jpg')">Buy Plant 3</button>
                 </div>
             </div>
 
