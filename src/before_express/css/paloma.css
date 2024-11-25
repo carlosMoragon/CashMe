@@ -9846,6 +9846,7 @@ h6,
   align-items: center;
 }
 
+
 .memberTeam:hover {
   transform: translateY(-10px);
 }
@@ -9860,15 +9861,6 @@ h6,
   display: block;
 }
 
-
-.descripcion {
-  font-size: 1em;
-  color: white;
-  padding-bottom: 5%;
-  border-bottom: 2px solid white;
-  margin-bottom: 5%;
-  flex-grow: 1;
-}
 
 .social-media-member {
   display: flex;
