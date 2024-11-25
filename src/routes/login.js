@@ -12,21 +12,6 @@ router.get('/', function(req, res, next) {
 
 //FALTA HASHES PARA LA SEGURIDAD
 
-/*
-router.post('/loginClient', function(req, res, next) {
-  const email = req.body.email;
-  const passwd = req.body.passwd;
-
-  if (email === 'admin') {
-    req.session.email =email;
-    console.log("CLIENTE HA ENTRADO")
-    res.render('profile', { email: req.session.email });
-  } else {
-    res.redirect('/');
-  }
-});
-*/
-
 
 // LogIn del cliente
 router.post('/loginClient', function(req, res, next) {
@@ -40,9 +25,13 @@ router.post('/loginClient', function(req, res, next) {
 
     if (row) {
       // Si el usuario existe
-      console.log('el usuario existe: ');
-      console.log(email);
-      res.render('profile', { email: req.session.email });
+      req.session.user = {
+        email: row.email,
+        nombre: row.nombre,
+        admin: row.admin
+      };
+      console.log('Sesión iniciada para el usuario:', req.session.user);
+      res.render('profile', { email: req.session.user.email , username: req.session.user.nombre});
     } else {
       res.render('login', { error: 'Invalid email or password' });
     }
@@ -64,8 +53,13 @@ router.post('/registerClient', function(req, res, next) {
         console.error('Error al registrar cliente:', err.message);
         return next(err);
       }
+      req.session.user = {
+        email: row.email,
+        nombre: row.nombre,
+        admin: row.admin
+      };
       // Redirigir al perfil después de registrarse
-      res.render('profile', { email: req.session.email });
+      res.render('profile', { email: req.session.user.email , username: req.session.user.nombre});
     }
   );
 });

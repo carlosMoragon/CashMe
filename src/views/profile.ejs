@@ -1,5 +1,4 @@
 <%- include('header') %> 
-        <link href="stylesheets/paloma.css" rel="stylesheet">
         <!-- Choose avatar Start -->
         <style>
             .avatar-selection img {
@@ -137,15 +136,19 @@
                 <tbody>
                     <tr>
                         <td class="font-weight-bold">Name:</td>
-                        <% if (email) { %>
-                            <td><%= email %></td>
+                        <% if (username) { %>
+                            <td><%= username %></td>
                         <% } else { %>
                             <td>Not Authenticated</td>
                         <% } %>
                     </tr>
                     <tr>
                         <td class="font-weight-bold">Email:</td>
-                        <td>{{ data.email }}</td>
+                        <% if (email) { %>
+                            <td><%= email %></td>
+                        <% } else { %>
+                            <td>Not Authenticated</td>
+                        <% } %>
                     </tr>
                 </tbody>
             </table>
