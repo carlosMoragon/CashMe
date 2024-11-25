@@ -1,51 +1,65 @@
 <%- include('header') %> 
-    <!-- Blog Start-->
+    <header class="bg-primary text-white text-center py-4">
+        <h1>Finance Blog</h1>
+        <p class="lead">Discover tips and reflections on finances</p>
+    </header>
     <main class="container mt-5">
         <div class="row">
-            <!-- Entrada 1 -->
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Título de la Entrada</h5>
-                        <p class="card-text text-muted">Publicado el 25 de noviembre de 2024</p>
-                        <p class="card-text">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vehicula dolor ut sapien aliquam, quis tempor nisi facilisis...
-                        </p>
-                        <a href="#" class="btn btn-primary">Leer más</a>
+            <% if (entradas.length > 0) { %>
+                <% entradas.forEach(entry => { %>
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= entry.titulo %></h5>
+                                <p class="card-text text-muted">Published on <%= new Date(entry.fecha_publicacion).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                                <p class="card-text"><%= entry.resumen %></p>
+                                <a href="#" class="btn btn-primary read-more" data-id="<%= entry.id %>">Read more</a>
+                                <!-- Hidden container for full content -->
+                                <div class="full-content mt-3" style="display: none;"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Entrada 2 -->
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Otro Título Interesante</h5>
-                        <p class="card-text text-muted">Publicado el 24 de noviembre de 2024</p>
-                        <p class="card-text">
-                            Vivamus eget elit a sapien tincidunt bibendum. Curabitur fringilla euismod risus, quis vulputate odio interdum non...
-                        </p>
-                        <a href="#" class="btn btn-primary">Leer más</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Entrada 3 -->
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Otro Título Interesante</h5>
-                        <p class="card-text text-muted">Publicado el 24 de noviembre de 2024</p>
-                        <p class="card-text">
-                            Vivamus eget elit a sapien tincidunt bibendum. Curabitur fringilla euismod risus, quis vulputate odio interdum non...
-                        </p>
-                        <a href="#" class="btn btn-primary">Leer más</a>
-                    </div>
-                </div>
-            </div>
+                <% }); %>
+            <% } else { %>
+                <p class="text-center">No entries available.</p>
+            <% } %>
         </div>
     </main>
-    <!-- Blog End-->
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.read-more').on('click', function (e) {
+                e.preventDefault();
+    
+                const button = $(this);
+                const entryId = button.data('id');
+                const contentContainer = button.siblings('.full-content');
+    
+                // Check if content is already loaded
+                if (contentContainer.is(':visible')) {
+                    contentContainer.slideUp(); // Collapse if already expanded
+                    return;
+                }
+    
+                // Fetch content via AJAX
+                $.ajax({
+                    url: `blog/entry/${entryId}`,
+                    method: 'GET',
+                    success: function (response) {
+                        contentContainer.html(`<p>${response.content}</p>`).slideDown(); // Display content
+                    },
+                    error: function () {
+                        alert('Failed to load content. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+    
+    
+    <!-- Blog End -->
+
 
         
 <%- include('footer') %>
