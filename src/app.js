@@ -12,6 +12,7 @@ var usersRouter = require('./routes/users');
 var profileRouter = require('./routes/profile');
 var loginRouter = require('./routes/login');
 var blogRouter = require('./routes/financeBlog');
+var aboutusRouter = require('./routes/aboutus');
 //var indexRouter = require('./routes/admin');
 //var indexRouter = require('./routes/home');
 
@@ -44,6 +45,8 @@ app.use('/profile', checkAuthenticated, profileRouter);
 app.use('/login', loginRouter)
 app.use('/users', usersRouter);
 app.use('/blog', blogRouter);
+app.use('/aboutus', aboutusRouter);
+
 
 
 // Middleware para verificar si el usuario está logueado
