@@ -1,0 +1,60 @@
+<%- include('header') %> 
+<link href="/stylesheets/chat.css" rel="stylesheet">
+<script src="/socket.io/socket.io.js" defer></script> 
+<script src="/javascripts/chats.js" defer></script>
+
+
+<!-- Users --> 
+<h2 id="users-display"> Chats </h2>
+<div id="contenedor_chat">
+    <div class="imgparagraph">
+        <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
+            <div class="list-group">
+            <a href="" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true" tag>
+                <img src="/images/oriannaprofile.jpg" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                    <h6 class="mb-0">Orianna Milone</h6>
+                    <p class="mb-0 opacity-75">Just joined!</p>
+                </div>
+                <small class="opacity-50 text-nowrap">now</small>
+                </div>
+            </a>
+            <a href="" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                <img src="/images/moragonprofile.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                    <h6 class="mb-0">Carlos Moragon</h6>
+                    <p class="mb-0 opacity-75">Killed his bonsai</p>
+                </div>
+                <small class="opacity-50 text-nowrap">3d</small>
+                </div>
+            </a>
+            <a href="" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                <img src="/images/paloma.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                    <h6 class="mb-0">Javi Martínez</h6>
+                    <p class="mb-0 opacity-75">Asked you a question ... ! </p>
+                </div>
+                <small class="opacity-50 text-nowrap">1w</small>
+                </div>
+            </a>
+            </div>
+        </div>
+    </div>
+    <div id="chat">
+        <form class="card">
+            <div class="chat-header">Chat</div>
+            <div class="chat-window">
+                <ul class="message-list"></ul>
+            </div>
+            <div class="chat-input">
+                <input type="text" class="message-input" placeholder="Type your message here">
+                <button class="send-button" type="submit">Send</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('footer') %>
