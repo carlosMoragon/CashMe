@@ -16,24 +16,48 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector('#chat .card'); // Selección del formulario
     const input = document.querySelector('.message-input'); // Selección del campo de entrada
     const messages = document.querySelector('.message-list'); // Selección de la lista de mensajes
-
+    const emisor = "carlos";
     if (form && input && messages) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (input.value) {
-                let author = "carlos moragon"
-                let fecha = getTodayDate();
-                socket.emit('chat', `${input.value}<split>${author}<split>${fecha}`); // Envía el mensaje al servidor
+                const messageContent = input.value;
+                const chatHeaderText = chatHeader.textContent;
+
+                socket.emit('chat', {
+                    content_message: messageContent,
+                    chat_header: chatHeaderText,
+                    emisor: emisor,
+                    date: getTodayDate()
+                });
+
+                fetch('/chat/sendMessage', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                      content_message: messageContent,
+                      chat_header: chatHeaderText,
+                      emisor: emisor,
+                      date: getTodayDate()
+                    })
+                  })
+                  .then(response => response.json())
+                  .then(data => console.log('Mensaje enviado:', data))
+                  .catch(error => console.error('Error al enviar el mensaje:', error));
+          
+                //socket.emit('chat', `${input.value}<split>${author}<split>${fecha}`); // Envía el mensaje al servidor
                 input.value = ''; // Limpia el campo de entrada
             }
         });
 
         let mine = false;
         socket.on('chat', (msg) => {
-            let message = msg.split("<split>");
-            let info = message[0];
-            let author = message[1];
-            let date = message[2];
+            const content_message = msg.content_message;
+            const chat_header = msg.chat_header; //OJO CON ESTO
+            const emisor = msg.emisor;
+            const date = msg.date;
 
             console.log("Mensaje recibido");
             const item = document.createElement("li");
@@ -42,11 +66,11 @@ document.addEventListener("DOMContentLoaded", () => {
             content.className = "content-message";
 
             const info_label = document.createElement("label");
-            info_label.textContent = info;
+            info_label.textContent = content_message;
             //info_label.className = "info-message";
 
             const author_label = document.createElement("label");
-            author_label.textContent = author;
+            author_label.textContent = emisor;
             //author_label.className = "author-message";
 
             const date_label = document.createElement("label");
