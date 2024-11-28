@@ -7,8 +7,43 @@ const db = new sqlite3.Database('../cashme');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('chat', {});
+  const usuario = req.session.user ? req.session.user.nombre : null;
+
+  // Si no hay usuario en la sesión, redirige o maneja el error
+  if (!usuario) {
+    return res.status(401).send('No se encontró al usuario en la sesión.');
+  }
+
+  db.all(`
+    SELECT 
+      chats.id AS chat_id, 
+      chats.titulo AS chat_title, 
+      mensajes.contenido AS last_message_content,
+      mensajes.fecha AS last_message_date
+    FROM usuarios
+    INNER JOIN usuarios_chats ON usuarios.id = usuarios_chats.usuario_id
+    INNER JOIN chats ON usuarios_chats.chat_id = chats.id
+    LEFT JOIN mensajes ON chats.id = mensajes.chat_id
+    WHERE usuarios.nombre = ?
+    ORDER BY mensajes.fecha DESC
+    LIMIT 1`, [usuario], function(err, rows) {
+      if (err) {
+        console.error("Error al realizar la consulta:", err);
+        return next(err);
+      }
+
+      if (rows && rows.length > 0) {
+        // Renderiza la vista 'chat', pasando solo los chats con su último mensaje
+        res.render('chat', { chats: rows });
+      } else {
+        // Si no hay chats, pasa un mensaje vacío o nulo
+        res.render('chat', { chats: [], message: 'No se encontraron chats para este usuario.' });
+      }
+  });
+
 });
+
+
 
 
 function getTodayDate(){
