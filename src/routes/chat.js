@@ -34,7 +34,7 @@ router.get('/', function(req, res, next) {
 
       if (rows && rows.length > 0) {
         // Renderiza la vista 'chat', pasando solo los chats con su último mensaje
-        res.render('chat', { chats: rows });
+        res.render('chat', { chats: rows , usuario: req.session.user.nombre});
       } else {
         // Si no hay chats, pasa un mensaje vacío o nulo
         res.render('chat', { chats: [], message: 'No se encontraron chats para este usuario.' });
@@ -58,6 +58,42 @@ function getTodayDate(){
   // Formatear como YYYY-MM-DD HH:mm
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
+
+router.post('/getMessages', function(req, res, next) {
+  console.log("Entra en SendMessage");
+  
+  // Verificación de sesión
+  if (!req.session || !req.session.user) {
+    console.error("Sesión no inicializada.");
+    return res.status(401).send("Usuario no autenticado.");
+  }
+
+  const name = req.session.user.nombre; // Nombre del usuario autenticado
+  const chat = req.body.chat_header;   // Título del chat
+
+  // Consulta SQL utilizando db.all para obtener múltiples filas
+  db.all(`
+    SELECT mensajes.id, mensajes.contenido, mensajes.emisor, mensajes.fecha
+    FROM usuarios
+    JOIN usuarios_chats ON usuarios.id = usuarios_chats.usuario_id
+    JOIN chats ON usuarios_chats.chat_id = chats.id
+    JOIN mensajes ON chats.id = mensajes.chat_id
+    WHERE usuarios.nombre = ?
+    AND chats.titulo = ?`, [name, chat], function(err, rows) {
+    if (err) {
+      console.error("Error en SELECT:", err);
+      return next(err);
+    }
+
+    if (rows && rows.length > 0) {
+      console.log("Mensajes recuperados:", rows);
+      return res.json(rows); // Enviar los mensajes como respuesta JSON
+    } else {
+      console.log("No se encontraron mensajes.");
+      return res.json([]); // Respuesta vacía si no hay mensajes
+    }
+  });
+});
 
 router.post('/sendMessage', function(req, res, next) {
   console.log("Entra en SendMessage");
