@@ -90,3 +90,47 @@
   footer {
     margin-top: auto;
   }
+
+  .message {
+    border-style:solid;
+    border-radius: 10px;
+    width: max-content;
+    background-color: #e5ffd4;
+    padding: 0.5%;
+    margin: 0.5%;
+  }
+  .my-message {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .other-message {
+    /*float: left;*/
+    text-align: left;
+    margin-right: auto;
+  }
+
+  .content-message {
+    display: block;
+  }
+
+  .info-message {
+    display: block;
+  }
+
+  .author-message {
+    display: block;
+    background-color: #ccc;
+    font-size: small;
+    width: fit-content;
+  }
+
+  .date-message {
+    display: block;
+    font-size:smaller;
+    width: fit-content;
+  }
+
+
+
+  

@@ -44,13 +44,13 @@
         </div>
     </div>
     <div id="chat">
-        <form class="card">
-            <div class="chat-header">Chat</div>
+        <form action="/chat/sendMessage" method="POST" class="card">
+            <div id="chat-header" class="chat-header">Chat</div>
             <div class="chat-window">
                 <ul class="message-list"></ul>
             </div>
             <div class="chat-input">
-                <input type="text" class="message-input" placeholder="Type your message here">
+                <input id="content_message" type="text" class="message-input" placeholder="Type your message here">
                 <button class="send-button" type="submit">Send</button>
             </div>
         </form>

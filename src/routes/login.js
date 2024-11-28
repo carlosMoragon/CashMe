@@ -54,9 +54,9 @@ router.post('/registerClient', function(req, res, next) {
         return next(err);
       }
       req.session.user = {
-        email: row.email,
-        nombre: row.nombre,
-        admin: row.admin
+        email: email,
+        nombre: nombre,
+        admin: 0
       };
       // Redirigir al perfil después de registrarse
       res.render('profile', { email: req.session.user.email , username: req.session.user.nombre});
