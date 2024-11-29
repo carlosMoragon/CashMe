@@ -1,0 +1,83 @@
+<!--Admin Home Page . EJS-->
+<%- include('adminHeader') %>
+    <!--DashBoard Start-->
+    <div class="container" id="top">
+        <h1>Services </h1>
+        <div class="ServiceNum">
+            <!-- Statistics Start -->
+            <h2 id="statistics-display">Statistics</h2>
+            <!-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+                style="color: #333; border-color: #333;">
+                <canvas class="my-4 w-100" id="myChart" width="880" height="371"
+                    style="display: block; box-sizing: border-box; height: 330px; width: 782px;"></canvas>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="/routes/adminHome.js"></script> -->
+            <!-- Statistics End-->
+           
+            <!-- User List Start-->
+            <h2> User List </h2>
+            <div class="d-flex flex-column flex-md-row justify-content-center p-3 gap-4">
+                <div class="list-group w-100">
+                    <% usuarios.forEach(usuario=> { %> <!-- Tema del chat que corresponda al usuario cliqueado -->
+                        <a href="/chat"
+                            class="list-group-item list-group-item-action d-flex gap-3 py-2 mb-2 rounded-lg shadow-sm"
+                            aria-current="true">
+                            <img src="images/paloma.png" alt="twbs" width="32" height="32"
+                                class="rounded-circle flex-shrink-0" style="margin-right: 10px;">
+                            <div class="d-flex gap-2 w-100 justify-content-between">
+                                <div>
+                                    <h6 class="mb-0">
+                                        <%= usuario.email %>
+                                    </h6>
+                                    <p class="mb-0 opacity-75">
+                                        <%= usuario.nombre %>
+                                    </p>
+                                </div>
+                                <small class="opacity-50 text-nowrap">Active</small>
+                                <!-- Puede indicar el estado del usuario -->
+                            </div>
+                        </a>
+                        <% }); %>
+                </div>
+            </div>
+            <!-- User List End-->
+            
+            <!-- Pre-Garden -->
+            <h2> Garden </h2>
+            <div
+                class="imgparagraph d-flex flex-column flex-md-row align-items-center justify-content-between p-4 bg-light rounded shadow-sm">
+
+                <div class="imgtext mb-3 mb-md-0" style="flex: 1;">
+                    <img src="images/rewardTree.png" alt="Reward Tree" class="img-fluid rounded">
+                </div>
+
+                <div class="paragraphNext flex-column flex-md-row ms-md-4" style="flex: 2;">
+                    <p class="text-muted mb-4">
+                        Our reward system is inspired by a garden metaphor, where growth, progress, and nurturing are
+                        central themes. In this system, clients set specific goals that they want to achieve, much like
+                        planting seeds in a garden. As they work towards their goals and make progress, they earn
+                        "plants" that are added to their virtual garden. These plants represent milestones or
+                        achievements, flourishing as clients continue their journey.
+                    </p>
+
+                    <div class="d-flex gap-3">
+                        <a href="/adminGarden" class="w-100">
+                            <button class="btn btn-primary rounded-pill px-4 py-2 w-100" type="button">New
+                                activity</button>
+                        </a>
+                        <a href="/adminGarden" class="w-100">
+                            <button class="btn btn-secondary rounded-pill px-4 py-2 w-100" type="button">Garden
+                                Factory</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Pre-Garden End -->
+        </div>
+
+    </div>
+
+    <!-- Dashboard Stop -->
+
+    <%- include('footer') %>
