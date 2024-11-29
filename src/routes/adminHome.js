@@ -1,12 +1,30 @@
 // routes/adminHome.js
 const express = require('express');
 const router = express.Router();
+var sqlite3 = require('sqlite3').verbose();
 
+// router.get('/', function(req, res, next) {
+//     res.render('adminHome', { });
+//   });
+
+
+const db = new sqlite3.Database('../cashme');
+ 
 router.get('/', function(req, res, next) {
-    res.render('adminHome', { });
-  });
+    // Hacer la consulta a la base de datos
+    db.all('SELECT nombre, email FROM usuarios', (err, rows) => {
+        if (err) {
+            console.error('Error al obtener los usuarios:', err);
+            res.status(500).send('Error al cargar los usuarios.');
+            return;
+        }
 
-module.exports = router;
+        // Pasar los datos de usuarios a la vista
+        res.render('adminHome', { usuarios: rows });
+    });
+});
+
+
 
 // document.addEventListener("DOMContentLoaded", () => {
 //     const ctx = document.getElementById('myChart').getContext('2d');
@@ -31,3 +49,7 @@ module.exports = router;
 //         }
 //     });
 // });
+
+
+
+module.exports = router;

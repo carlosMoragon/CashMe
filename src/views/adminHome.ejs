@@ -14,9 +14,23 @@
             <!-- Statistics End--> 
             <!-- User List Start--> 
            <h2> User List </h2>
-           <div class="imgparagraph">
-                
-           </div>     
+           <!--<div class="imgparagraph">-->
+            <div class="d-flex flex-column flex-md-row p-2 gap-4 py-0 align-items-center justify-content-center">
+                <div class="list-group">
+                  <% usuarios.forEach(usuario => { %>
+                    <a href="/chat" class="list-group-item list-group-item-action d-flex gap-3 py-1" aria-current="true">
+                      <img src="images/paloma.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0" style="margin-right: 10px;">
+                      <div class="d-flex gap-2 w-100 justify-content-between">
+                        <div>
+                          <h6 class="mb-0"><%= usuario.email %></h6>
+                          <p class="mb-0 opacity-75"><%= usuario.nombre %></p>
+                        </div>
+                      </div>
+                    </a>
+                  <% }); %>
+                </div>
+              </div>              
+          <!--</div> -->
             <!-- User List End--> 
             <!-- Pre-Garden -->
             <h2> Garden </h2>
