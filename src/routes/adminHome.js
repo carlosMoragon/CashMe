@@ -13,7 +13,6 @@ router.get('/', function(req, res, next) {
             res.status(500).send('Error al cargar los usuarios.');
             return;
         }
-
         // Pasar los datos de usuarios a la vista
         res.render('adminHome', { usuarios: rows });
     });

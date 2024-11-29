@@ -1,4 +1,76 @@
 <%- include('adminHeader') %> 
 
+<!--Garden Options-->
+<div class="container">
+    <h1>Garden</h1>
+    <h3>Management</h3>
+    <div class="ServiceNum">
+        <!-- New Activity Start -->
+        <h2 id="new-garden-activity">New Activity</h2>
+        <!-- <div class="slider-container">
+            <img class="slider-item" src="../img/planta1.jpg" />
+            <img class="slider-item" src="../img/planta2.jpg" />
+            <img class="slider-item" src="../img/planta3.jpg" /> 
+        </div> -->
+        <!-- New Activity End -->
+
+        <!-- Garden Factory Start -->
+        <h2 id="garden-factory">Garden Factory</h2>
+            <div class="paragraphNext">
+                <button id="add-plant" class="btn btn-primary rounded-pill px-3" type="button">Add
+                    Plant</button>
+                <button id="remove-plant" class="btn btn-primary rounded-pill px-3" type="button">Remove
+                    Plant</button>
+                <button id="easter-egg" class="btn btn-primary rounded-pill px-3" type="button">Easter
+                    Egg</button>
+                <div id="img-container" class="imgtext">
+                    <!-- Aquí se agregarán o removerán imágenes según los botones -->
+                </div>
+            </div>
+        <!-- Garden Factory End -->
+
+            <!-- <script>
+                // Seleccionar el contenedor donde estarán las imágenes
+                const imgContainer = document.getElementById('img-container');
+
+                // Función para agregar una planta (imagen)
+                document.getElementById('add-plant').addEventListener('click', () => {
+                    const img = document.createElement('img');
+                    img.src = '../img/planta2.jpg';
+                    img.alt = 'Plant';
+                    img.classList.add('plant-image');
+                    imgContainer.appendChild(img);
+                });
+
+                // Función para eliminar la última planta agregada
+                document.getElementById('remove-plant').addEventListener('click', () => {
+                    const plants = imgContainer.getElementsByClassName('plant-image');
+                    if (plants.length > 0) {
+                        imgContainer.removeChild(plants[plants.length - 1]);
+                    }
+                });
+
+                // Selección del botón y la imagen del Easter Egg
+                const easterEggButton = document.getElementById('easter-egg');
+                const easterEggImg = document.getElementById('easter-egg-img');
+
+                // Función para activar el Easter Egg
+                easterEggButton.addEventListener('click', () => {
+                    easterEggImg.style.display = 'block'; // Muestra la imagen
+                });
+
+                // Función para mover la imagen con el cursor
+                document.addEventListener('mousemove', (event) => {
+                    if (easterEggImg.style.display === 'block') {
+                        easterEggImg.style.left = `${event.pageX + 10}px`; // Posición horizontal con un pequeño desplazamiento
+                        easterEggImg.style.top = `${event.pageY + 10}px`;  // Posición vertical con un pequeño desplazamiento
+                    }
+                });
+            </script> -->
+
+        </div>
+    </div>
+    <!-- Content End -->
+
 
 <%- include('footer') %>
