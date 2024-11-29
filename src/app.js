@@ -18,9 +18,8 @@ var servicesRouter = require('./routes/services');
 var contactRouter = require('./routes/contact');
 var adminblogRouter = require('./routes/adminBlog');
 var admincontactRouter = require('./routes/adminContact');
-
-//var indexRouter = require('./routes/admin');
-//var indexRouter = require('./routes/home');
+var adminHomeRouter = require('./routes/adminHome');
+var adminGardenRouter = require('./routes/adminGarden');
 
 
 var app = express();
@@ -53,6 +52,8 @@ app.use('/services', servicesRouter);
 app.use('/adminBlog', adminblogRouter); // HAY QUE METERLO EN ADMIN
 app.use('/contact', contactRouter);
 app.use('/adminContact', admincontactRouter);
+app.use('/adminHome', adminHomeRouter);
+app.use('/adminGarden', adminGardenRouter);
 
 
 

@@ -138,11 +138,11 @@
             <h2 id="statistics-display">Statistics</h2>
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="color: #333; border-color: #333;">
               <canvas class="my-4 w-100" id="myChart" width="880" height="371" style="display: block; box-sizing: border-box; height: 330px; width: 782px;"></canvas>
-              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
                 const ctx = document.getElementById('myChart').getContext('2d');
                 const myChart = new Chart(ctx, {
-                    type: 'bar', // Puedes cambiar el tipo de gráfico
+                    type: 'bar', 
                     data: {
                     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                     datasets: [{
@@ -161,8 +161,10 @@
                     }
                     }
                 });
-                </script>
+                </script> -->
            </div>
+           <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+           <script src="../../src/routes/adminHome.js"></script> 
            <!-- Statistics End-->
            <!-- Users --> 
            <h2 id="users-display"> Users </h2>
