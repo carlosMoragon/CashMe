@@ -3,11 +3,6 @@ const express = require('express');
 const router = express.Router();
 var sqlite3 = require('sqlite3').verbose();
 
-// router.get('/', function(req, res, next) {
-//     res.render('adminHome', { });
-//   });
-
-
 const db = new sqlite3.Database('../cashme');
  
 router.get('/', function(req, res, next) {
