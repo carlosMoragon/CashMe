@@ -1,3 +1,4 @@
+<!--Admin Garden . EJS-->
 <%- include('adminHeader') %> 
 
 <!--Garden Options-->
@@ -8,66 +9,126 @@
         <!-- New Activity Start -->
         <h2 id="new-garden-activity">New Activity</h2>
         <!-- <div class="slider-container">
-            <img class="slider-item" src="../img/planta1.jpg" />
-            <img class="slider-item" src="../img/planta2.jpg" />
-            <img class="slider-item" src="../img/planta3.jpg" /> 
+            <% plantas.forEach(planta => { %> 
+                <div class="slider-item">
+                    <img src="<%= planta.imagen %>" alt="<%= planta.nombre %>" class="img-fluid rounded mb-3">
+                    <h3><%= planta.nombre %></h3>
+                </div>
+            <% }); %>
         </div> -->
         <!-- New Activity End -->
 
         <!-- Garden Factory Start -->
         <h2 id="garden-factory">Garden Factory</h2>
-            <div class="paragraphNext">
-                <button id="add-plant" class="btn btn-primary rounded-pill px-3" type="button">Add
-                    Plant</button>
-                <button id="remove-plant" class="btn btn-primary rounded-pill px-3" type="button">Remove
-                    Plant</button>
-                <button id="easter-egg" class="btn btn-primary rounded-pill px-3" type="button">Easter
-                    Egg</button>
-                <div id="img-container" class="imgtext">
-                    <!-- Aquí se agregarán o removerán imágenes según los botones -->
-                </div>
+        <div class="paragraphNext">
+            <h3 class="text-center mb-4">Manage Plants</h3>
+            <div class="button-group d-flex justify-content-center gap-3 mb-4">
+                <button id="add-plant" class="btn btn-primary rounded-pill px-4 py-2" type="button">Add Plant</button>
+                <button id="remove-plant" class="btn btn-warning rounded-pill px-4 py-2" type="button">Remove Plant</button>
+                <button id="easter-egg" class="btn btn-success rounded-pill px-4 py-2" type="button">Easter Egg</button>
             </div>
+            
+            <!-- Plant Image Container -->
+            <div id="img-container" class="imgtext">
+                <!-- Aquí se agregarán o removerán imágenes según los botones
+                <% if (planta && planta.length > 0) { %>
+                    <% planta.forEach(plant => { %>
+                        <div class="plant-item">
+                            <img src="<%= plant.image %>" alt="<%= plant.name %>" class="plant-image">
+                            <p class="text-center mt-2"><%= plant.name %></p>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No plants available.</p>
+                <% } %> -->
+            </div>
+        </div>
+        
+        <!-- Estilos en línea
+        <style>
+            /* Estilos generales */
+            .button-group {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+            }
+        
+            .button-group .btn {
+                font-size: 16px;
+                font-weight: 600;
+                padding: 12px 30px;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                border: none;
+            }
+        
+            .button-group .btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            }
+        
+            .button-group .btn:focus {
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.5); /* Azul claro al hacer foco */
+            }
+        
+            /* Botones con colores específicos */
+            #add-plant {
+                background-color: #007bff; /* Azul */
+                border-color: #007bff;
+            }
+        
+            #add-plant:hover {
+                background-color: #0056b3;
+                border-color: #004085;
+            }
+        
+            #remove-plant {
+                background-color: #ffc107; /* Amarillo */
+                border-color: #ffc107;
+            }
+        
+            #remove-plant:hover {
+                background-color: #e0a800;
+                border-color: #d39e00;
+            }
+        
+            #easter-egg {
+                background-color: #28a745; /* Verde */
+                border-color: #28a745;
+            }
+        
+            #easter-egg:hover {
+                background-color: #218838;
+                border-color: #1e7e34;
+            }
+        
+            /* Estilos adicionales para las imágenes de plantas */
+            #img-container {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-top: 30px;
+            }
+        
+            #img-container .plant-item {
+                text-align: center;
+            }
+        
+            #img-container .plant-image {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 10px;
+                transition: transform 0.3s ease-in-out;
+            }
+        
+            #img-container .plant-image:hover {
+                transform: scale(1.1);
+            }
+        </style> -->
         <!-- Garden Factory End -->
-
-            <!-- <script>
-                // Seleccionar el contenedor donde estarán las imágenes
-                const imgContainer = document.getElementById('img-container');
-
-                // Función para agregar una planta (imagen)
-                document.getElementById('add-plant').addEventListener('click', () => {
-                    const img = document.createElement('img');
-                    img.src = '../img/planta2.jpg';
-                    img.alt = 'Plant';
-                    img.classList.add('plant-image');
-                    imgContainer.appendChild(img);
-                });
-
-                // Función para eliminar la última planta agregada
-                document.getElementById('remove-plant').addEventListener('click', () => {
-                    const plants = imgContainer.getElementsByClassName('plant-image');
-                    if (plants.length > 0) {
-                        imgContainer.removeChild(plants[plants.length - 1]);
-                    }
-                });
-
-                // Selección del botón y la imagen del Easter Egg
-                const easterEggButton = document.getElementById('easter-egg');
-                const easterEggImg = document.getElementById('easter-egg-img');
-
-                // Función para activar el Easter Egg
-                easterEggButton.addEventListener('click', () => {
-                    easterEggImg.style.display = 'block'; // Muestra la imagen
-                });
-
-                // Función para mover la imagen con el cursor
-                document.addEventListener('mousemove', (event) => {
-                    if (easterEggImg.style.display === 'block') {
-                        easterEggImg.style.left = `${event.pageX + 10}px`; // Posición horizontal con un pequeño desplazamiento
-                        easterEggImg.style.top = `${event.pageY + 10}px`;  // Posición vertical con un pequeño desplazamiento
-                    }
-                });
-            </script> -->
-
         </div>
     </div>
     <!-- Content End -->
