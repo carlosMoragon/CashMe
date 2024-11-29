@@ -156,4 +156,69 @@ document.addEventListener("DOMContentLoaded", () => {
         return `${year}-${month}-${day} ${hours}:${minutes}`;
     }
 
+    const create_chat_button = document.querySelector('#create-button');
+    const delete_chat_button = document.querySelector('#delete-button');
+    create_chat_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log("Se EJECUTA");
+        document.getElementById('div_create_chat').style.display = 'block';
+    });
+    delete_chat_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('div_delete_chat').style.display = 'block';
+    });
+
+    const accept_creation = document.querySelector('#accept_creation');
+    const cancel_creation = document.querySelector('#cancel_creation');
+    const titulo = document.querySelector('#titulo'); // Obtener el input del título
+    const selectedUsers = [document.getElementById("users-display").textContent.split("Chats of ")[1]];
+    
+    document.querySelectorAll('#check_usuarios .form-check-input').forEach(function(checkbox) {
+        if (checkbox.checked) {
+            selectedUsers.push(checkbox.id); // Añadir el id del checkbox seleccionado al array
+        }
+    });
+    
+    accept_creation.addEventListener('click', (e) => {
+        e.preventDefault();
+    
+        const tituloValue = titulo.value.trim(); // Asegúrate de que el valor no tiene espacios extras
+    
+        // Verificar que el título no esté vacío
+        if (!tituloValue) {
+            alert("Por favor, ingresa un título para el chat.");
+            return;
+        }
+    
+        console.log("Valor del título:", tituloValue); // Verifica que el valor es correcto
+    
+        fetch('/chat/createChat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                titulo: tituloValue, // Título del chat
+                usuarios: selectedUsers, // Lista de usuarios seleccionados
+                date: getTodayDate() // Fecha de creación
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            if (data.error) {
+                alert(data.error); // Mostrar el error si se recibe uno
+            }
+        })
+        .catch(error => console.error('Error al enviar el mensaje:', error));
+        document.getElementById('div_create_chat').style.display = 'none';
+    });
+    
+
+    cancel_creation.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('div_create_chat').style.display = 'none';
+    });
+
+
 });

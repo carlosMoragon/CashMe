@@ -8,8 +8,12 @@
 <h2 id="users-display"> Chats of <%= usuario%></h2>
 <div id="contenedor_chat">
     <div class="imgparagraph">
+        <div class="create-delete-chat">
+            <button id="create-button" class="create-delete-button">create</button>
+            <button id="delete-button" class="create-delete-button">delete</button>
+        </div>
         <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
-            <div class="list-group">
+            <div id="all_chats" class="list-group">
                 <% if (chats && chats.length > 0) { %>
                     <% chats.forEach(chat => { %>
                       <a href="" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
@@ -25,41 +29,10 @@
                     <% }); %>
                   <% } else { %>
                     <p>No tienes chats disponibles.</p>
-                  <% } %><!--
-            <a href="" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true" tag>
-                <img src="/images/oriannaprofile.jpg" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-                <div class="d-flex gap-2 w-100 justify-content-between">
-                <div>
-                    <h6 class="mb-0">Orianna Milone</h6>
-                    <p class="mb-0 opacity-75">Just joined!</p>
-                </div>
-                <small class="opacity-50 text-nowrap">now</small>
-                </div>
-            </a>
-            <a href="" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                <img src="/images/moragonprofile.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-                <div class="d-flex gap-2 w-100 justify-content-between">
-                <div>
-                    <h6 class="mb-0">Carlos Moragon</h6>
-                    <p class="mb-0 opacity-75">Killed his bonsai</p>
-                </div>
-                <small class="opacity-50 text-nowrap">3d</small>
-                </div>
-            </a>
-            <a href="" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                <img src="/images/paloma.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-                <div class="d-flex gap-2 w-100 justify-content-between">
-                <div>
-                    <h6 class="mb-0">Javi Martínez</h6>
-                    <p class="mb-0 opacity-75">Asked you a question ... ! </p>
-                </div>
-                <small class="opacity-50 text-nowrap">1w</small>
-                </div>
-            </a>
-            -->
+                  <% } %>
             </div>
         </div>
-    </div>
+    </div>  
     <div id="chat">
         <form action="/chat/sendMessage" method="POST" class="card">
             <div id="chat-header" class="chat-header">chat</div>
@@ -71,7 +44,35 @@
                 <button class="send-button" type="submit">Send</button>
             </div>
         </form>
-    </div>    
+    </div>
+
+    <div id="div_create_chat">
+        <label for="form_create_chat"></label>
+        <form id="form_create_chat">
+            <label for="titulo">Title:</label>
+            <input id="titulo" type="text" placeholder="title">
+            <input type="text" placeholder="Search..">
+            <label for="check_usuarios">Who do you want to speak with?</label>
+            <div id="check_usuarios">
+                <!--Meter un for para seleccionar el usuario-->
+                <% if(usuarios && usuarios.length > 0) { %>
+                    <% usuarios.forEach(usuario => { %>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="<%= usuario%>">
+                    <label class="form-check-label" for="<%= usuario%>"><%= usuario%></label>
+                </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No tienes usuarios disponibles.</p>
+                <% } %>
+            </div>
+            <button id="cancel_creation">cancel</button>
+            <button id="accept_creation">accept</button>
+        </form>
+    </div> 
+    <div id="div_delete_chat">
+
+    </div> 
 </div>
 
 <%- include('footer') %>

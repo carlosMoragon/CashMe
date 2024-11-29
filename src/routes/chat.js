@@ -6,7 +6,7 @@ var sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('../cashme');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
   const usuario = req.session.user ? req.session.user.nombre : null;
 
   // Si no hay usuario en la sesión, redirige o maneja el error
@@ -14,35 +14,73 @@ router.get('/', function(req, res, next) {
     return res.status(401).send('No se encontró al usuario en la sesión.');
   }
 
-  db.all(`
-    SELECT 
-      chats.id AS chat_id, 
-      chats.titulo AS chat_title, 
-      mensajes.contenido AS last_message_content,
-      mensajes.fecha AS last_message_date
-    FROM usuarios
-    INNER JOIN usuarios_chats ON usuarios.id = usuarios_chats.usuario_id
-    INNER JOIN chats ON usuarios_chats.chat_id = chats.id
-    LEFT JOIN mensajes ON chats.id = mensajes.chat_id
-    WHERE usuarios.nombre = ?
-    ORDER BY mensajes.fecha DESC
-    LIMIT 1`, [usuario], function(err, rows) {
-      if (err) {
-        console.error("Error al realizar la consulta:", err);
-        return next(err);
-      }
+  try {
+    // Consulta para obtener los chats del usuario
+    const chatsQuery = `
+      SELECT 
+          chats.id AS chat_id, 
+          chats.titulo AS chat_title, 
+          last_message.content AS last_message_content,
+          last_message.date AS last_message_date
+      FROM 
+          usuarios
+      INNER JOIN usuarios_chats ON usuarios.id = usuarios_chats.usuario_id
+      INNER JOIN chats ON usuarios_chats.chat_id = chats.id
+      LEFT JOIN (
+          SELECT 
+              chat_id, 
+              contenido AS content, 
+              fecha AS date
+          FROM mensajes
+          WHERE (chat_id, fecha) IN (
+              SELECT chat_id, MAX(fecha)
+              FROM mensajes
+              GROUP BY chat_id
+          )
+      ) AS last_message ON chats.id = last_message.chat_id
+      WHERE usuarios.nombre = ?
+      ORDER BY last_message.date DESC;
+      `;
 
-      if (rows && rows.length > 0) {
-        // Renderiza la vista 'chat', pasando solo los chats con su último mensaje
-        res.render('chat', { chats: rows , usuario: req.session.user.nombre});
-      } else {
-        // Si no hay chats, pasa un mensaje vacío o nulo
-        res.render('chat', { chats: [], message: 'No se encontraron chats para este usuario.' });
-      }
-  });
+    const chats = await queryDatabase(chatsQuery, [usuario]);
 
+    // Obtener la lista de usuarios
+    const usuarios = await getUsersName(req);
+
+    // Renderiza la vista 'chat', pasando los datos
+    res.render('chat', { chats, usuario: req.session.user.nombre, usuarios });
+  } catch (err) {
+    console.error("Error al realizar la consulta:", err);
+    return next(err);
+  }
 });
 
+// Función para obtener los usuarios, excluyendo al usuario actual
+function getUsersName(req) {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT nombre FROM usuarios WHERE nombre <> ?`;
+    db.all(query, [req.session.user.nombre], (err, rows) => {
+      if (err) {
+        reject("Error al realizar la consulta para obtener usuarios.");
+      } else {
+        resolve(rows.map(row => row.nombre));
+      }
+    });
+  });
+}
+
+// Función para hacer consultas a la base de datos
+function queryDatabase(query, params) {
+  return new Promise((resolve, reject) => {
+    db.all(query, params, (err, rows) => {
+      if (err) {
+        reject("Error al ejecutar la consulta.");
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
 
 
 
@@ -58,6 +96,88 @@ function getTodayDate(){
   // Formatear como YYYY-MM-DD HH:mm
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
+
+router.post('/createChat', function (req, res, next) {
+  console.log("SE EJECUTA");
+  // Verificar si el usuario está autenticado
+  if (!req.session || !req.session.user) {
+    console.error("Sesión no inicializada.");
+    return res.status(401).send("Usuario no autenticado.");
+  }
+
+  // Obtener los datos del cuerpo de la solicitud
+  const usuarios = req.body.usuarios; // Lista de nombres de usuarios
+  const titulo = req.body.titulo;
+  const fechaCreacion = req.body.date; // Usar fecha actual si no se proporciona
+
+  // Validar entrada
+  if (!usuarios || !Array.isArray(usuarios) || usuarios.length === 0) {
+    return res.status(400).json({ error: 'Debe proporcionar al menos un usuario.' });
+  }
+  if (!titulo) {
+    return res.status(400).json({ error: 'Debe proporcionar un título para el chat.' });
+  }
+
+  // Paso 1: Insertar el chat en la tabla "chats"
+  db.run(
+    'INSERT INTO chats (titulo, fecha) VALUES (?, ?)',
+    [titulo, fechaCreacion],
+    function (err) {
+      if (err) {
+        console.error('Error al crear el chat:', err);
+        return next(err);
+      }
+
+      const chatId = this.lastID; // Obtener el ID del chat recién creado
+      console.log('Chat creado correctamente con ID:', chatId);
+
+      // Paso 2: Obtener los IDs de los usuarios a partir de sus nombres
+      const placeholders = usuarios.map(() => '?').join(', ');
+      db.all(
+        `SELECT id FROM usuarios WHERE nombre IN (${placeholders})`,
+        usuarios,
+        function (err, rows) {
+          if (err) {
+            console.error('Error al buscar usuarios:', err);
+            return next(err);
+          }
+
+          if (rows.length !== usuarios.length) {
+            console.error('Algunos usuarios no se encontraron.');
+            return res.status(400).json({
+              error: 'Algunos usuarios no existen en la base de datos.',
+            });
+          }
+
+          const usuariosIds = rows.map((row) => row.id);
+
+          // Paso 3: Asociar usuarios al chat en la tabla "usuarios_chats"
+          const placeholdersChats = usuariosIds.map(() => '(?, ?)').join(', ');
+          const valuesChats = usuariosIds.flatMap((usuarioId) => [usuarioId, chatId]);
+
+          db.run(
+            `INSERT INTO usuarios_chats (usuario_id, chat_id) VALUES ${placeholdersChats}`,
+            valuesChats,
+            function (err) {
+              if (err) {
+                console.error('Error al asociar usuarios al chat:', err);
+                return next(err);
+              }
+
+              console.log('Usuarios asociados correctamente al chat.');
+              res.status(200).json({
+                message: 'Chat creado exitosamente.',
+                chatId,
+              });
+            }
+          );
+        }
+      );
+    }
+  );
+});
+
+
 
 router.post('/getMessages', function(req, res, next) {
   console.log("Entra en SendMessage");

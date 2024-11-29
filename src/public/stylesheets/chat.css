@@ -65,6 +65,7 @@
   }
 
   .imgparagraph {
+    display: block;
     width: fit-content;
   }
 
@@ -131,6 +132,61 @@
     width: fit-content;
   }
 
+  .create-delete-chat {
+    display: flex;
+    justify-content: center;
+  }
 
+  #create-button {
+    display: inline;
+    background-color: #e5ffd4;
+  }
 
+  #delete-button {
+    display: inline;
+    background-color: #ffd4d4;
+  }
+
+  .create-delete-button {
+    margin: 2px;
+    background: #fbca1f;
+    font-family: inherit;
+    padding: 0.6em 1.3em;
+    font-weight: 900;
+    font-size: 18px;
+    border: 3px solid black;
+    border-radius: 0.4em;
+    box-shadow: 0.1em 0.1em;
+    cursor: pointer;
+  }
   
+  .create-delete-button:hover {
+    transform: translate(-0.05em, -0.05em);
+    box-shadow: 0.15em 0.15em;
+  }
+  
+  .create-delete-button:active {
+    transform: translate(0.05em, 0.05em);
+    box-shadow: 0.05em 0.05em;
+  }
+  
+
+  /* Estilo inicial para ocultar el div */
+#div_create_chat {
+  display: none; /* Ocultamos el div por defecto */
+  position: fixed; /* Posiciona el div de manera fija en la pantalla */
+  top: 50%; /* Coloca el div en el centro de la pantalla en el eje Y */
+  left: 50%; /* Coloca el div en el centro de la pantalla en el eje X */
+  transform: translate(-50%, -50%); /* Ajuste para centrar el div correctamente */
+  background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+  color: white; /* Color del texto */
+  padding: 20px;
+  border-radius: 8px; /* Bordes redondeados */
+  z-index: 1000; /* Asegura que el div esté sobre otros elementos */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Sombra para hacer que resalte */
+}
+
+#all_chats {
+  height: 300px;
+  overflow-y: auto;
+}
