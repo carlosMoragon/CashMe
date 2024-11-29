@@ -2,10 +2,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const chats = document.querySelectorAll(".list-group a");
     const chatHeader = document.querySelector(".card .chat-header");
 
+    let isDeleting = false;
+
     chats.forEach(chat => {
         chat.addEventListener('click', (e) => {
             e.preventDefault();
-    
+
+            if (isDeleting) return;
+
             // Obtener el título del chat seleccionado (nombre del usuario o chat)
             const userName = chat.querySelector('h6').innerText;
             
@@ -163,10 +167,58 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Se EJECUTA");
         document.getElementById('div_create_chat').style.display = 'block';
     });
+        
+        // Al pulsar el botón de eliminar, se activa el modo de eliminar
     delete_chat_button.addEventListener('click', (e) => {
         e.preventDefault();
         document.getElementById('div_delete_chat').style.display = 'block';
+        isDeleting = true; // Activar modo de eliminación
+
+        // Obtener todos los enlaces <a> dentro de #all_chats
+        const chatLinks = document.querySelectorAll('#all_chats a');
+
+        // Cambiar color cuando el ratón pasa por encima de cada <a>
+        chatLinks.forEach((chatLink) => {
+            chatLink.addEventListener('mouseover', () => {
+                chatLink.style.backgroundColor = 'red'; // Cambiar el fondo a rojo cuando el ratón está encima
+            });
+
+            chatLink.addEventListener('mouseout', () => {
+                chatLink.style.backgroundColor = ''; // Restaurar el color original cuando el ratón se va
+            });
+
+            // Añadir un evento de click para eliminar
+            chatLink.addEventListener('click', (e) => {
+                if (isDeleting) { // Solo se ejecuta si estamos en modo de eliminación
+                    e.preventDefault(); // Evitar que ejecute la función del chat
+
+                    // Aquí capturamos la información del chat seleccionado
+                    const chatName = chatLink.innerText.split("\n")[0]; // Obtener el texto del enlace
+                    console.log("Eliminando el chat:", chatName);
+
+                    // Aquí puedes realizar la acción de eliminación, por ejemplo, hacer una solicitud a un servidor
+                    fetch('/chat/deleteChat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ chatName: chatName }) // Enviar el nombre del chat a eliminar
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Chat eliminado:", data);
+                        // Realiza las actualizaciones necesarias en la interfaz
+                    })
+                    .catch(error => console.error("Error al eliminar el chat:", error));
+                    
+                    // Desactivar el modo de eliminación después de eliminar
+                    isDeleting = false;
+                    document.getElementById('div_delete_chat').style.display = 'none'; // Ocultar el div
+                }
+            });
+        });
     });
+
 
     const accept_creation = document.querySelector('#accept_creation');
     const cancel_creation = document.querySelector('#cancel_creation');

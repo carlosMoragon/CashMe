@@ -97,6 +97,91 @@ function getTodayDate(){
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
+router.post('/deleteChat', function(req, res, next){
+  // Verificar si el usuario está autenticado
+  if (!req.session || !req.session.user) {
+    console.error("Sesión no inicializada.");
+    return res.status(401).send("Usuario no autenticado.");
+  }
+
+  const chat = req.body.chatName; // Nombre del chat a eliminar
+  const usuario = req.session.user.nombre; // Nombre del usuario autenticado
+
+  // Paso 1: Obtener el ID del chat a partir de su nombre
+  db.get(
+    'SELECT id FROM chats WHERE titulo = ?',
+    [chat],
+    function(err, row) {
+      if (err) {
+        console.error("Error al buscar el chat:", err);
+        return next(err);
+      }
+
+      if (!row) {
+        return res.status(404).json({ error: 'Chat no encontrado.' });
+      }
+
+      const chatId = row.id;
+
+      // Paso 2: Verificar si el usuario está en ese chat
+      db.get(
+        'SELECT * FROM usuarios_chats WHERE chat_id = ? AND usuario_id = (SELECT id FROM usuarios WHERE nombre = ?)',
+        [chatId, usuario],
+        function(err, row) {
+          if (err) {
+            console.error("Error al verificar usuario en chat:", err);
+            return next(err);
+          }
+
+          if (!row) {
+            return res.status(403).json({ error: 'El usuario no pertenece a este chat.' });
+          }
+
+          // Paso 3: Borrar todos los mensajes del chat
+          db.run(
+            'DELETE FROM mensajes WHERE chat_id = ?',
+            [chatId],
+            function(err) {
+              if (err) {
+                console.error("Error al borrar los mensajes:", err);
+                return next(err);
+              }
+
+              // Paso 4: Borrar las asociaciones en la tabla usuarios_chats
+              db.run(
+                'DELETE FROM usuarios_chats WHERE chat_id = ?',
+                [chatId],
+                function(err) {
+                  if (err) {
+                    console.error("Error al borrar la asociación usuario-chat:", err);
+                    return next(err);
+                  }
+
+                  // Paso 5: Eliminar el chat de la tabla chats
+                  db.run(
+                    'DELETE FROM chats WHERE id = ?',
+                    [chatId],
+                    function(err) {
+                      if (err) {
+                        console.error("Error al borrar el chat:", err);
+                        return next(err);
+                      }
+
+                      console.log("Chat eliminado correctamente.");
+                      return res.status(200).json({ message: 'Chat eliminado exitosamente.' });
+                    }
+                  );
+                }
+              );
+            }
+          );
+        }
+      );
+    }
+  );
+});
+
+
 router.post('/createChat', function (req, res, next) {
   console.log("SE EJECUTA");
   // Verificar si el usuario está autenticado

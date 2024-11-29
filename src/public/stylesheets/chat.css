@@ -190,3 +190,18 @@
   height: 300px;
   overflow-y: auto;
 }
+
+#div_delete_chat {
+  display: none;
+  position: fixed;  /* Hace que el div quede fijo en la pantalla */
+  top: 0;  /* Lo coloca en la parte superior */
+  left: 50%;  /* Lo coloca al centro horizontal */
+  transform: translateX(-50%);  /* Lo ajusta para centrarlo correctamente */
+  z-index: 9999;  /* Asegura que el div esté por encima de otros elementos */
+  background-color: rgba(0, 0, 0, 0.7);  /* Fondo semi-transparente */
+  color: white;  /* Color de texto */
+  padding: 20px;  /* Espaciado interno */
+  width: 100%;  /* Ocupa todo el ancho de la pantalla */
+  text-align: center;  /* Centra el contenido dentro del div */
+  box-sizing: border-box;  /* Incluye el padding en el tamaño total del div */
+}
