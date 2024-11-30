@@ -262,7 +262,72 @@ router.post('/createChat', function (req, res, next) {
   );
 });
 
+// metí esto a ver si funcioa conectar desde el admin (Orianna)
+// Ruta para crear un chat entre el usuario conectado y el seleccionado
+// router.get('/chat/createChat', function (req, res, next) {
+//   const usuarioEmail = req.query.usuario; // El email del usuario seleccionado
+//   const currentUser = req.session.user; // Suponiendo que el usuario conectado está en la sesión
 
+//   // Verificar si el usuario está autenticado
+//   if (!currentUser) {
+//     return res.status(401).send('Usuario no autenticado');
+//   }
+
+//   // Paso 1: Obtener los IDs de los dos usuarios (el actual y el seleccionado)
+//   db.all('SELECT id, email FROM usuarios WHERE email IN (?, ?)', [currentUser.email, usuarioEmail], function (err, rows) {
+//     if (err) {
+//       console.error('Error al obtener los usuarios:', err);
+//       return next(err);
+//     }
+
+//     if (rows.length !== 2) {
+//       return res.status(404).send('No se encontraron ambos usuarios');
+//     }
+
+//     const usuarioIds = rows.map(row => row.id);
+
+//     // Paso 2: Comprobar si ya existe un chat entre ellos
+//     db.get('SELECT c.id FROM chats c JOIN usuarios_chats uc ON c.id = uc.chat_id WHERE uc.usuario_id IN (?, ?) GROUP BY c.id', usuarioIds, function (err, chatRow) {
+//       if (err) {
+//         console.error('Error al buscar chat existente:', err);
+//         return next(err);
+//       }
+
+//       if (chatRow) {
+//         // Si ya existe un chat, redirigir al chat existente
+//         return res.redirect(`/chat/${chatRow.id}`);
+//       }
+
+//       // Paso 3: Si no existe, crear un nuevo chat
+//       const titulo = `Chat entre ${currentUser.email} y ${usuarioEmail}`;
+//       const fechaCreacion = new Date().toISOString();
+
+//       db.run('INSERT INTO chats (titulo, fecha) VALUES (?, ?)', [titulo, fechaCreacion], function (err) {
+//         if (err) {
+//           console.error('Error al crear el chat:', err);
+//           return next(err);
+//         }
+
+//         const chatId = this.lastID;
+
+//         // Paso 4: Asociar ambos usuarios con el nuevo chat
+//         const valores = [usuarioIds[0], chatId, usuarioIds[1], chatId];
+//         db.run('INSERT INTO usuarios_chats (usuario_id, chat_id) VALUES (?, ?), (?, ?)', valores, function (err) {
+//           if (err) {
+//             console.error('Error al asociar usuarios al chat:', err);
+//             return next(err);
+//           }
+
+//           // Redirigir a la vista del chat recién creado
+//           res.redirect(`/chat/${chatId}`);
+//         });
+//       });
+//     });
+//   });
+// });
+
+
+//
 
 router.post('/getMessages', function(req, res, next) {
   console.log("Entra en SendMessage");
