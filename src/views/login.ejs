@@ -45,8 +45,8 @@
             <div class="container-fluid py-5 hidden" id="main-container"> <!-- añadimos class hidden -->
                 <div class="container py-5">
                     <div class="text-center mb-3 pb-3">
-                        <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Log In </h6>
-                        <h1>Enter the world of CashMe</h1>
+                        <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Inicio de sesión </h6>
+                        <h1>¡Forma parte del proyecto!</h1>
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
@@ -65,13 +65,13 @@
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        <button class="btn btn-primary py-3 px-4" type="submit" id="submitLoginButton">Submit</button>
+                                        <button class="btn btn-primary py-3 px-4" type="submit" id="submitLoginButton">Acceder</button>
                                     </div>
                                 </form>
                             </div>
                             <!-- Botón para mostrar formulario registro -->
                             <div class="text-center mt-4">
-                                <button class="btn btn-secondary py-3 px-4" id="showNewFormBtn">Do not have an account? Register Here!</button>
+                                <button class="btn btn-secondary py-3 px-4" id="showNewFormBtn">¿No tienes una cuenta? ¡Regístrate aquí!</button>
                             </div>
                         </div>
                     </div>
@@ -83,8 +83,8 @@
             <div class="container-fluid py-5" id="newFormContainer">
                 <div class="container py-5">
                     <div class="text-center mb-3 pb-3">
-                        <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Register</h6>
-                        <h1>Create an account at CashMe</h1>
+                        <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Registro</h6>
+                        <h1>Create una cuenta en ChestGAN</h1>
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
@@ -92,7 +92,7 @@
 
                                 <form id="RegisterForm" action="/login/registerClient" method="POST">
                                     <div class="control-group">
-                                        <input type="text" class="form-control p-4" id="newName" name="name" placeholder="Name" required>
+                                        <input type="text" class="form-control p-4" id="newName" name="name" placeholder="Nombre" required>
                                         <p class="help-block text-danger" id="nameError" style="display: none;"></p>
                                     </div>
                                     <div class="control-group">
@@ -100,17 +100,17 @@
                                         <p class="help-block text-danger"></p>
                                     </div>
                                     <div class="control-group">
-                                        <input type="password" class="form-control p-4" id="newPassword" name="password" placeholder="Password" required>
+                                        <input type="password" class="form-control p-4" id="newPassword" name="password" placeholder="contraseña" required>
                                         <p class="help-block text-danger"></p>
                                     </div>
                                     <div class="text-center">
-                                        <button class="btn btn-primary py-3 px-4" type="submit">Submit</button>
+                                        <button class="btn btn-primary py-3 px-4" type="submit">Enviar</button>
                                     </div>
                                 </form>
 
                             </div>
                             <div class="text-center mt-4">
-                                <button class="btn btn-secondary py-3 px-4" type="button" id="hideNewFormBtn"> Already have an account? log in here</button>
+                                <button class="btn btn-secondary py-3 px-4" type="button" id="hideNewFormBtn"> ¿Ya tienes una cuenta? Inicia sesión aquí</button>
                             </div>
                         </div>
                     </div>
