@@ -49,9 +49,16 @@ router.post('/loginClient', function (req, res, next) {
           return;
         }
 
+        db.all("SELECT id, planta, evolucion FROM jardines", function (err, plantsAvailable) {
+          if (err) {
+              return next(err);
+          }
+          
         console.log('Se supone que el cash:', cash.saldo);
-        res.render('profile', { email: req.session.user.email, username: req.session.user.nombre, saldo: cash.saldo });
+        let awarded = cash.saldo * 0.45;
+        res.render('profile', { email: req.session.user.email, username: req.session.user.nombre, saldoAcumulado: awarded, plantasDisponibles: plantsAvailable });
       });
+    });
     } else {
       res.render('login', { error: 'Invalid email or password' });
     }

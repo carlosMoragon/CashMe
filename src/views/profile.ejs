@@ -254,7 +254,8 @@
             </button>
 
             <div class="d-flex align-items-center">
-                <p id="savedAmount" class="mr-2 mb-0">Total Saved: € <%= saldo %></p>
+                <p id="savedAmount" class="mr-2 mb-0">Total Accumulated: € <%= saldoAcumulado %>
+                </p>
                 <img src="/images/coin.png" alt="Savings Image" width="40" height="40">
             </div>
         </div>
@@ -292,83 +293,84 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Client Garden</h2>
 
-        <!-- Contenedor de las plantas disponibles -->
+        <!--No esta ni agarrando el click pero bueno aja. Luego sigo-->
+        <!-- Contenedor de las plantas disponibles START -->
         <div class="plant-container">
-            <div class="plant-item">
-                <img src="/images/planta1.jpg" alt="Plant 1" id="plant1-img">
-                <button class="buy-plant-btn" onclick="buyPlant('planta1', '/images/planta1.jpg')">Buy Plant 1</button>
-            </div>
-            <div class="plant-item">
-                <img src="/images/planta2.jpg" alt="Plant 2" id="plant2-img">
-                <button class="buy-plant-btn" onclick="buyPlant('planta2', '/images/planta2.jpg')">Buy Plant 2</button>
-            </div>
-            <div class="plant-item">
-                <img src="/images/planta3.jpg" alt="Plant 3" id="plant3-img">
-                <button class="buy-plant-btn" onclick="buyPlant('planta3', '/images/planta3.jpg')">Buy Plant 3</button>
-            </div>
+            <% plantasDisponibles.forEach(plant=> { %>
+                <div class="plant-item">
+                    <img src="/images/plantas/<%= plant.id %>.jpg" alt="Plant <%= plant.id %>"
+                        id="plant<%= plant.id %>-img" draggable="true" ondragstart="drag(event)">
+                    <button class="buy-plant-btn" data-plant-id="<%= plant.id %>"
+                        data-plant-price="<%= plant.evolucion %>">
+                        Buy Plant: €<%= plant.evolucion %>
+                    </button>
+                </div>
+                <% }) %>
         </div>
+        <!-- Contenedor de las plantas disponibles END -->
 
-        <!-- Contenedor del jardín -->
+        <!-- Contenedor del jardín START -->
         <div class="garden" id="garden" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <!-- Contenedor del jardín END -->
+
+
         <script>
-            let plantCount = {
-                planta1: 0,
-                planta2: 0,
-                planta3: 0
-            };
+            document.querySelectorAll('.buy-plant-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    console.log('Al menos detecta el click');
+                    const plantId = this.dataset.plantId;
+                    const plantPrice = parseFloat(this.dataset.plantPrice);
+                    buyPlant(plantId, plantPrice);
+                });
+            });
 
-            // Función para permitir el arrastre
-            function allowDrop(event) {
-                event.preventDefault(); // Necesario para permitir el drop
+            function buyPlant(plantId, plantPrice) {
+                if (saldoAcumulado >= plantPrice) {
+                    const plantImg = document.getElementById(`plant${plantId}-img`).cloneNode(true);
+                    plantImg.removeAttribute('id'); // Evita conflictos de ID duplicados
+                    document.getElementById('garden').appendChild(plantImg);
+                    saldoAcumulado -= plantPrice; // Resta el precio de la planta al saldo
+                    alert('Plant purchased and added to your garden!');
+                } else {
+                    alert('Insufficient balance to buy this plant.');
+                }
             }
+            // Event listener para el botón de "Save Challenge"
+            document.getElementById('saveChallenge').addEventListener('click', function () {
+                // Obtener el valor ingresado por el usuario
+                const challengeAmount = document.getElementById('amount').value;
 
-            // Función para iniciar el arrastre
-            function drag(event) {
-                event.dataTransfer.setData("text", event.target.id); // Guardamos el id del elemento arrastrado
-            }
+                // Verificar si el valor es válido
+                if (!challengeAmount || isNaN(challengeAmount) || challengeAmount <= 0) {
+                    alert('Please enter a valid amount.');
+                    return;
+                }
 
-            // Función para comprar la planta
-            function buyPlant(plantId, plantImg) {
-                // Incrementar el contador de la planta seleccionada
-                plantCount[plantId]++;
+                // Enviar el valor al servidor usando Fetch API
+                fetch('/saveChallenge', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ amount: challengeAmount })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Challenge saved successfully!');
+                            // Actualizar la interfaz con el saldo actualizado, si es necesario
+                            document.getElementById('savedAmount').textContent = `Total Saved: € ${data.newBalance}`;
+                            $('#setChallengeModal').modal('hide'); // Cerrar el modal
+                        } else {
+                            alert('Error saving challenge.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred.');
+                    });
+            });
 
-                // Crear una nueva planta y hacerla arrastrable
-                const newPlant = document.createElement('img');
-                newPlant.src = plantImg; // Usamos la imagen de la planta seleccionada
-                newPlant.classList.add('plant');
-                newPlant.id = plantId + '-' + plantCount[plantId]; // ID único para cada planta añadida
-                newPlant.setAttribute('draggable', 'true'); // Permitir arrastre de la nueva planta
-
-                // Asignar evento para el arrastre
-                newPlant.setAttribute('ondragstart', 'drag(event)');
-
-                // Posicionar la planta en el jardín (en una posición aleatoria)
-                const garden = document.getElementById('garden');
-                const maxX = garden.offsetWidth - 100;
-                const maxY = garden.offsetHeight - 100;
-                newPlant.style.left = `${Math.random() * maxX}px`;
-                newPlant.style.top = `${Math.random() * maxY}px`;
-
-                // Agregar la planta al jardín
-                garden.appendChild(newPlant);
-            }
-
-            // Función para soltar la planta en el jardín
-            function drop(event) {
-                event.preventDefault();
-                const plantId = event.dataTransfer.getData("text");
-                const plant = document.getElementById(plantId);
-
-                // Calcula la nueva posición en el jardín
-                const garden = document.getElementById('garden');
-                const gardenRect = garden.getBoundingClientRect();
-                const x = event.clientX - gardenRect.left - plant.width / 2;
-                const y = event.clientY - gardenRect.top - plant.height / 2;
-
-                // Establece la nueva posición de la planta
-                plant.style.left = `${x}px`;
-                plant.style.top = `${y}px`;
-            }
         </script>
     </div>
     <!-- Jardín End-->
