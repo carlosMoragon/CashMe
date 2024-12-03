@@ -142,7 +142,7 @@
             <tbody>
                 <tr>
                     <td class="font-weight-bold">Name:</td>
-                    <% if (username) { %>
+                    <% if (typeof username !== 'undefined') { %>
                         <td>
                             <%= username %>
                         </td>
@@ -152,7 +152,7 @@
                 </tr>
                 <tr>
                     <td class="font-weight-bold">Email:</td>
-                    <% if (email) { %>
+                    <% if (typeof email !== 'undefined') { %>
                         <td>
                             <%= email %>
                         </td>
@@ -254,7 +254,11 @@
             </button>
 
             <div class="d-flex align-items-center">
-                <p id="savedAmount" class="mr-2 mb-0">Total Accumulated: € <%= saldoAcumulado %>
+                <% if (typeof saldoAcumulado !== 'undefined') { %>
+                    <p id="savedAmount" class="mr-2 mb-0">Total Accumulated: € <%= saldoAcumulado %>
+                <% } else { %>
+                    <p id="savedAmount" class="mr-2 mb-0">Total Accumulated: Not defined
+                <% } %>
                 </p>
                 <img src="/images/coin.png" alt="Savings Image" width="40" height="40">
             </div>
@@ -295,6 +299,7 @@
 
         <!--No esta ni agarrando el click pero bueno aja. Luego sigo-->
         <!-- Contenedor de las plantas disponibles START -->
+        <% if (typeof plantasDisponibles !== 'undefined'){%>
         <div class="plant-container">
             <% plantasDisponibles.forEach(plant=> { %>
                 <div class="plant-item">
@@ -307,6 +312,7 @@
                 </div>
                 <% }) %>
         </div>
+        <% } %>
         <!-- Contenedor de las plantas disponibles END -->
 
         <!-- Contenedor del jardín START -->
