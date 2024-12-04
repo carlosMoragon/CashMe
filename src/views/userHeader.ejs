@@ -40,15 +40,21 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                         <div class="navbar-nav ml-auto py-0">
-                            <a href="/" class="nav-item nav-link active">Home</a>
-                            <a href="/aboutus" class="nav-item nav-link">About Us</a>
-                            <a href="/services" class="nav-item nav-link">Services</a>
-                            <a href="/blog" class="nav-item nav-link">Blog</a>
-                            <a href="/contact" class="nav-item nav-link">Contact Us</a>
-                            <a href="/" class="nav-item nav-link">Log out</a>
+                            <a href="/profile" class="nav-item nav-link <%= page === 'profile' ? 'active' : '' %>">Profile</a>
+                            <a href="/chat" class="nav-item nav-link <%= page === 'chat' ? 'active' : '' %>">Chat</a>
+                            <a href="/contact" class="nav-item nav-link <%= page === 'contact' ? 'active' : '' %>">Contact</a>
+                            <a href="/blog" class="nav-item nav-link <%= page === 'blog' ? 'active' : '' %>">Blog</a>
+                            <a href="/analytics" class="nav-item nav-link <%= page === 'analytics' ? 'active' : '' %>">Analytics</a>
+                            <a href="/transactions" class="nav-item nav-link <%= page === 'transactions' ? 'active' : '' %>">Transactions</a>
+                            <a href="/logout" class="nav-item nav-link">Log out</a>
                         </div>
                     </div>
                 </nav>
             </div>
         </div>
         <!-- Navbar End -->
+        <style>
+            .nav-link.active {
+                color: green !important;
+            }
+        </style>

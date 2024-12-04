@@ -20,6 +20,8 @@ var adminblogRouter = require('./routes/adminBlog');
 var admincontactRouter = require('./routes/adminContact');
 var adminHomeRouter = require('./routes/adminHome');
 var adminGardenRouter = require('./routes/adminGarden');
+var analyticsRouter = require('./routes/analytics');
+var transactionsRouter = require('./routes/transactions');
 
 
 var app = express();
@@ -43,26 +45,38 @@ app.use(session({
 }));
 
 app.use('/', indexRouter);
-app.use('/profile', checkAuthenticated, profileRouter);
+app.use('/profile',checkAuthenticated, profileRouter);
 app.use('/login', loginRouter)
 app.use('/users', usersRouter);
 app.use('/blog', blogRouter);
 app.use('/chat', chatRouter);
 app.use('/aboutus', aboutusRouter);
 app.use('/services', servicesRouter);
-app.use('/adminBlog', adminblogRouter); // HAY QUE METERLO EN ADMIN
+app.use('/adminBlog', adminblogRouter); //checkAdmin añadir middleware
 app.use('/contact', contactRouter);
 app.use('/adminContact', admincontactRouter);
 app.use('/adminHome', adminHomeRouter);
 app.use('/adminGarden', adminGardenRouter);
-
+app.use('/analytics', checkAuthenticated, analyticsRouter);
+app.use('/transactions', checkAuthenticated, transactionsRouter);
 
 
 // Middleware para verificar si el usuario está logueado
 function checkAuthenticated(req, res, next) {
   console.log(req.session); 
-  if (!req.session.email) {  
+  if (!req.session.user) {  
+    console.log("User not authenticated")
     return res.redirect('/login'); 
+  }
+  next();  
+}
+
+// Deberíamos usarlo en Admin
+function checkAdmin(req, res, next) {
+  console.log(req.session); 
+  if (!req.session.user.admin) {  
+    console.log("User is not an Admin")
+    return res.redirect('/`'); 
   }
   next();  
 }
@@ -84,7 +98,6 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
