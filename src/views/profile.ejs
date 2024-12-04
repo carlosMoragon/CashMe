@@ -314,10 +314,10 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="setChallengeForm">
+                        <form id="setChallengeForm" action="/profile/add-challeng" method="POST">
                             <div class="form-group">
                                 <label for="amount">Enter Amount to Save</label>
-                                <input type="number" id="amount" class="form-control" placeholder="Enter amount"
+                                <input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount"
                                     required>
                             </div>
                         </form>
@@ -342,7 +342,7 @@
         <div class="plant-container">
             <% plantasDisponibles.forEach(plant=> { %>
                 <div class="plant-item">
-                    <img src="/images/plantas/<%= plant.id %>.jpg" alt="Plant <%= plant.id %>"
+                    <img src="/images/plantas/<%= plant.planta %>.jpg" alt="Plant <%= plant.planta %>"
                         id="plant<%= plant.id %>-img" draggable="true" ondragstart="drag(event)">
                     <button class="buy-plant-btn" data-plant-id="<%= plant.id %>"
                         data-plant-price="<%= plant.evolucion %>">

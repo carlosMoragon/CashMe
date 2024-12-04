@@ -74,34 +74,34 @@ router.get('/getAccounts', function (req, res) {
 });
 
 //Orianna: Probando algo
-// router.post('/add-challenge', function (req, res) {
-//   try {
-//     const amount = req.body;
-//     const userId = req.session.user.id;
+router.post('/add-challenge', function (req, res) {
+  try {
+    const amount = req.body.amount;
+    const userId = req.session.user.id;
 
-//     const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
-//     db.run(updateSql, [amount, userId], function (err) {
-//       if (err) {
-//         console.error(err.message);
-//       } else if (this.changes === 0) {
-//         // Si no se actualizó ninguna fila, hacemos un INSERT
-//         const insertSql = "INSERT INTO cuentas (usuario_id, saldo, goal) VALUES (?, ?, ?)";
-//         db.run(insertSql, [userId, 0.0, amount], function (err) {
-//           if (err) {
-//             console.error(err.message);
-//           } else {
-//             console.log(Nueva fila insertada con el ID ${userId});
-//           }
-//         });
-//       } else {
-//         console.log(Fila actualizada con el ID ${userId});
-//       }
-//     });
+    const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
+    db.run(updateSql, [amount, userId], function (err) {
+      if (err) {
+        console.error(err.message);
+      } else if (this.changes === 0) {
+        // Si no se actualizó ninguna fila, hacemos un INSERT
+        const insertSql = "INSERT INTO cuentas (usuario_id, saldo, goal) VALUES (?, ?, ?)";
+        db.run(insertSql, [userId, 0.0, amount], function (err) {
+          if (err) {
+            console.error(err.message);
+          } else {
+            console.log(`Nueva fila insertada con el ID ${userId}`);
+          }
+        });
+      } else {
+        console.log(`Fila actualizada con el ID ${userId}`);
+      }
+    });
 
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Error processing the form.' });
-//   }
-// });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error processing the form.' });
+  }
+});
 
 module.exports = router;
