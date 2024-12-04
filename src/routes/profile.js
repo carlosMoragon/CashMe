@@ -31,6 +31,7 @@ router.get('/', (req, res) => {
       // Inicializar variables para el renderizado
       let error = null;
       let awarded = 0; // Valor predeterminado para saldoAcumulado si no existe saldo
+      let goalGoal = 0; 
       // Verificar si existe el saldo
       if (!cash) {
         console.error('No se encontró saldo para el usuario.');
@@ -38,14 +39,18 @@ router.get('/', (req, res) => {
       } else {
         console.log('Saldo del usuario:', cash.saldo);
         awarded = cash.saldo * 0.45;
+        if (cash.goal == null) {
+          goalGoal = cash.goal;
+        }
       }
+
 
       // Renderizar la página de perfil
       res.render('profile', {
         email: req.session.user.email,
         username: req.session.user.nombre,
         saldoAcumulado: awarded,
-        goalSet: cash.goal, //Orianna: Aquí va el goal
+        goalSet: goalGoal, 
         plantasDisponibles: plantsAvailable,
         error: error,
         page: 'profile'
@@ -105,6 +110,7 @@ router.post('/saveChallenge', function (req, res) {
             console.error(err.message);
           } else {
             console.log(`Fila actualizada con el ID ${userId}`);
+            res.redirect('/profile');
           }
         });
       }
