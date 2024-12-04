@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
   console.log(user);
 
   // Obtener saldo del usuario
-  db.get('SELECT saldo FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, cash) => {
+  db.get('SELECT saldo, goal FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, cash, goalGoal) => {
     if (err) {
       console.error('Error al obtener el saldo del usuario:', err);
       res.status(500).send('Error al cargar los datos.');
@@ -46,6 +46,7 @@ router.get('/', (req, res) => {
         email: req.session.user.email,
         username: req.session.user.nombre,
         saldoAcumulado: awarded,
+        goalSet: goalGoal, //Orianna: Aquí va el goal
         plantasDisponibles: plantsAvailable,
         error: error,
         page: 'profile'
