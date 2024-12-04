@@ -243,7 +243,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     
         console.log("Valor del título:", tituloValue); // Verifica que el valor es correcto
-    
+        
+        //Este es el fetch del boton: buscar el boton (bueno, no se si me basta o no, con el bonton)
         fetch('/chat/createChat', {
             method: 'POST',
             headers: {
