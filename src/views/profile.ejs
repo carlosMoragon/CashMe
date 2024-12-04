@@ -314,18 +314,18 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="setChallengeForm" action="/profile/add-challeng" method="POST">
+                        <form id="setChallengeForm" action="/profile/saveChallenge" method="POST">
                             <div class="form-group">
                                 <label for="amount">Enter Amount to Save</label>
-                                <input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount"
-                                    required>
+                                <input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save Challenge</button>
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="saveChallenge">Save Challenge</button>
-                    </div>
+                    
                 </div>
             </div>
         </div>

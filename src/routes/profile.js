@@ -74,10 +74,12 @@ router.get('/getAccounts', function (req, res) {
 });
 
 //Orianna: Probando algo
-router.post('/add-challenge', function (req, res) {
+router.post('/saveChallenge', function (req, res) {
   try {
     const amount = req.body.amount;
     const userId = req.session.user.id;
+    console.log('amount:', amount);
+    console.log('userId:', userId);
 
     const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
     db.run(updateSql, [amount, userId], function (err) {
