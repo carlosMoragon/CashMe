@@ -43,7 +43,7 @@ app.use(session({
 }));
 
 app.use('/', indexRouter);
-app.use('/profile', profileRouter);
+app.use('/profile', checkAuthenticated, profileRouter);
 app.use('/login', loginRouter)
 app.use('/users', usersRouter);
 app.use('/blog', blogRouter);
