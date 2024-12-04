@@ -50,6 +50,7 @@ router.post('/add-plant', upload.single('plantImage'), async (req, res) => {
                     console.log("Planta insertada correctamente");
                     console.log("Ruta de la imagen: ", imagePath);
                     return res.status(200).json({ message: "Plant added successfully", imagePath });
+    
                 }
             });
     } catch (error) {
