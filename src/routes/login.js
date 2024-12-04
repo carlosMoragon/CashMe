@@ -32,7 +32,7 @@ router.post('/loginClient', function (req, res, next) {
 
       console.log('Sesión iniciada para el usuario:', req.session.user);
 
-      //
+      // Obtener saldo del usuario
       db.get('SELECT saldo FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, cash) => {
         if (err) {
           console.error('Error al obtener el saldo del usuario:', err);
@@ -40,25 +40,39 @@ router.post('/loginClient', function (req, res, next) {
           return;
         }
 
-        // Verificar si el saldo existe
-        if (!cash) {
-          console.error('No se encontró saldo para el usuario.');
-          // res.status(404).send('Saldo no encontrado');
-          res.render('profile', { error: 'Saldo no encontrado' });
-          return;
-        }
-
-        db.all("SELECT id, planta, evolucion FROM jardines", function (err, plantsAvailable) {
+        // Obtener las plantas disponibles
+        db.all("SELECT id, planta, evolucion FROM jardines", (err, plantsAvailable) => {
           if (err) {
-              return next(err);
+            console.error('Error al obtener las plantas disponibles:', err);
+            res.status(500).send('Error al cargar las plantas disponibles.');
+            return;
           }
-          
-        console.log('Se supone que el cash:', cash.saldo);
-        let awarded = cash.saldo * 0.45;
-        res.render('profile', { email: req.session.user.email, username: req.session.user.nombre, saldoAcumulado: awarded, plantasDisponibles: plantsAvailable });
+
+          // Inicializar variables para el renderizado
+          let error = null;
+          let awarded = 0; // Valor predeterminado para saldoAcumulado si no existe saldo
+
+          // Verificar si existe el saldo
+          if (!cash) {
+            console.error('No se encontró saldo para el usuario.');
+            error = 'Saldo no encontrado';
+          } else {
+            console.log('Saldo del usuario:', cash.saldo);
+            awarded = cash.saldo * 0.45;
+          }
+
+          // Renderizar la página de perfil
+          res.render('profile', {
+            email: req.session.user.email,
+            username: req.session.user.nombre,
+            saldoAcumulado: awarded,
+            plantasDisponibles: plantsAvailable,
+            error: error
+          });
+        });
       });
-    });
     } else {
+      // Si el usuario no existe
       res.render('login', { error: 'Invalid email or password' });
     }
   });
@@ -77,20 +91,60 @@ router.post('/registerClient', function (req, res, next) {
     function (err) {
       if (err) {
         console.error('Error al registrar cliente:', err.message);
-        return next(err);
+        return res.render('login', { error: 'Error al registrar cliente. Inténtelo de nuevo.' });
       }
+
+      // Sesión
       req.session.user = {
         email: email,
         nombre: nombre,
-        admin: 0
+        admin: 0,
       };
-      // Redirigir al perfil después de registrarse
-      res.render('profile', { email: req.session.user.email, username: req.session.user.nombre });
+
+      console.log('Registro exitoso. Sesión iniciada para el usuario:', req.session.user);
+
+      // Obtener saldo del usuario
+      db.get('SELECT saldo FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, cash) => {
+        if (err) {
+          console.error('Error al obtener el saldo del usuario:', err);
+          return res.render('login', { error: 'Error al cargar el saldo. Inténtelo más tarde.' });
+        }
+
+        // Obtener las plantas disponibles
+        db.all("SELECT id, planta, evolucion FROM jardines", (err, plantsAvailable) => {
+          if (err) {
+            console.error('Error al obtener las plantas disponibles:', err);
+            return res.render('login', { error: 'Error al cargar las plantas disponibles. Inténtelo más tarde.' });
+          }
+
+          // Inicializar variables para el renderizado
+          let error = null;
+          let awarded = 0; // Valor predeterminado para saldoAcumulado si no existe saldo
+
+          // Verificar si existe el saldo
+          if (!cash) {
+            console.error('No se encontró saldo para el usuario.');
+            error = 'Saldo no encontrado';
+          } else {
+            console.log('Saldo del usuario:', cash.saldo);
+            awarded = cash.saldo * 0.45;
+          }
+
+          // Renderizar la página de perfil
+          res.render('profile', {
+            email: req.session.user.email,
+            username: req.session.user.nombre,
+            saldoAcumulado: awarded,
+            plantasDisponibles: plantsAvailable,
+            error: error
+          });
+        });
+      });
     }
   );
 });
 
-
+/* 
 router.get('/profile', function (req, res) {
   if (!req.session.username) {
     return res.redirect('/login'); // Redirige al login si no está logueado
@@ -98,5 +152,6 @@ router.get('/profile', function (req, res) {
 
   res.render('profile', { username: req.session.username });
 });
+*/
 
 module.exports = router;

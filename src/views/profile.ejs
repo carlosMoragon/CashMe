@@ -179,25 +179,63 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Account ID</th>
-                    <th>Account Balance</th>
-                    <th>Account Notifications</th>
+                    <th>Account Name</th>
+                    <th>Balance</th>
+                    <th>Notifications</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Loop through accounts and display them -->
-                <tr>
-                    <td>accountName1</td>
-                    <td>$150.00</td>
-                    <td> Notification 1</td>
-                </tr>
-                <tr>
-                    <td>accountName2</td>
-                    <td>$225.50</td>
-                    <td> Notification 1</td>
-                </tr>
-                <!-- Añadir más aquí... poner el bucle -->
+            <tbody id="accountsTableBody">
+                  <!-- Aquí se llenará dinámicamente con AJAX -->
             </tbody>
+            <tr>
+                <td>accountName1</td>
+                <td>$150.00</td>
+                <td> Notification 1</td>
+            </tr>
+            <tr>
+                <td>accountName2</td>
+                <td>$225.50</td>
+                <td> Notification 1</td>
+            </tr>
+        </table>
+              
+        <script>
+            // Función para cargar las cuentas del usuario
+            function loadAccounts() {
+                fetch('/profile/getAccounts')
+                .then(response => {
+                    if (!response.ok) {
+                      throw new Error('Error al cargar las cuentas');
+                    }
+                      return response.json();
+                    })
+                .then(data => {
+                    const tableBody = document.getElementById('accountsTableBody');
+                    tableBody.innerHTML = ''; 
+              
+                    if (data.accounts.length === 0) {
+                      tableBody.innerHTML = '<tr><td colspan="3">No accounts found.</td></tr>';
+                      return;
+                    }
+              
+                    data.accounts.forEach(account => {
+                      const row = document.createElement('tr');
+                      row.innerHTML = `
+                          <td>Account ${account.id}</td>
+                          <td>$${account.saldo.toFixed(2)}</td>
+                          <td>${account.notificaciones === 1 ? 'Notification Enabled' : 'No Notifications'}</td>
+                      `;
+                      tableBody.appendChild(row);
+                    });
+                })
+                .catch(err => {
+                      console.error(err);
+                      alert('Failed to load accounts.');
+                });
+            }
+              
+            document.addEventListener('DOMContentLoaded', loadAccounts);
+            </script>              
         </table>
     </div>
     <!-- User Info End -->
