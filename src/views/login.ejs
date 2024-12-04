@@ -1,4 +1,4 @@
-<%- include('header') %>
+<%- include('userHeader', { page: 'login' }) %>
 <style>
     #registerIndex {
         background-color: #08142d;
@@ -40,8 +40,7 @@
 </style>
 
 <!-- Log In Start -->
-<!-- Hidden form initially -->
-<div class="container-fluid py-5 hidden" id="main-container"> <!-- added class hidden -->
+<div class="container-fluid py-5" id="main-container">
     <div class="container py-5">
         <div class="text-center mb-3 pb-3">
             <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Log In</h6>
@@ -152,6 +151,10 @@
     hideNewFormBtn.addEventListener('click', function() {
         newFormContainer.classList.add('hidden');
         mainContainer.classList.remove('hidden');
+    });
+
+    loginForm.addEventListener('submit', function(event) {
+        // Remove the preventDefault to allow form submission
     });
 </script>
 

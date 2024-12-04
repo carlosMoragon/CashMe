@@ -47,7 +47,8 @@ router.get('/', (req, res) => {
         username: req.session.user.nombre,
         saldoAcumulado: awarded,
         plantasDisponibles: plantsAvailable,
-        error: error
+        error: error,
+        page: 'profile'
       });
     });
   });

@@ -20,6 +20,8 @@ var adminblogRouter = require('./routes/adminBlog');
 var admincontactRouter = require('./routes/adminContact');
 var adminHomeRouter = require('./routes/adminHome');
 var adminGardenRouter = require('./routes/adminGarden');
+var analyticsRouter = require('./routes/analytics');
+var transactionsRouter = require('./routes/transactions');
 
 
 var app = express();
@@ -55,7 +57,8 @@ app.use('/contact', contactRouter);
 app.use('/adminContact', admincontactRouter);
 app.use('/adminHome', adminHomeRouter);
 app.use('/adminGarden', adminGardenRouter);
-
+app.use('/analytics', checkAuthenticated, analyticsRouter);
+app.use('/transactions', checkAuthenticated, transactionsRouter);
 
 
 // Middleware para verificar si el usuario está logueado
