@@ -37,6 +37,9 @@
     .text-danger {
         margin-left: 5%;
     }
+    #newFormContainer {
+        display: none;
+    }
 </style>
 
 <!-- Log In Start -->
@@ -87,7 +90,7 @@
 </div>
 <!-- Log In End -->
 
-<!-- Form initially -->
+<!-- Registration Form -->
 <div class="container-fluid py-5" id="newFormContainer">
     <div class="container py-5">
         <div class="text-center mb-3 pb-3">
@@ -143,14 +146,14 @@
 
     // Show the login form and hide the register form
     showNewFormBtn.addEventListener('click', function() {
-        mainContainer.classList.add('hidden');
-        newFormContainer.classList.remove('hidden');
+        mainContainer.style.display = 'none';
+        newFormContainer.style.display = 'block';
     });
 
     // Hide the register form and show the login form
     hideNewFormBtn.addEventListener('click', function() {
-        newFormContainer.classList.add('hidden');
-        mainContainer.classList.remove('hidden');
+        newFormContainer.style.display = 'none';
+        mainContainer.style.display = 'block';
     });
 
     loginForm.addEventListener('submit', function(event) {
