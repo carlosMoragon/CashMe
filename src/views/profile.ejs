@@ -37,7 +37,7 @@
         }
     </style>
     <div class="row justify-content-center mt-4">
-        <% if (typeof error !== 'undefined') { %>
+        <% if (typeof error !== 'undefined' || error == '') { %>
             <div class="alert alert-danger" role="alert">
                 <%= error %>
             </div>
@@ -187,16 +187,6 @@
             <tbody id="accountsTableBody">
                   <!-- Aquí se llenará dinámicamente con AJAX -->
             </tbody>
-            <tr>
-                <td>accountName1</td>
-                <td>$150.00</td>
-                <td> Notification 1</td>
-            </tr>
-            <tr>
-                <td>accountName2</td>
-                <td>$225.50</td>
-                <td> Notification 1</td>
-            </tr>
         </table>
               
         <script>
