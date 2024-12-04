@@ -17,8 +17,9 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const { plantName } = req.body;  // Obtener el nombre de la planta del cuerpo de la solicitud
-        const fileExtension = path.extname(file.originalname); // Obtener la extensión del archivo
-        const newFileName = `${plantName}${fileExtension}`; // Nuevo nombre del archivo
+        // const fileExtension = path.extname(file.originalname); // Obtener la extensión del archivo
+        // const newFileName = `${plantName}${fileExtension}`; // Nuevo nombre del archivo
+        const newFileName = `${plantName}.jpg`; // Nuevo nombre del archivo
         cb(null, newFileName); // Guardar el archivo con el nuevo nombre
     }
 });
