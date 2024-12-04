@@ -40,8 +40,7 @@
 </style>
 
 <!-- Log In Start -->
-<!-- Hidden form initially -->
-<div class="container-fluid py-5 hidden" id="main-container"> <!-- added class hidden -->
+<div class="container-fluid py-5" id="main-container">
     <div class="container py-5">
         <div class="text-center mb-3 pb-3">
             <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Log In</h6>
@@ -155,8 +154,7 @@
     });
 
     loginForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        // ...existing code...
+        // Remove the preventDefault to allow form submission
     });
 </script>
 
