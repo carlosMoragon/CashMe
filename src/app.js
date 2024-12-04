@@ -43,14 +43,14 @@ app.use(session({
 }));
 
 app.use('/', indexRouter);
-app.use('/profile', profileRouter);
+app.use('/profile',checkAuthenticated, profileRouter);
 app.use('/login', loginRouter)
 app.use('/users', usersRouter);
 app.use('/blog', blogRouter);
 app.use('/chat', chatRouter);
 app.use('/aboutus', aboutusRouter);
 app.use('/services', servicesRouter);
-app.use('/adminBlog', adminblogRouter); // HAY QUE METERLO EN ADMIN
+app.use('/adminBlog', adminblogRouter); //checkAdmin añadir middleware
 app.use('/contact', contactRouter);
 app.use('/adminContact', admincontactRouter);
 app.use('/adminHome', adminHomeRouter);
@@ -61,8 +61,19 @@ app.use('/adminGarden', adminGardenRouter);
 // Middleware para verificar si el usuario está logueado
 function checkAuthenticated(req, res, next) {
   console.log(req.session); 
-  if (!req.session.email) {  
+  if (!req.session.user) {  
+    console.log("User not authenticated")
     return res.redirect('/login'); 
+  }
+  next();  
+}
+
+// Deberíamos usarlo en Admin
+function checkAdmin(req, res, next) {
+  console.log(req.session); 
+  if (!req.session.user.admin) {  
+    console.log("User is not an Admin")
+    return res.redirect('/`'); 
   }
   next();  
 }
