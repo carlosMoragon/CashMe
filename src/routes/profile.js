@@ -83,7 +83,7 @@ router.post('/saveChallenge', function (req, res) {
 
     const selectSql = "SELECT goal FROM cuentas WHERE usuario_id = ?";
     db.get(selectSql, [userId], function (err, row) {
-      if (err) {
+      if (!row) {
         try {
           const insertSql = "INSERT INTO cuentas (usuario_id, saldo, goal) VALUES (?, ?, ?)";
           db.run(insertSql, [userId, 0.0, amount], function (err) {
