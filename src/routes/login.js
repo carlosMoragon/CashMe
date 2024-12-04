@@ -37,6 +37,7 @@ router.post('/loginClient', function (req, res, next) {
             admin: row.admin
           };
 
+          console.log("REDIRIGE AL PROFILE");
           // Redirige a la página de perfil
           res.redirect('/profile');
         } else {
