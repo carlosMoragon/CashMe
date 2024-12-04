@@ -11,7 +11,7 @@ const db = new sqlite3.Database('../cashme');
 router.get('/', (req, res) => {
   const user = req.session.user;
   console.log(user);
-  
+
   // Obtener saldo del usuario
   db.get('SELECT saldo FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, cash) => {
     if (err) {
@@ -78,28 +78,37 @@ router.post('/saveChallenge', function (req, res) {
   try {
     const amount = req.body.amount;
     const userId = req.session.user.id;
-    console.log('amount:', amount);
-    console.log('userId:', userId);
+    // console.log('amount:', amount);
+    // console.log('userId:', userId);
 
-    const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
-    db.run(updateSql, [amount, userId], function (err) {
+    const selectSql = "SELECT goal FROM cuentas WHERE usuario_id = ?";
+    db.get(selectSql, [userId], function (err, row) {
       if (err) {
-        console.error(err.message);
-      } else if (this.changes === 0) {
-        // Si no se actualizó ninguna fila, hacemos un INSERT
-        const insertSql = "INSERT INTO cuentas (usuario_id, saldo, goal) VALUES (?, ?, ?)";
-        db.run(insertSql, [userId, 0.0, amount], function (err) {
+        try {
+          const insertSql = "INSERT INTO cuentas (usuario_id, saldo, goal) VALUES (?, ?, ?)";
+          db.run(insertSql, [userId, 0.0, amount], function (err) {
+            if (err) {
+              console.error(err.message);
+            } else {
+              console.log(`Nueva fila insertada con el ID ${userId}`);
+            }
+          });
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ error: 'Error inserting the challenge.' });
+        }
+      } else {
+        let updatedGoal = parseFloat(row.goal) + parseFloat(amount);
+        const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
+        db.run(updateSql, [updatedGoal, userId], function (err) {
           if (err) {
             console.error(err.message);
           } else {
-            console.log(`Nueva fila insertada con el ID ${userId}`);
+            console.log(`Fila actualizada con el ID ${userId}`);
           }
         });
-      } else {
-        console.log(`Fila actualizada con el ID ${userId}`);
       }
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error processing the form.' });
