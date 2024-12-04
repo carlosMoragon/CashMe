@@ -1,0 +1,217 @@
+.container {
+    margin: 20px auto;
+    max-width: 900px; /* Ajuste de ancho para incluir el formulario y la tarjeta */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex; /* Flexbox para alinear formulario y tarjeta */
+    gap: 20px;
+    align-items: flex-start; /* Alinear elementos al inicio */
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+form.transaction-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1; /* El formulario ocupa el espacio restante */
+    margin-bottom: 0; /* Eliminamos margen inferior */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.transactions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.transaction-item.income {
+    border-left: 5px solid #28a745;
+}
+
+.transaction-item.expense {
+    border-left: 5px solid #dc3545;
+}
+
+.transaction-info {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Estilos para la tarjeta de crédito */
+.flip-card {
+    background-color: transparent;
+    width: 320px; /* Tamaño ajustado de la tarjeta */
+    height: 200px;
+    perspective: 1000px;
+    flex-shrink: 0; /* Evita que la tarjeta se reduzca en pantallas pequeñas */
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    border-radius: 1rem;
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    box-shadow: 0 8px 14px 0 rgba(0,0,0,0.2);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 1rem;
+}
+
+.flip-card-front {
+    background-color: #171717; /* Fondo oscuro */
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+}
+
+.flip-card-back {
+    background-color: #2c2c2c;
+    color: white;
+    transform: rotateY(180deg);
+}
+
+/* Elementos de la tarjeta */
+.heading_8264 {
+    font-size: 14px;
+    text-align: right;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    margin-bottom: 10px;
+}
+
+.chip {
+    width: 50px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.contactless {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 20px;
+    height: auto;
+}
+
+.number {
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.valid_thru {
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+.date_8264 {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.name {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.logo {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: auto;
+}
+
+.strip {
+    position: absolute;
+    background-color: black;
+    width: 100%;
+    height: 30px;
+    top: 20px;
+}
+
+.mstrip {
+    position: absolute;
+    background-color: #fff;
+    width: 60%;
+    height: 10px;
+    top: 70px;
+    border-radius: 4px;
+}
+
+.sstrip {
+    position: absolute;
+    background-color: #fff;
+    width: 30%;
+    height: 10px;
+    top: 70px;
+    right: 10px;
+    border-radius: 4px;
+}
+
+.code {
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    color: black;
+}
