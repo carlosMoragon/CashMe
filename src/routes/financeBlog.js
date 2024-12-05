@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
     }
 
     // Renderizar la vista y pasarle los datos
-    res.render('financeBlog', { entradas: rows });
+    res.render('financeBlog', { entradas: rows, user: req.session.user });
   });
 });
 
