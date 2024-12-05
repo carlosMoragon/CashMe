@@ -8,7 +8,7 @@ const db = new sqlite3.Database('../cashme');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('login', {});
+  res.render('login', { user: req.session.user });
 });
 
 
@@ -42,7 +42,7 @@ router.post('/loginClient', function (req, res, next) {
           res.redirect('/profile');
         } else {
           // Si la contraseña no coincide
-          res.render('login', { error: 'Invalid email or password' });
+          res.render('login', { error: 'Invalid email or password', user: req.session.user });
         }
       });
     } else {
