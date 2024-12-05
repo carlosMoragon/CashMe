@@ -227,3 +227,31 @@ body {
 .list ul li:hover:before {
     transform: scaleX(1);
 }
+
+/* Modal Popups */
+.modal-dialog {
+    max-width: 90%;
+    margin: 1.75rem auto;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.modal-header {
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-body {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    width: 100% !important;
+    height: 400px !important;
+}

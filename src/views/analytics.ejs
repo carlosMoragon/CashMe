@@ -6,6 +6,7 @@
     <title>Análisis</title>
     <link href="/stylesheets/analytics.css" rel="stylesheet">
     <link href="/stylesheets/paloma.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <%- include('header') %>
@@ -19,20 +20,67 @@
         </div>
 
         <div class="cards-container">
-            <div class="card">
+            <div class="card" data-toggle="modal" data-target="#ingresosModal">
                 <p class="heading">Ingresos</p>
                 <p>Descripción breve</p>
                 <p>Más información</p>
             </div>
-            <div class="card">
+            <div class="card" data-toggle="modal" data-target="#gastosModal">
                 <p class="heading">Gastos</p>
                 <p>Descripción breve</p>
                 <p>Más información</p>
             </div>
-            <div class="card">
+            <div class="card" data-toggle="modal" data-target="#netoModal">
                 <p class="heading">Neto</p>
                 <p>Descripción breve</p>
                 <p>Más información</p>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div class="modal fade" id="ingresosModal" tabindex="-1" role="dialog" aria-labelledby="ingresosModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ingresosModalLabel">Ingresos - Últimos 12 meses</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <canvas id="ingresosChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="gastosModal" tabindex="-1" role="dialog" aria-labelledby="gastosModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="gastosModalLabel">Gastos - Últimos 12 meses</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <canvas id="gastosChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="netoModal" tabindex="-1" role="dialog" aria-labelledby="netoModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="netoModalLabel">Neto - Últimos 12 meses</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <canvas id="netoChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -48,8 +96,128 @@
                 </ul>
             </div>
         </div>
-    </div>
 
+        <!-- Sample Chart Section -->
+        <div class="chart-section">
+            <h3>Ejemplo de Gráfica</h3>
+            <div class="chart-container">
+                <canvas id="sampleChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctxIngresos = document.getElementById('ingresosChart').getContext('2d');
+            const ctxGastos = document.getElementById('gastosChart').getContext('2d');
+            const ctxNeto = document.getElementById('netoChart').getContext('2d');
+            const ctxSample = document.getElementById('sampleChart').getContext('2d');
+
+            fetch('/analytics/data/ingresos')
+                .then(response => response.json())
+                .then(data => {
+                    new Chart(ctxIngresos, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Ingresos',
+                                data: data.data,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+
+            fetch('/analytics/data/gastos')
+                .then(response => response.json())
+                .then(data => {
+                    new Chart(ctxGastos, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Gastos',
+                                data: data.data,
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+
+            fetch('/analytics/data/neto')
+                .then(response => response.json())
+                .then(data => {
+                    new Chart(ctxNeto, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Neto',
+                                data: data.data,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+
+            // Generate labels for the last 12 months
+            const currentDate = new Date();
+            const labels = [];
+            for (let i = 11; i >= 0; i--) {
+                const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+                labels.push(date.toLocaleString('default', { month: 'long' }));
+            }
+
+            // Sample Chart
+            new Chart(ctxSample, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ejemplo de Datos',
+                        data: [65, 59, 80, 81, 56, 55, 40, 45, 60, 70, 75, 90],
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
     <%- include('footer') %>
 </body>
 </html>
