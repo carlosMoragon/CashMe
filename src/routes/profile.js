@@ -53,7 +53,6 @@ router.get('/', (req, res) => {
         goalSet: goalGoal, 
         plantasDisponibles: plantsAvailable,
         error: error,
-        page: 'profile',
         user: req.session.user
       });
     });
@@ -63,11 +62,7 @@ router.get('/', (req, res) => {
 
 // Cuentas (AJAX)
 router.get('/getAccounts', function (req, res) {
-  if (!req.session.user) {
-    return res.status(401).send({ error: 'No autorizado' });
-  }
-
-  const userId = req.session.user.id;
+    const userId = req.session.user.id;
 
   db.all('SELECT id, saldo, notificaciones, goal FROM cuentas WHERE usuario_id = ?', [userId], (err, accounts) => {
     if (err) {
@@ -121,5 +116,54 @@ router.post('/saveChallenge', function (req, res) {
     res.status(500).json({ error: 'Error processing the form.' });
   }
 });
+
+
+// Ruta para guardar la ruta de la imagen en la base de datos
+router.post('/save-avatar', (req, res) => {
+    const { userId, photoPath } = req.body; 
+    console.log(`User ID: ${userId}, y Photo Path: ${photoPath}`);
+
+    // Usar ? para evitar inyección SQL
+    const query = `UPDATE usuarios SET photo_path = ? WHERE id = ?`;
+
+    // Ejecutar la consulta de actualización
+    db.run(query, [photoPath, userId], function (err) {
+        if (err) {
+            console.log('Error al actualizar la ruta de la imagen:', err);
+            return res.render('profile', { 
+              error: 'Error al guardar la ruta en la base de datos.',
+              email: user.email,
+              username: user.nombre,
+              saldoAcumulado: awarded,
+              goalSet: goalGoal, 
+              plantasDisponibles: plantsAvailable,
+              error: error,
+              user: req.session.user
+            });
+        }
+
+    });
+});
+
+
+router.get('/get-avatar', (req, res) => {
+  const userId = req.session.user.id;
+
+  const query = 'SELECT photo_path FROM usuarios WHERE id = ?';
+  db.get(query, [userId], (err, row) => {
+      if (err) {
+          console.error('Error al obtener la ruta de la imagen:', err);
+          return res.status(500).json({ error: 'Error al obtener la ruta de la imagen.' });
+      }
+
+      if (row) {
+          res.json({ photoPath: row.photo_path });
+      } else {
+          res.json({ photoPath: null });
+      }
+  });
+});
+
+
 
 module.exports = router;

@@ -57,11 +57,12 @@
 
     <div class="avatar-container text-center mt-4" style="display:none;">
         <h3>Your Selected Avatar</h3>
+        <!-- Carga aquí la Imagen de la base de datos con AJAX-->
         <img id="profile-image" src="" alt="Profile Avatar" class="img-thumbnail" style="max-width: 200px;">
     </div>
 
     <div class="carousel-container text-center mt-4">
-        <h3>Select an Avatar</h3>
+        <h3>Our Avatars</h3>
         <div id="avatar-carousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -99,50 +100,75 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/profile/get-avatar')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.photoPath) {
+                        const imageElement = document.getElementById('profile-image');
+                        imageElement.src = data.photoPath; 
+
+                        const avatarContainer = document.querySelector('.avatar-container');
+                        avatarContainer.style.display = 'block';
+                    } else {
+                        console.log('Profile Image not found');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error in uploading the imgs:', error);
+                });
+        });
+
         // Variable para almacenar la imagen seleccionada
         let selectedImagePath = '';
-
+        let userId = '<%= user.id %>';
+        console.log(userId);
+    
         // Función para seleccionar un avatar al hacer clic en una imagen
         function selectAvatar(imagePath) {
-            selectedImagePath = imagePath; // Guarda la ruta de la imagen seleccionada
-            document.getElementById('profile-image').src = imagePath; // Previsualiza la imagen
-
-            // Quita el borde rojo de cualquier imagen previamente seleccionada
-            document.querySelectorAll('.carousel-item img').forEach(img => {
-                img.classList.remove('selected'); // Elimina la clase "selected" de todas las imágenes
-            });
-
-            // Añade el borde rojo a la imagen seleccionada
-            const clickedImage = document.querySelector(`img[src="${imagePath}"]`);
-            if (clickedImage) {
-                clickedImage.classList.add('selected'); // Añade la clase "selected" a la imagen seleccionada
-            }
+            selectedImagePath = imagePath; 
+            document.getElementById('profile-image').src = imagePath; 
         }
-
-        // Función para finalizar la selección del avatar al hacer clic en el botón "Select"
+        
         function finalizeSelection() {
             if (selectedImagePath) {
-                // Oculta el carrusel
                 const carouselContainer = document.querySelector('.carousel-container');
                 carouselContainer.style.display = 'none';
-
-                // Muestra la sección del avatar seleccionado
+    
                 const avatarContainer = document.querySelector('.avatar-container');
                 avatarContainer.style.display = 'block';
+    
+                // Enviar la imagen seleccionada al servidor usando fetch
+                fetch('/profile/save-avatar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        photoPath: selectedImagePath
+                    })
+                })
+                .then(response => response.json())
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while saving your avatar.');
+                });
             } else {
                 alert('Please select an avatar before finalizing your choice.'); // Mensaje si no se selecciona una imagen
             }
         }
-
-        // Evento del botón "Select Avatar" para abrir el carrusel
+    
         document.getElementById('select-avatar-btn').addEventListener('click', function () {
             const carouselContainer = document.querySelector('.carousel-container');
             carouselContainer.style.display = 'block'; // Muestra el carrusel
         });
-
-        // Asocia la función finalizeSelection al botón "Select"
+    
         document.getElementById('select-button').addEventListener('click', finalizeSelection);
+
+
     </script>
+    
     <!-- Choose avatar End-->
 
 
