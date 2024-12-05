@@ -45,7 +45,8 @@ router.get('/entry/:id', function (req, res, next) {
           res.json({ 
               content: row.contenido,
               fecha_publicacion: row.fecha_publicacion,
-              autor: row.autor
+              autor: row.autor,
+              user: req.session.user
           });
       } else {
           const notFoundError = new Error('Entry not found.');

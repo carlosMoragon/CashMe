@@ -8,7 +8,6 @@ var session = require('express-session');
 // Os propongo estas rutas y que el resto estén derivadas en los archivos de rutas
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var profileRouter = require('./routes/profile');
 var loginRouter = require('./routes/login');
 var blogRouter = require('./routes/financeBlog');
@@ -46,8 +45,7 @@ app.use(session({
 
 app.use('/', indexRouter);
 app.use('/profile',checkAuthenticated, profileRouter);
-app.use('/login', loginRouter)
-app.use('/users', usersRouter);
+app.use('/login', loginRouter);
 app.use('/blog', blogRouter);
 app.use('/chat', chatRouter);
 app.use('/aboutus', aboutusRouter);
@@ -103,7 +101,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', {user: req.session.user});
 });
+
 
 module.exports = app;

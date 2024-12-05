@@ -54,7 +54,7 @@ router.get('/', (req, res) => {
         plantasDisponibles: plantsAvailable,
         error: error,
         page: 'profile',
-        user: user
+        user: req.session.user
       });
     });
   });

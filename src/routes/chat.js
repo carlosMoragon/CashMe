@@ -48,7 +48,7 @@ router.get('/', async function(req, res, next) {
     const usuarios = await getUsersName(req);
 
     // Renderiza la vista 'chat', pasando los datos
-    res.render('chat', { chats, usuario: req.session.user.nombre, usuarios });
+    res.render('chat', { chats, usuario: req.session.user.nombre, usuarios , user: req.session.user});
   } catch (err) {
     console.error("Error al realizar la consulta:", err);
     return next(err);
