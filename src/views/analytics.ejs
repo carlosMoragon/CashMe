@@ -1,4 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis</title>
+    <link href="/stylesheets/analytics.css" rel="stylesheet">
+    <link href="/stylesheets/paloma.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('header') %>
+    <link href="/stylesheets/analytics.css" rel="stylesheet">
+    <link href="/stylesheets/paloma.css" rel="stylesheet">
 
-<%- include('header') %>
-<h1>Analytics Page</h1>
-<%- include('footer') %>
+    <!-- Analysis Section -->
+    <div class="analysis-container">
+        <div class="statistics">
+            <h2>Estadísticas meses</h2>
+        </div>
+
+        <div class="cards-container">
+            <div class="card">
+                <p class="heading">Ingresos</p>
+                <p>Descripción breve</p>
+                <p>Más información</p>
+            </div>
+            <div class="card">
+                <p class="heading">Gastos</p>
+                <p>Descripción breve</p>
+                <p>Más información</p>
+            </div>
+            <div class="card">
+                <p class="heading">Neto</p>
+                <p>Descripción breve</p>
+                <p>Más información</p>
+            </div>
+        </div>
+
+        <!-- Lista con efecto hover -->
+        <div class="list-section">
+            <h3>Lista</h3>
+            <div class="list">
+                <ul>
+                    <li><span>Elemento 1</span></li>
+                    <li><span>Elemento 2</span></li>
+                    <li><span>Elemento 3</span></li>
+                    <li><span>Elemento 4</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <%- include('footer') %>
+</body>
+</html>
