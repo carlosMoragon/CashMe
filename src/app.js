@@ -50,11 +50,11 @@ app.use('/blog', blogRouter);
 app.use('/chat', chatRouter);
 app.use('/aboutus', aboutusRouter);
 app.use('/services', servicesRouter);
-app.use('/adminBlog', adminblogRouter); //checkAdmin añadir middleware
+app.use('/adminBlog',checkAdmin, adminblogRouter); //checkAdmin añadir middleware
 app.use('/contact', contactRouter);
-app.use('/adminContact', admincontactRouter);
-app.use('/adminHome', adminHomeRouter);
-app.use('/adminGarden', adminGardenRouter);
+app.use('/adminContact',checkAdmin, admincontactRouter);
+app.use('/adminHome', checkAdmin, adminHomeRouter);
+app.use('/adminGarden', checkAdmin, adminGardenRouter);
 app.use('/analytics', checkAuthenticated, analyticsRouter);
 app.use('/transactions', checkAuthenticated, transactionsRouter);
 

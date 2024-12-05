@@ -6,7 +6,7 @@ const db = require('sqlite3').verbose();
 const database = new db.Database('../cashme');
 
 router.get('/', function(req, res, next) {
-    res.render('adminBlog', {});
+    res.render('adminBlog', {user: req.session.user});
 });
 
 router.post('/add-entry', (req, res) => {
