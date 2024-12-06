@@ -6,6 +6,9 @@ const sqlite3 = require('sqlite3').verbose();
 // Conectar a la base de datos
 const db = new sqlite3.Database('../cashme');
 
+// Example function to adjust month value
+
+
 // GET analytics page
 router.get('/', function(req, res, next) {
   res.render('analytics', { user: req.session.user });
@@ -15,7 +18,7 @@ router.get('/data/ingresos', (req, res) => {
     const query = `
         SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
         FROM transacciones
-        WHERE tipo = 'INGRESO' AND fecha >= date('now', 'start of month', '-12 months')
+        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
         GROUP BY strftime('%Y-%m', fecha)
         ORDER BY strftime('%Y-%m', fecha)
     `;
@@ -23,11 +26,12 @@ router.get('/data/ingresos', (req, res) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
+        console.log(rows); // Verifica qué datos se están obteniendo
         const labels = [];
         const data = [];
         const currentDate = new Date();
         // Iterative case: previous 12 months
-        for (let i = 12; i > 0; i--) {
+        for (let i = 13; i >= -1; i--) {
             const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
             const month = date.toISOString().slice(0, 7);
             labels.push(month);
@@ -42,7 +46,7 @@ router.get('/data/gastos', (req, res) => {
     const query = `
         SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
         FROM transacciones
-        WHERE tipo = 'GASTO' AND fecha >= date('now', 'start of month', '-12 months')
+        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
         GROUP BY strftime('%Y-%m', fecha)
         ORDER BY strftime('%Y-%m', fecha)
     `;
@@ -54,7 +58,7 @@ router.get('/data/gastos', (req, res) => {
         const data = [];
         const currentDate = new Date();
         // Iterative case: previous 12 months
-        for (let i = 12; i > 0; i--) {
+        for (let i = 11; i >= 0; i--) {
             const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
             const month = date.toISOString().slice(0, 7);
             labels.push(month);
@@ -69,14 +73,14 @@ router.get('/data/neto', (req, res) => {
     const ingresosQuery = `
         SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
         FROM transacciones
-        WHERE tipo = 'INGRESO' AND fecha >= date('now', 'start of month', '-12 months')
+        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
         GROUP BY strftime('%Y-%m', fecha)
         ORDER BY strftime('%Y-%m', fecha)
     `;
     const gastosQuery = `
         SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
         FROM transacciones
-        WHERE tipo = 'GASTO' AND fecha >= date('now', 'start of month', '-12 months')
+        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
         GROUP BY strftime('%Y-%m', fecha)
         ORDER BY strftime('%Y-%m', fecha)
     `;
@@ -92,7 +96,7 @@ router.get('/data/neto', (req, res) => {
             const data = [];
             const currentDate = new Date();
             // Iterative case: previous 12 months
-            for (let i = 12; i > 0; i--) {
+            for (let i = 11; i >= 0; i--) {
                 const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
                 const month = date.toISOString().slice(0, 7);
                 labels.push(month);
@@ -103,6 +107,121 @@ router.get('/data/neto', (req, res) => {
                 data.push(ingreso - gasto);
             }
             res.json({ labels, data });
+        });
+    });
+});
+
+router.get('/data/combined', (req, res) => {
+    const ingresosQuery = `
+        SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
+        FROM transacciones
+        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
+        GROUP BY strftime('%Y-%m', fecha)
+        ORDER BY strftime('%Y-%m', fecha)
+    `;
+    const gastosQuery = `
+        SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
+        FROM transacciones
+        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
+        GROUP BY strftime('%Y-%m', fecha)
+        ORDER BY strftime('%Y-%m', fecha)
+    `;
+    db.all(ingresosQuery, [], (err, ingresosRows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        db.all(gastosQuery, [], (err, gastosRows) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            const labels = [];
+            const ingresos = [];
+            const gastos = [];
+            const currentDate = new Date();
+            // Iterative case: previous 12 months
+            for (let i = 11; i >= 0; i--) {
+                const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+                const month = date.toISOString().slice(0, 7);
+                labels.push(month);
+                const ingresoRow = ingresosRows.find(row => row.month === month);
+                const gastoRow = gastosRows.find(row => row.month === month);
+                ingresos.push(ingresoRow ? ingresoRow.total : 0);
+                gastos.push(gastoRow ? gastoRow.total : 0);
+            }
+            res.json({ labels, ingresos, gastos });
+        });
+    });
+});
+
+router.get('/income', async (req, res) => {
+  try {
+    let transactions = await getIncomeTransactionsFromDB(); // Fetch transactions from DB
+    transactions = adjustTransactionMonth(transactions); // Adjust month
+    res.json(transactions);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.get('/expenses', async (req, res) => {
+  try {
+    let transactions = await getExpenseTransactionsFromDB(); // Fetch transactions from DB
+    transactions = adjustTransactionMonth(transactions); // Adjust month
+    res.json(transactions);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.get('/data/total-ingresos', (req, res) => {
+    const query = `
+        SELECT SUM(dinero) as total
+        FROM transacciones
+        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
+    `;
+    db.get(query, [], (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({ total: row.total });
+    });
+});
+
+router.get('/data/total-gastos', (req, res) => {
+    const query = `
+        SELECT SUM(dinero) as total
+        FROM transacciones
+        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
+    `;
+    db.get(query, [], (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({ total: row.total });
+    });
+});
+
+router.get('/data/total-neto', (req, res) => {
+    const ingresosQuery = `
+        SELECT SUM(dinero) as total
+        FROM transacciones
+        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
+    `;
+    const gastosQuery = `
+        SELECT SUM(dinero) as total
+        FROM transacciones
+        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
+    `;
+    db.get(ingresosQuery, [], (err, ingresosRow) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        db.get(gastosQuery, [], (err, gastosRow) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            const totalNeto = ingresosRow.total - gastosRow.total;
+            res.json({ total: totalNeto });
         });
     });
 });

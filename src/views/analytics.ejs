@@ -19,6 +19,18 @@
             <h2>Estadísticas últimos 12 meses</h2>
         </div>
 
+        <div class="totals">
+            <div class="total-ingresos">
+                <h3>Total Ingresos: <span id="total-ingresos"></span></h3>
+            </div>
+            <div class="total-gastos">
+                <h3>Total Gastos: <span id="total-gastos"></span></h3>
+            </div>
+            <div class="total-neto">
+                <h3>Total Neto: <span id="total-neto"></span></h3>
+            </div>
+        </div>
+
         <div class="cards-container">
             <div class="card" data-toggle="modal" data-target="#ingresosModal">
                 <p class="heading">Ingresos</p>
@@ -97,17 +109,25 @@
             </div>
         </div>
 
+        <!-- Financial Control Panel -->
+        <div class="financial-control-panel">
+            <h3>Panel de Control Financiero</h3>
+            <div class="chart-container">
+                <canvas id="combinedChart"></canvas>
+            </div>
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctxIngresos = document.getElementById('ingresosChart').getContext('2d');
             const ctxGastos = document.getElementById('gastosChart').getContext('2d');
             const ctxNeto = document.getElementById('netoChart').getContext('2d');
+            const ctxCombined = document.getElementById('combinedChart').getContext('2d');
 
             function getLast12Months() {
                 const months = [];
                 const date = new Date();
-                for (let i = 12; i > 0; i--) {
+                for (let i = 13; i > 0; i--) {
                     const d = new Date(date.getFullYear(), date.getMonth() - i, 1);
                     months.push(d.toLocaleString('default', { month: 'short' }));
                 }
@@ -204,6 +224,56 @@
                             }
                         }
                     });
+                });
+
+            fetch('/analytics/data/combined')
+                .then(response => response.json())
+                .then(data => {
+                    new Chart(ctxCombined, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Ingresos',
+                                data: data.ingresos,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }, {
+                                label: 'Gastos',
+                                data: data.gastos,
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+
+            // Fetch and display total values
+            fetch('/analytics/data/total-ingresos')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('total-ingresos').textContent = data.total;
+                });
+
+            fetch('/analytics/data/total-gastos')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('total-gastos').textContent = data.total;
+                });
+
+            fetch('/analytics/data/total-neto')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('total-neto').textContent = data.total;
                 });
         });
     </script>
