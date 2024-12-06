@@ -276,3 +276,15 @@
 .switch input:checked+.slider:before {
     transform: translateX(1.5em);
 }
+
+.perfil_foto {
+/*
+    height: 150px;
+    border-radius: 50% !important;*/
+    width: 150px; 
+    height: 150px; 
+    border-radius: 50%;
+    object-fit: cover; 
+    border: 2px solid #fff; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
