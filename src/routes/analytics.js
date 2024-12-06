@@ -4,8 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 const ejs = require('ejs');
 const fs = require('fs');
 const path = require('path');
-const { jsPDF } = require('jspdf');
-require('jspdf-autotable');
+
 
 // CONEXIÓN
 // Conectar a la base de datos
