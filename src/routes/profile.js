@@ -37,17 +37,19 @@ router.get('/', (req, res) => {
         let plantsAcquired;
         let plantasString = plantas[0].plantasAdquiridas;
         if (plantasString.length > 0) {
-
           plantsAcquired = plantasString.split(";");
           plantsAcquired.shift();
+          
+          // Tomar solo los últimos 5 elementos
+          if (plantsAcquired.length > 5) {
+            plantsAcquired = plantsAcquired.slice(-5);
+          }
 
           console.log("------------------------------------------------------------------------------------");
           console.log(plantsAcquired);
           console.log("------------------------------------------------------------------------------------");
-
         } else {
-          console.log('No se encontraron plantas adquiridas.');
-          //plantsAcquired; 
+          console.log('No plants were found yet. Start planting!');
         }
         // Inicializar variables para el renderizado
         let error = null;

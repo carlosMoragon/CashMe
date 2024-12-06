@@ -332,6 +332,7 @@
             height: 100px;
             cursor: pointer;
         }
+
     </style>
     <!-- Personal Challenges and rewards Start -->
     <div class="container mt-5">
@@ -411,16 +412,15 @@
 
                 <!-- Contenedor del jardín START -->
                 <div class="garden" id="garden">
-                    <% if (Array.isArray(plantasAdquiridas) && plantasAdquiridas.length> 0) { %>
-                        <% plantasAdquiridas.forEach(plant=> { %>
+                    <% if (Array.isArray(plantasAdquiridas) && plantasAdquiridas.length > 0) { %>
+                        <% plantasAdquiridas.forEach(plant => { %>
                             <div class="plant-item">
-                                <img src="/images/plantas/<%= plant %>.jpg" alt="Plant <%= plant %>"
-                                    id="plant<%= plant %>-img">
+                                <img src="/images/plantas/<%= plant %>.jpg" alt="Plant <%= plant %>" id="plant<%= plant %>-img">
                             </div>
-                            <% }) %>
-                                <% } else { %>
-                                    <p>No tienes plantas adquiridas.</p>
-                                    <% } %>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No tienes plantas adquiridas.</p>
+                    <% } %>
                 </div>
                 <!-- Contenedor del jardín END -->
 
