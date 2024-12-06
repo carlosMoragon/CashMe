@@ -17,7 +17,7 @@
                 <% if (chats && chats.length > 0) { %>
                     <% chats.forEach(chat => { %>
                       <a href="" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                        <img src="/images/oriannaprofile.jpg" alt="Profile" width="32" height="32" class="rounded-circle flex-shrink-0">
+                        <!--<img src="/images/oriannaprofile.jpg" alt="Profile" width="32" height="32" class="rounded-circle flex-shrink-0">-->
                         <div class="d-flex gap-2 w-100 justify-content-between">
                           <div>
                             <h6 class="mb-0"><%= chat.chat_title %></h6>
@@ -50,8 +50,9 @@
         <label for="form_create_chat"></label>
         <form id="form_create_chat">
             <label for="titulo">Title:</label>
-            <input id="titulo" type="text" placeholder="title">
-            <input type="text" placeholder="Search..">
+            <input id="titulo" type="text" placeholder="title" required>
+            <input id="search_content" type="text" placeholder="Search.." for="search">
+            <button type="button" id="search_button">search</button>
             <label for="check_usuarios">Who do you want to speak with?</label>
             <div id="check_usuarios">
                 <!--Meter un for para seleccionar el usuario-->
