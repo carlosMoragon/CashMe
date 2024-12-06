@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
       // Inicializar variables para el renderizado
       let error = null;
       let awarded = 0; // Valor predeterminado para saldoAcumulado si no existe saldo
-      let goalGoal = 0; 
+      let goalGoal = 0;
       // Verificar si existe el saldo
       if (!cash) {
         console.error('No se encontró saldo para el usuario.');
@@ -49,7 +49,7 @@ router.get('/', (req, res) => {
         email: user.email,
         username: user.nombre,
         saldoAcumulado: awarded,
-        goalSet: goalGoal, 
+        goalSet: goalGoal,
         plantasDisponibles: plantsAvailable,
         error: error,
         user: req.session.user
@@ -61,7 +61,7 @@ router.get('/', (req, res) => {
 
 // Cuentas (AJAX)
 router.get('/getAccounts', function (req, res) {
-    const userId = req.session.user.id;
+  const userId = req.session.user.id;
 
   db.all('SELECT id, saldo, notificaciones, goal FROM cuentas WHERE usuario_id = ?', [userId], (err, accounts) => {
     if (err) {
@@ -118,89 +118,77 @@ router.post('/saveChallenge', function (req, res) {
 
 // Función para comprar una planta
 // router.post('/comprarPlanta', (req, res) => {
+//   //plnta price
 //   try {
-//     const user = req.session.user; // Obtener datos del usuario de la sesión
-//     const { plantId } = req.body; // ID de la planta seleccionada
-//     if (!user || !plantId) {
-//       return res.status(400).json({ error: 'Datos incompletos' });
-//     }
-
-//     // Obtener saldo del usuario
-//     db.get('SELECT saldo FROM cuentas WHERE usuario_id = ?', [user.id], (err, cash) => {
+//     const getTotalAcummulated = "SELECT monedasAcumuladas FROM cuentas WHERE usuario_id = ?";
+//     const userId = req.session.user.id;
+//     db.run(getTotalAcummulated, [userId], function (err, row) {
 //       if (err) {
-//         console.error('Error al obtener el saldo del usuario:', err);
-//         return res.status(500).json({ error: 'Error al procesar la compra.' });
+//         console.error(err.message);
+//       } else {
+//         console.log(`Total acumulado: ${row.monedasAcumuladas}`);
+//         totalAcumulado = row.monedasAcumuladas;
 //       }
-
-//       // Obtener precio de la planta
-//       db.get('SELECT evolucion FROM jardines WHERE id = ?', [plantId], (err, plant) => {
-//         const plantPrice = plant.evolucion;
-        
-//         // Validar si el usuario tiene saldo suficiente
-//         if (cash.saldo < plantPrice) {
-//           return res.status(400).json({ error: 'Saldo insuficiente para comprar esta planta.' });
-//         }
-
-//         // Actualizar saldo del usuario en la base de datos
-//         const newSaldo = cash.saldo - plantPrice;
-//         db.run(
-//           'UPDATE cuentas SET saldo = ? WHERE usuario_id = ?',
-//           [newSaldo, user.id],
-//           function (err) {
-//             if (err) {
-//               console.error('Error al actualizar el saldo del usuario:', err);
-//               return res.status(500).json({ error: 'Error al actualizar el saldo.' });
-//             }
-
-//             // Insertar la planta comprada en la tabla de jardines
-//             db.run(
-//               'INSERT INTO jardines (usuario_id, planta_id) VALUES (?, ?)',
-//               [user.id, plantId],
-//               function (err) {
-//                 if (err) {
-//                   console.error('Error al añadir la planta al jardín:', err);
-//                   return res.status(500).json({ error: 'Error al registrar la compra.' });
-//                 }
-
-//                 console.log(`Planta ID ${plantId} añadida al usuario ID ${user.id}.`);
-//                 res.redirect('/profile'); // Redirigir al perfil actualizado
-//               }
-//             );
+//       if (totalAcumulado < plantPrice) {
+//         console.log('Saldo insuficiente para comprar esta planta.');
+//         return res.status(400).json({ error: 'Saldo insuficiente para comprar esta planta.' });
+//       } else {
+//         totalAcumulado = totalAcumulado - plantPrice;
+//         const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
+//         db.run(updateTotalAcummulated, [totalAcumulado, userId], function (err) {
+//           if (err) {
+//             console.error(err.message);
+//           } else {
+//             console.log(`Total acumulado actualizado: ${totalAcumulado}`);
 //           }
-//         );
-//       });
-//     });
-//   } catch (error) {
-//     console.error('Error procesando la compra:', error);
-//     res.status(500).json({ error: 'Error interno del servidor.' });
-//   }
-// });
+//         });
+
+//         const updateJardines = "UPDATE jardines SET usuario_id = ? WHERE id = ?"; //Mirarla
+//         db.run(updateJardines, [userId, plantId], function (err) {
+//           if (err) {
+//             console.error(err.message);
+//           } else {
+//             console.log(`Jardín actualizado con el ID ${plantId}`);
+//             res.redirect('/profile');
+//           }
+//         });
+//       }});
+//     } catch (error) {
+//       console.error('Error procesando la compra:', error);
+//       res.status(500).json({ error: 'Error interno del servidor.' });
+//     }
+//   });
+
+
+// db.get('SELECT evolucion FROM jardines WHERE id = ?', [plantId], (err, plant) => {
+//   const plantPrice = plant.evolucion;
+// Actualizar saldo del usuario en la base de datos
 
 // Ruta para guardar la ruta de la imagen en la base de datos
 router.post('/save-avatar', (req, res) => {
-    const { userId, photoPath } = req.body; 
-    console.log(`User ID: ${userId}, y Photo Path: ${photoPath}`);
+  const { userId, photoPath } = req.body;
+  console.log(`User ID: ${userId}, y Photo Path: ${photoPath}`);
 
-    // Usar ? para evitar inyección SQL
-    const query = `UPDATE usuarios SET photo_path = ? WHERE id = ?`;
+  // Usar ? para evitar inyección SQL
+  const query = `UPDATE usuarios SET photo_path = ? WHERE id = ?`;
 
-    // Ejecutar la consulta de actualización
-    db.run(query, [photoPath, userId], function (err) {
-        if (err) {
-            console.log('Error al actualizar la ruta de la imagen:', err);
-            return res.render('profile', { 
-              error: 'Error al guardar la ruta en la base de datos.',
-              email: user.email,
-              username: user.nombre,
-              saldoAcumulado: awarded,
-              goalSet: goalGoal, 
-              plantasDisponibles: plantsAvailable,
-              error: error,
-              user: req.session.user
-            });
-        }
+  // Ejecutar la consulta de actualización
+  db.run(query, [photoPath, userId], function (err) {
+    if (err) {
+      console.log('Error al actualizar la ruta de la imagen:', err);
+      return res.render('profile', {
+        error: 'Error al guardar la ruta en la base de datos.',
+        email: user.email,
+        username: user.nombre,
+        saldoAcumulado: awarded,
+        goalSet: goalGoal,
+        plantasDisponibles: plantsAvailable,
+        error: error,
+        user: req.session.user
+      });
+    }
 
-    });
+  });
 });
 
 
@@ -209,16 +197,16 @@ router.get('/get-avatar', (req, res) => {
 
   const query = 'SELECT photo_path FROM usuarios WHERE id = ?';
   db.get(query, [userId], (err, row) => {
-      if (err) {
-          console.error('Error al obtener la ruta de la imagen:', err);
-          return res.status(500).json({ error: 'Error al obtener la ruta de la imagen.' });
-      }
+    if (err) {
+      console.error('Error al obtener la ruta de la imagen:', err);
+      return res.status(500).json({ error: 'Error al obtener la ruta de la imagen.' });
+    }
 
-      if (row) {
-          res.json({ photoPath: row.photo_path });
-      } else {
-          res.json({ photoPath: null });
-      }
+    if (row) {
+      res.json({ photoPath: row.photo_path });
+    } else {
+      res.json({ photoPath: null });
+    }
   });
 });
 
