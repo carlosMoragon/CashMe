@@ -136,8 +136,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const emisor = msg.emisor;
             const date = msg.date;
 
-            console.log("Mensaje recibido");
-            renderMessage(content_message, emisor, date);
+            if(content_message == "CREACIONCHAT" &&
+                chat_header == "" &&
+                emisor == "" &&
+                date == ""
+            ){
+                location.reload();
+            }else{
+                console.log("Mensaje recibido");
+                renderMessage(content_message, emisor, date);
+            }
+
         });
     } else {
         console.error('Formulario, entrada o lista de mensajes no encontrado en el DOM.');
@@ -228,14 +237,86 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancel_creation = document.querySelector('#cancel_creation');
     const titulo = document.querySelector('#titulo'); // Obtener el input del título
     const selectedUsers = [document.getElementById("users-display").textContent.split("Chats of ")[1]];
-    
+/*    const selectedUsers = []; // Inicializamos como un array vacío.
+
+    accept_creation.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Limpia el array en cada click para evitar duplicados
+        selectedUsers.length = 0;
+
+        // Obtener el usuario principal de "users-display" si existe
+        const mainUser = document.getElementById("users-display")?.textContent.split("Chats of ")[1]?.trim();
+        if (mainUser) {
+            selectedUsers.push(mainUser);
+        }
+
+        // Añadir usuarios seleccionados de los checkboxes
+        document.querySelectorAll('#check_usuarios .form-check-input:checked').forEach((checkbox) => {
+            selectedUsers.push(checkbox.id); // Añadir el id del checkbox seleccionado al array
+        });
+
+        // Validar que se seleccionaron usuarios
+        if (selectedUsers.length === 0) {
+            alert("Por favor, selecciona al menos un usuario.");
+            return;
+        }
+
+        const tituloValue = titulo.value.trim(); // Asegúrate de que el título no tiene espacios extras
+
+        // Verificar que el título no esté vacío
+        if (!tituloValue) {
+            alert("Por favor, ingresa un título para el chat.");
+            return;
+        }
+
+        console.log("Usuarios seleccionados:", selectedUsers);
+        console.log("Título del chat:", tituloValue);
+
+        // Fetch para enviar la solicitud al servidor
+        fetch('/chat/createChat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                titulo: tituloValue, // Título del chat
+                usuarios: selectedUsers, // Lista de usuarios seleccionados
+                date: getTodayDate(), // Fecha de creación
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            if (data.error) {
+                alert(data.error); // Mostrar el error si se recibe uno
+            }
+        })
+        .catch(error => console.error('Error al enviar el mensaje:', error));
+
+        // Cerrar el modal
+        document.getElementById('div_create_chat').style.display = 'none';
+
+        // Emitir evento al socket
+        socket.emit('chat', {
+            content_message: "CREACIONCHAT",
+            chat_header: "",
+            emisor: "",
+            date: "",
+        });
+
+        setTimeout(() => {
+            location.reload();
+        }, 500);
+    });
+*/
     
     
     accept_creation.addEventListener('click', (e) => {
         e.preventDefault();
         document.querySelectorAll('#check_usuarios .form-check-input').forEach(function(checkbox) {
             if (checkbox.checked) {
-                selectedUsers.push(checkbox.id); // Añadir el id del checkbox seleccionado al array
+                selectedUsers.push(checkbox.value); // Añadir el id del checkbox seleccionado al array
             }
         });
         const tituloValue = titulo.value.trim(); // Asegúrate de que el valor no tiene espacios extras
@@ -269,6 +350,14 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => console.error('Error al enviar el mensaje:', error));
         document.getElementById('div_create_chat').style.display = 'none';
+
+        socket.emit('chat', {
+            content_message: "CREACIONCHAT",
+            chat_header: "",
+            emisor: "",
+            date: ""
+        });
+
         setTimeout(function() {
             location.reload();
         }, 500);

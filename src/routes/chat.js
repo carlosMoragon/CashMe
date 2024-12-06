@@ -181,7 +181,7 @@ router.post('/deleteChat', function(req, res, next){
   );
 });
 
-/*
+
 router.post('/createChat', function (req, res, next) {
   console.log("SE EJECUTA");
   // Verificar si el usuario está autenticado
@@ -261,8 +261,8 @@ router.post('/createChat', function (req, res, next) {
     }
   );
 });
-*/
 
+/*
 router.post('/createChat', function (req, res, next) {
   console.log("SE EJECUTA");
 
@@ -346,7 +346,7 @@ router.post('/createChat', function (req, res, next) {
 });
 
 
-
+*/
 
 // metí esto a ver si funcioa conectar desde el admin (Orianna)
 // Ruta para crear un chat entre el usuario conectado y el seleccionado
