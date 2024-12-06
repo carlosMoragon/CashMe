@@ -39,8 +39,10 @@ router.get('/', (req, res) => {
       } else {
         console.log('Saldo del usuario:', cash.saldo);
         awarded = cash.saldo * 0.45;
-        if (cash.goal == null) {
+        console.log('Meta del usuario:', cash.goal);
+        if (cash.goal != null) {
           goalGoal = cash.goal;
+          console.log('Meta del usuario:', goalGoal);
         }
       }
 
@@ -74,7 +76,7 @@ router.get('/getAccounts', function (req, res) {
   });
 });
 
-//Orianna: Probando algo
+//Setting a challenge/goal
 router.post('/saveChallenge', function (req, res) {
   try {
     const amount = req.body.amount;
@@ -117,6 +119,48 @@ router.post('/saveChallenge', function (req, res) {
   }
 });
 
+//Cargar saldo, acumulado y meta
+// router.post('/saveChallenge', function (req, res) {
+//   try {
+//     const amount = req.body.amount;
+//     const userId = req.session.user.id;
+//     // console.log('amount:', amount);
+//     // console.log('userId:', userId);
+
+//     const selectSql = "SELECT goal FROM cuentas WHERE usuario_id = ?";
+//     db.get(selectSql, [userId], function (err, row) {
+//       if (!row) {
+//         try {
+//           const insertSql = "INSERT INTO cuentas (usuario_id, saldo, goal) VALUES (?, ?, ?)";
+//           db.run(insertSql, [userId, 0.0, amount], function (err) {
+//             if (err) {
+//               console.error(err.message);
+//             } else {
+//               console.log(`Nueva fila insertada con el ID ${userId}`);
+//             }
+//           });
+//         } catch (error) {
+//           console.error(error);
+//           res.status(500).json({ error: 'Error inserting the challenge.' });
+//         }
+//       } else {
+//         let updatedGoal = parseFloat(row.goal) + parseFloat(amount);
+//         const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
+//         db.run(updateSql, [updatedGoal, userId], function (err) {
+//           if (err) {
+//             console.error(err.message);
+//           } else {
+//             console.log(`Fila actualizada con el ID ${userId}`);
+//             res.redirect('/profile');
+//           }
+//         });
+//       }
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Error processing the form.' });
+//   }
+// });
 
 // Ruta para guardar la ruta de la imagen en la base de datos
 router.post('/save-avatar', (req, res) => {
