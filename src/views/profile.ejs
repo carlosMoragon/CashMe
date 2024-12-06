@@ -37,16 +37,16 @@
         }
     </style>
     <div class="row justify-content-center mt-4">
-        <% if (typeof error !== 'undefined' || error == '') { %>
+        <% if (typeof error !=='undefined' || error=='' ) { %>
             <div class="alert alert-danger" role="alert">
                 <%= error %>
             </div>
-        <% } %>
-        <% if (typeof message !== 'undefined') { %>
-            <div class="alert alert-success" role="alert">
-                <%= message %>
-            </div>
-        <% } %>
+            <% } %>
+                <% if (typeof message !=='undefined' ) { %>
+                    <div class="alert alert-success" role="alert">
+                        <%= message %>
+                    </div>
+                    <% } %>
     </div>
     <div class="text-center mt-4">
         <button class="btn btn-primary" id="select-avatar-btn">Our Avatars</button>
@@ -106,7 +106,7 @@
                 .then(data => {
                     if (data.photoPath) {
                         const imageElement = document.getElementById('profile-image');
-                        imageElement.src = data.photoPath; 
+                        imageElement.src = data.photoPath;
 
                         const avatarContainer = document.querySelector('.avatar-container');
                         avatarContainer.style.display = 'block';
@@ -123,21 +123,21 @@
         let selectedImagePath = '';
         let userId = '<%= user.id %>';
         console.log(userId);
-    
+
         // Función para seleccionar un avatar al hacer clic en una imagen
         function selectAvatar(imagePath) {
-            selectedImagePath = imagePath; 
-            document.getElementById('profile-image').src = imagePath; 
+            selectedImagePath = imagePath;
+            document.getElementById('profile-image').src = imagePath;
         }
-        
+
         function finalizeSelection() {
             if (selectedImagePath) {
                 const carouselContainer = document.querySelector('.carousel-container');
                 carouselContainer.style.display = 'none';
-    
+
                 const avatarContainer = document.querySelector('.avatar-container');
                 avatarContainer.style.display = 'block';
-    
+
                 // Enviar la imagen seleccionada al servidor usando fetch
                 fetch('/profile/save-avatar', {
                     method: 'POST',
@@ -149,22 +149,22 @@
                         photoPath: selectedImagePath
                     })
                 })
-                .then(response => response.json())
+                    .then(response => response.json())
             } else {
                 alert('Please select an avatar before finalizing your choice.'); // Mensaje si no se selecciona una imagen
             }
         }
-    
+
         document.getElementById('select-avatar-btn').addEventListener('click', function () {
             const carouselContainer = document.querySelector('.carousel-container');
             carouselContainer.style.display = 'block'; // Muestra el carrusel
         });
-    
+
         document.getElementById('select-button').addEventListener('click', finalizeSelection);
 
 
     </script>
-    
+
     <!-- Choose avatar End-->
 
 
@@ -175,7 +175,7 @@
             <tbody>
                 <tr>
                     <td class="font-weight-bold">Name:</td>
-                    <% if (typeof username !== 'undefined') { %>
+                    <% if (typeof username !=='undefined' ) { %>
                         <td>
                             <%= username %>
                         </td>
@@ -185,7 +185,7 @@
                 </tr>
                 <tr>
                     <td class="font-weight-bold">Email:</td>
-                    <% if (typeof email !== 'undefined') { %>
+                    <% if (typeof email !=='undefined' ) { %>
                         <td>
                             <%= email %>
                         </td>
@@ -207,47 +207,47 @@
                 </tr>
             </thead>
             <tbody id="accountsTableBody">
-                  <!-- Aquí se llenará dinámicamente con AJAX -->
+                <!-- Aquí se llenará dinámicamente con AJAX -->
             </tbody>
         </table>
-              
+
         <script>
             // Función para cargar las cuentas del usuario
             function loadAccounts() {
                 fetch('/profile/getAccounts')
-                .then(response => {
-                    if (!response.ok) {
-                      throw new Error('Error al cargar las cuentas');
-                    }
-                      return response.json();
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al cargar las cuentas');
+                        }
+                        return response.json();
                     })
-                .then(data => {
-                    const tableBody = document.getElementById('accountsTableBody');
-                    tableBody.innerHTML = ''; 
-              
-                    if (data.accounts.length === 0) {
-                      tableBody.innerHTML = '<tr><td colspan="3">No accounts found.</td></tr>';
-                      return;
-                    }
-              
-                    data.accounts.forEach(account => {
-                      const row = document.createElement('tr');
-                      row.innerHTML = `
+                    .then(data => {
+                        const tableBody = document.getElementById('accountsTableBody');
+                        tableBody.innerHTML = '';
+
+                        if (data.accounts.length === 0) {
+                            tableBody.innerHTML = '<tr><td colspan="3">No accounts found.</td></tr>';
+                            return;
+                        }
+
+                        data.accounts.forEach(account => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
                           <td>Account ${account.id}</td>
                           <td>€${account.saldo.toFixed(2)}</td>
                           <td>${account.notificaciones === 1 ? 'Notification Enabled' : 'No Notifications'}</td>
                       `;
-                      tableBody.appendChild(row);
+                            tableBody.appendChild(row);
+                        });
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Failed to load accounts.');
                     });
-                })
-                .catch(err => {
-                      console.error(err);
-                      alert('Failed to load accounts.');
-                });
             }
-              
+
             document.addEventListener('DOMContentLoaded', loadAccounts);
-            </script>              
+        </script>
         </table>
     </div>
     <!-- User Info End -->
@@ -315,23 +315,19 @@
             </button>
 
             <div class="d-flex align-items-center">
-                <!-- <% if (typeof goalSet !== 'undefined') { %> -->
-                    <p id="savedAmount" class="mr-2 mb-0">Current Goal set: € <%= goalSet %>
-                <!-- <% } else { %>
-                    <p id="savedAmount" class="mr-2 mb-0">Current Goal set: Not set yet
-                <% } %> -->
+                <p id="savedAmount" class="mr-2 mb-0">Current Goal set: € <%= goalSet %>
                 </p>
                 <img src="/images/alcancia.jpg" alt="Savings Image" width="80" height="80">
             </div>
-            
+
             <div class="d-flex align-items-center">
-                <% if (typeof saldoAcumulado !== 'undefined') { %>
+                <% if (typeof saldoAcumulado !=='undefined' ) { %>
                     <p id="savedAmount" class="mr-2 mb-0">Total Accumulated: € <%= saldoAcumulado %>
-                <% } else { %>
-                    <p id="savedAmount" class="mr-2 mb-0">Total Accumulated: Not defined
-                <% } %>
-                </p>
-                <img src="/images/coin.png" alt="Savings Image" width="40" height="40">
+                            <% } else { %>
+                                <p id="savedAmount" class="mr-2 mb-0">Total Accumulated: Not defined
+                                    <% } %>
+                                </p>
+                                <img src="/images/coin.png" alt="Savings Image" width="40" height="40">
             </div>
         </div>
         <!-- Modal para establecer el desafío -->
@@ -349,7 +345,8 @@
                         <form id="setChallengeForm" action="/profile/saveChallenge" method="POST">
                             <div class="form-group">
                                 <label for="amount">Enter Amount to Save</label>
-                                <input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount" required>
+                                <input type="number" id="amount" name="amount" class="form-control"
+                                    placeholder="Enter amount" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -357,7 +354,7 @@
                             </div>
                         </form>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -368,87 +365,103 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Client Garden</h2>
 
-        <!--No esta ni agarrando el click pero bueno aja. Luego sigo-->
         <!-- Contenedor de las plantas disponibles START -->
-        <% if (typeof plantasDisponibles !== 'undefined'){%>
-        <div class="plant-container">
-            <% plantasDisponibles.forEach(plant=> { %>
-                <div class="plant-item">
-                    <img src="/images/plantas/<%= plant.planta %>.jpg" alt="Plant <%= plant.planta %>"
-                        id="plant<%= plant.id %>-img" draggable="true" ondragstart="drag(event)">
-                    <button class="buy-plant-btn" data-plant-id="<%= plant.id %>"
-                        data-plant-price="<%= plant.evolucion %>">
-                        Buy Plant: €<%= plant.evolucion %>
-                    </button>
-                </div>
-                <% }) %>
-        </div>
-        <% } %>
-        <!-- Contenedor de las plantas disponibles END -->
-
-        <!-- Contenedor del jardín START -->
-        <div class="garden" id="garden" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <!-- Contenedor del jardín END -->
+        <% if (typeof plantasDisponibles !=='undefined' ){%>
+            <div class="plant-container">
+                <% plantasDisponibles.forEach(plant=> { %>
+                    <div class="plant-item">
+                        <img src="/images/plantas/<%= plant.planta %>.jpg" alt="Plant <%= plant.planta %>"
+                            id="plant<%= plant.id %>-img" draggable="true" ondragstart="drag(event)">
+                        <button type="button" class="buy-plant-btn" data-plant-id="<%= plant.id %>"
+                            data-plant-price="<%= plant.evolucion %>">
+                            Buy Plant: €<%= plant.evolucion %>
+                        </button>
+                    </div>
+                    <% }) %>
+            </div>
+            <% } %>
 
 
-        <script>
-            document.querySelectorAll('.buy-plant-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    console.log('Al menos detecta el click');
-                    const plantId = this.dataset.plantId;
-                    const plantPrice = parseFloat(this.dataset.plantPrice);
-                    buyPlant(plantId, plantPrice);
-                });
-            });
+                <!-- Contenedor de las plantas disponibles END -->
 
-            function buyPlant(plantId, plantPrice) {
-                if (saldoAcumulado >= plantPrice) {
-                    const plantImg = document.getElementById(`plant${plantId}-img`).cloneNode(true);
-                    plantImg.removeAttribute('id'); // Evita conflictos de ID duplicados
-                    document.getElementById('garden').appendChild(plantImg);
-                    saldoAcumulado -= plantPrice; // Resta el precio de la planta al saldo
-                    alert('Plant purchased and added to your garden!');
-                } else {
-                    alert('Insufficient balance to buy this plant.');
-                }
-            }
-            // Event listener para el botón de "Save Challenge"
-            document.getElementById('saveChallenge').addEventListener('click', function () {
-                // Obtener el valor ingresado por el usuario
-                const challengeAmount = document.getElementById('amount').value;
+                <!-- Contenedor del jardín START -->
+                <div class="garden" id="garden" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <!-- Contenedor del jardín END -->
 
-                // Verificar si el valor es válido
-                if (!challengeAmount || isNaN(challengeAmount) || challengeAmount <= 0) {
-                    alert('Please enter a valid amount.');
-                    return;
-                }
 
-                // Enviar el valor al servidor usando Fetch API
-                fetch('/saveChallenge', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ amount: challengeAmount })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Challenge saved successfully!');
-                            // Actualizar la interfaz con el saldo actualizado, si es necesario
-                            document.getElementById('savedAmount').textContent = `Total Saved: € ${data.newBalance}`;
-                            $('#setChallengeModal').modal('hide'); // Cerrar el modal
-                        } else {
-                            alert('Error saving challenge.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('An error occurred.');
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        document.querySelectorAll('.buy-plant-btn').forEach(button => {
+                            button.addEventListener('click', function () {
+                                const plantId = this.dataset.plantId;  
+                                const plantPrice = parseFloat(this.dataset.plantPrice);
+                                enviarDatosDeCompra(plantId, plantPrice);
+                            });
+                        });
                     });
-            });
 
-        </script>
+                    function enviarDatosDeCompra(plantId, plantPrice) {
+                        console.log('Comprando la planta con ID:', plantId, 'y precio:', plantPrice);
+                        fetch('/profile/comprarPlanta', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json', 
+                            },
+                            body: JSON.stringify({
+                                plantId: plantId,  
+                                plantPrice: plantPrice  
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Aquí puedes hacer algo si la compra es exitosa
+                                    alert(`¡Compra exitosa! ${data.message}`);
+                                } else {
+                                    // Manejo de errores, si es necesario
+                                    alert(`Error al comprar la planta: ${data.error}`);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Hubo un error al procesar la compra.');
+                            });
+                    }
+
+
+                    // Event listener para el botón de "Save Challenge"
+                    document.getElementById('saveChallenge').addEventListener('click', function () {
+                        const challengeAmount = document.getElementById('amount').value;
+                        if (!challengeAmount || isNaN(challengeAmount) || challengeAmount <= 0) {
+                            alert('Please enter a valid amount.');
+                            return;
+                        }
+
+                        // Enviar el valor al servidor usando Fetch API
+                        fetch('/saveChallenge', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ amount: challengeAmount })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Challenge saved successfully!');
+                                    // Actualizar la interfaz con el saldo actualizado, si es necesario
+                                    document.getElementById('savedAmount').textContent = `Total Saved: € ${data.newBalance}`;
+                                    $('#setChallengeModal').modal('hide'); // Cerrar el modal
+                                } else {
+                                    alert('Error saving challenge.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('An error occurred.');
+                            });
+                    });
+                </script>
     </div>
     <!-- Jardín End-->
     <%- include('footer') %>
