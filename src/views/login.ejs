@@ -43,7 +43,7 @@
 </style>
 
 <!-- Log In Start -->
-<div class="container-fluid py-5" id="main-container">
+<div class="container-fluid py-5" id="main-container" style="<%= register ? 'display: none;' : 'display: block;' %>">
     <div class="container py-5">
         <div class="text-center mb-3 pb-3">
             <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Log In</h6>
@@ -92,7 +92,7 @@
 
 <!-- Registration Form -->
 <!-- Modified Registration Form -->
-<div class="container-fluid py-5" id="newFormContainer">
+<div class="container-fluid py-5" id="newFormContainer" style="<%= register ? 'display: block;' : 'display: none;' %>">
     <div class="container py-5">
         <div class="text-center mb-3 pb-3">
             <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Registration</h6>
@@ -155,6 +155,7 @@
     const hideNewFormBtn = document.getElementById('hideNewFormBtn');
     const registerForm = document.getElementById('RegisterForm');
     const loginForm = document.forms['sentLogIn'];
+
 
     // Show the login form and hide the register form
     showNewFormBtn.addEventListener('click', function() {

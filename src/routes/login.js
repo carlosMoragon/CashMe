@@ -8,7 +8,9 @@ const db = new sqlite3.Database('../cashme');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('login', { user: req.session.user });
+  const register = req.query.register && req.query.register === 'true'
+  res.render('login', { user: req.session.user, register: register });
+  
 });
 
 
