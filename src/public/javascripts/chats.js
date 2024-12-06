@@ -229,15 +229,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const titulo = document.querySelector('#titulo'); // Obtener el input del título
     const selectedUsers = [document.getElementById("users-display").textContent.split("Chats of ")[1]];
     
-    document.querySelectorAll('#check_usuarios .form-check-input').forEach(function(checkbox) {
-        if (checkbox.checked) {
-            selectedUsers.push(checkbox.id); // Añadir el id del checkbox seleccionado al array
-        }
-    });
+    
     
     accept_creation.addEventListener('click', (e) => {
         e.preventDefault();
-    
+        document.querySelectorAll('#check_usuarios .form-check-input').forEach(function(checkbox) {
+            if (checkbox.checked) {
+                selectedUsers.push(checkbox.id); // Añadir el id del checkbox seleccionado al array
+            }
+        });
         const tituloValue = titulo.value.trim(); // Asegúrate de que el valor no tiene espacios extras
     
         // Verificar que el título no esté vacío

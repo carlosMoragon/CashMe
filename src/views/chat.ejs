@@ -59,7 +59,7 @@
                 <% if(usuarios && usuarios.length > 0) { %>
                     <% usuarios.forEach(usuario => { %>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="<%= usuario%>">
+                    <input class="form-check-input" type="checkbox" value="<%= usuario%>" id="<%= usuario%>">
                     <label class="form-check-label" for="<%= usuario%>"><%= usuario%></label>
                 </div>
                     <% }); %>

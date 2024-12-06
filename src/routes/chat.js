@@ -181,7 +181,7 @@ router.post('/deleteChat', function(req, res, next){
   );
 });
 
-
+/*
 router.post('/createChat', function (req, res, next) {
   console.log("SE EJECUTA");
   // Verificar si el usuario está autenticado
@@ -261,6 +261,92 @@ router.post('/createChat', function (req, res, next) {
     }
   );
 });
+*/
+
+router.post('/createChat', function (req, res, next) {
+  console.log("SE EJECUTA");
+
+  if (!req.session || !req.session.user) {
+    console.error("Sesión no inicializada.");
+    return res.status(401).json({ error: "Usuario no autenticado." });
+  }
+
+  const usuarios = req.body.usuarios; // Lista de nombres de usuarios
+  const titulo = req.body.titulo;
+  const fechaCreacion = req.body.date || new Date().toISOString(); // Usar la fecha actual si no se proporciona
+
+  usuarios.array.forEach(element => {
+    console.log(`AAAAAAAAAAAAAAAAAAAAAAAAAAAAA ${element}\n\n\n`);
+  });
+  // Validar entrada
+  if (!usuarios || !Array.isArray(usuarios) || usuarios.length === 0) {
+    return res.status(400).json({ error: "Debe proporcionar al menos un usuario." });
+  }
+  if (!titulo) {
+    return res.status(400).json({ error: "Debe proporcionar un título para el chat." });
+  }
+
+  // Paso 1: Insertar el chat en la tabla `chats`
+  db.run(
+    'INSERT INTO chats (titulo, fecha) VALUES (?, ?)',
+    [titulo, fechaCreacion],
+    function (err) {
+      if (err) {
+        console.error("Error al crear el chat:", err);
+        return next(err);
+      }
+
+      const chatId = this.lastID; // Obtener el ID del chat recién creado
+      console.log("Chat creado correctamente con ID:", chatId);
+
+      // Paso 2: Obtener los IDs de los usuarios basándose en los nombres
+      const placeholders = usuarios.map(() => '?').join(', ');
+      db.all(
+        `SELECT id FROM usuarios WHERE nombre IN (${placeholders})`,
+        usuarios,
+        function (err, rows) {
+          if (err) {
+            console.error("Error al buscar usuarios:", err);
+            return next(err);
+          }
+
+          if (rows.length !== usuarios.length) {
+            console.error("Algunos usuarios no se encontraron.");
+            return res.status(400).json({
+              error: "Algunos usuarios no existen en la base de datos.",
+            });
+          }
+
+          const usuariosIds = rows.map((row) => row.id);
+
+          // Paso 3: Asociar usuarios al chat en la tabla `usuarios_chats`
+          const placeholdersChats = usuariosIds.map(() => '(?, ?)').join(', ');
+          const valuesChats = usuariosIds.flatMap((usuarioId) => [usuarioId, chatId]);
+
+          db.run(
+            `INSERT INTO usuarios_chats (usuario_id, chat_id) VALUES ${placeholdersChats}`,
+            valuesChats,
+            function (err) {
+              if (err) {
+                console.error("Error al asociar usuarios al chat:", err);
+                return next(err);
+              }
+
+              console.log("Usuarios asociados correctamente al chat.");
+              res.status(200).json({
+                message: "Chat creado exitosamente.",
+                chatId,
+              });
+            }
+          );
+        }
+      );
+    }
+  );
+});
+
+
+
 
 // metí esto a ver si funcioa conectar desde el admin (Orianna)
 // Ruta para crear un chat entre el usuario conectado y el seleccionado
