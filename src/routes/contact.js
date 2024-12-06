@@ -5,7 +5,7 @@ const db = require('sqlite3').verbose();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('contact', {  });
+  res.render('contact', { user:req.session.user });
 });
 
 
