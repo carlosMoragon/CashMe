@@ -117,47 +117,54 @@ router.post('/saveChallenge', function (req, res) {
 });
 
 // Función para comprar una planta
-// router.post('/comprarPlanta', (req, res) => {
-//   //plnta price
-//   try {
-//     const getTotalAcummulated = "SELECT monedasAcumuladas FROM cuentas WHERE usuario_id = ?";
-//     const userId = req.session.user.id;
-//     db.run(getTotalAcummulated, [userId], function (err, row) {
-//       if (err) {
-//         console.error(err.message);
-//       } else {
-//         console.log(`Total acumulado: ${row.monedasAcumuladas}`);
-//         totalAcumulado = row.monedasAcumuladas;
-//       }
-//       if (totalAcumulado < plantPrice) {
-//         console.log('Saldo insuficiente para comprar esta planta.');
-//         return res.status(400).json({ error: 'Saldo insuficiente para comprar esta planta.' });
-//       } else {
-//         totalAcumulado = totalAcumulado - plantPrice;
-//         const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
-//         db.run(updateTotalAcummulated, [totalAcumulado, userId], function (err) {
-//           if (err) {
-//             console.error(err.message);
-//           } else {
-//             console.log(`Total acumulado actualizado: ${totalAcumulado}`);
-//           }
-//         });
+router.post('/comprarPlanta', (req, res) => {
+  const { plantId, plantPrice } = req.body; // Recibe datos del cliente
+  const userId = req.session.user.id; // Usuario autenticado
+  console.log(`Usuario ${userId} quiere comprar la planta ${plantId} por ${plantPrice} monedas.`);
 
-//         const updateJardines = "UPDATE jardines SET usuario_id = ? WHERE id = ?"; //Mirarla
-//         db.run(updateJardines, [userId, plantId], function (err) {
-//           if (err) {
-//             console.error(err.message);
-//           } else {
-//             console.log(`Jardín actualizado con el ID ${plantId}`);
-//             res.redirect('/profile');
-//           }
-//         });
-//       }});
-//     } catch (error) {
-//       console.error('Error procesando la compra:', error);
-//       res.status(500).json({ error: 'Error interno del servidor.' });
-//     }
-//   });
+  try {
+    const getTotalAcummulated = "SELECT monedasAcumuladas FROM cuentas WHERE usuario_id = ?";
+    db.get(getTotalAcummulated, [userId], (err, row) => {
+      if (err) {
+        console.error('Error obteniendo saldo acumulado:', err.message);
+        return res.status(500).json({ error: 'Error interno al obtener saldo.' });
+      }
+
+      const totalAcumulado = row.monedasAcumuladas;
+      if (totalAcumulado < plantPrice) {
+        return res.status(400).json({ error: 'Saldo insuficiente para comprar esta planta.' });
+      }
+
+      // Actualizar saldo
+      const nuevoSaldo = totalAcumulado - plantPrice;
+      console.log(`Nuevo saldo acumulado: ${nuevoSaldo}`);
+      const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
+      db.run(updateTotalAcummulated, [nuevoSaldo, userId], function (err) {
+        if (err) {
+          console.error('Error actualizando las monedas acumuladas:', err.message);
+          return res.status(500).json({ error: 'Error interno al actualizar saldo.' });
+        }
+        
+        console.log("Descuento realizado con éxito.");
+
+        // Registrar la planta en el jardín
+        const updateJardines = "UPDATE jardines SET cuenta_id = ? WHERE id = ?";
+        db.run(updateJardines, [userId, plantId], function (err) {
+          if (err) {
+            console.error('Error actualizando jardín:', err.message);
+            return res.status(500).json({ error: 'Error interno al registrar planta.' });
+          }
+
+          console.log(`Compra exitosa: Planta ${plantId} agregada al usuario ${userId}`);
+          res.status(200).json({ message: 'Planta comprada con éxito.' });
+        });
+      });
+    });
+  } catch (error) {
+    console.error('Error procesando la compra:', error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+});
 
 
 // db.get('SELECT evolucion FROM jardines WHERE id = ?', [plantId], (err, plant) => {
