@@ -398,7 +398,7 @@
                 <% plantasDisponibles.forEach(plant=> { %>
                     <div class="plant-item">
                         <img src="/images/plantas/<%= plant.planta %>.jpg" alt="Plant <%= plant.planta %>"
-                            id="plant<%= plant.id %>-img" draggable="true" ondragstart="drag(event)">
+                            id="plant<%= plant.id %>-img">
                         <button type="button" class="buy-plant-btn" data-plant-id="<%= plant.id %>"
                             data-plant-price="<%= plant.evolucion %>">
                             Buy Plant: €<%= plant.evolucion %>
@@ -416,59 +416,52 @@
                 <!-- Contenedor del jardín END -->
 
 
-                <div id="mensaje-error" style="display:none; color: red; font-weight: bold;"></div>
-
+            </div>
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
+                        console.log("DOM content loaded");
                         document.querySelectorAll('.buy-plant-btn').forEach(button => {
                             button.addEventListener('click', function () {
-                                const plantId = this.dataset.plantId;  
-                                const plantPrice = parseFloat(this.dataset.plantPrice);  // Asegúrate de que el precio sea un número
-                                enviarDatosDeCompra(plantId, plantPrice);  // Llama a la función que maneja la compra
+                                console.log("CLICKED");
+                                const plantId = this.dataset.plantId;
+                                const plantPrice = parseFloat(this.dataset.plantPrice);
+                                enviarDatosDeCompra(plantId, plantPrice);
                             });
                         });
                     });
+                    
 
                     function enviarDatosDeCompra(plantId, plantPrice) {
                         console.log('Comprando la planta con ID:', plantId, 'y precio:', plantPrice);
                         fetch('/profile/comprarPlanta', {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json', 
+                                'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                plantId: plantId,  
-                                plantPrice: plantPrice  
+                                plantId: plantId,
+                                plantPrice: plantPrice
                             })
                         })
-                        .then(response => {
-                            if (!response.ok) {
+                            .catch(error => {
                                 return response.json().then(err => {
-                                    throw new Error(err.error); // Extrae el error del mensaje JSON
-                                });
-                            }
-                            return response.json(); // Si todo va bien, pasa al siguiente .then
-                        })
-                        .then(data => {
-                            console.log('Compra exitosa:', data);
-                            location.reload(); // Recarga la página si la compra fue exitosa
-                        })
-                        .catch(error => {
-                            console.error('Error en la compra:', error.message);
-                            mostrarAviso(error.message); // Llama a la función para mostrar el mensaje
-                        });
+                                    throw new Error(err.error);
+                                }); 
+                            }) 
+                            .then(response => {
+                                if (!response.ok) {
+                                        alert('Insufficient funds to buy the plant');
+                                        location.reload(); 
+                                }
+                                return response.json(); 
+                            })
+                            .then(data => {
+                                console.log('Compra exitosa:', data);
+                                location.reload(); 
+                            });
                     }
-                
-                    function mostrarAviso(mensaje) {
-                        const errorDiv = document.getElementById('mensaje-error');
-                        errorDiv.textContent = mensaje; // Establece el mensaje de error
-                        errorDiv.style.display = 'block'; // Muestra el div con el mensaje
-                        setTimeout(() => {
-                            errorDiv.style.display = 'none'; // Oculta el mensaje después de 3 segundos
-                        }, 3000);
-                    }
-                    
+
                 </script>
-    </div>
+   
     <!-- Jardín End-->
     <%- include('footer') %>

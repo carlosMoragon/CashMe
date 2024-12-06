@@ -139,7 +139,6 @@ router.post('/comprarPlanta', (req, res) => {
   const { plantId, plantPrice } = req.body;
   const userId = req.session.user.id;
   // console.log(`El Usuario ${userId} quiere comprar la planta ${plantId} por ${plantPrice} monedas.`); // "Debugging"
-  // try {
   const getTotalAcummulated = "SELECT monedasAcumuladas FROM cuentas WHERE usuario_id = ?";
   db.get(getTotalAcummulated, [userId], (err, row) => {
     if (err) {
@@ -189,17 +188,12 @@ router.post('/comprarPlanta', (req, res) => {
             return res.status(500).json({ error: 'Internal error while registering plant.' });
           }
 
-          console.log(`Compra registrada en la bbddd. Planta: ${plantId} Usuario: ${userId}`); // Hasta aquí funciona
+          console.log(`Compra registrada en la bbddd. Planta: ${plantId} Usuario: ${userId}`); 
           res.status(200).json({ message: 'Plant successfully purchased.' });
         });
       });
     });
   });
-
-  // } catch (error) {
-  //   console.error('Error processing the purchase:', error);
-  //   res.status(500).json({ error: 'Internal server error.' });
-  // }
 });
 
 
