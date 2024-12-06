@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
   console.log(user);
 
   // Obtener saldo del usuario
-  db.get('SELECT saldo, goal FROM cuentas WHERE usuario_id = ?', [user.id], (err, cash) => {
+  db.get('SELECT saldo, goal, monedasAcumuladas FROM cuentas WHERE usuario_id = ?', [user.id], (err, cash) => {
     if (err) {
       console.error('Error al obtener el saldo del usuario:', err);
       res.status(500).send('Error al cargar los datos.');
@@ -38,15 +38,12 @@ router.get('/', (req, res) => {
         error = 'Saldo no encontrado';
       } else {
         console.log('Saldo del usuario:', cash.saldo);
-        awarded = cash.saldo * 0.45;
-        console.log('Meta del usuario:', cash.goal);
+        awarded = cash.monedasAcumuladas;
+        console.log('Saldo acumulado:', awarded);
         if (cash.goal != null) {
           goalGoal = cash.goal;
-          console.log('Meta del usuario:', goalGoal);
         }
       }
-
-
       // Renderizar la página de perfil
       res.render('profile', {
         email: user.email,

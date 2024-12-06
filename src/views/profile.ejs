@@ -234,7 +234,7 @@
                       const row = document.createElement('tr');
                       row.innerHTML = `
                           <td>Account ${account.id}</td>
-                          <td>$${account.saldo.toFixed(2)}</td>
+                          <td>€${account.saldo.toFixed(2)}</td>
                           <td>${account.notificaciones === 1 ? 'Notification Enabled' : 'No Notifications'}</td>
                       `;
                       tableBody.appendChild(row);
