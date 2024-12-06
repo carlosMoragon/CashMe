@@ -399,7 +399,7 @@
                     <div class="plant-item">
                         <img src="/images/plantas/<%= plant.planta %>.jpg" alt="Plant <%= plant.planta %>"
                             id="plant<%= plant.id %>-img">
-                        <button type="button" class="buy-plant-btn" data-plant-id="<%= plant.id %>"
+                        <button type="button" class="buy-plant-btn" data-plant-name="<%= plant.planta %>"
                             data-plant-price="<%= plant.evolucion %>">
                             Buy Plant: €<%= plant.evolucion %>
                         </button>
@@ -407,61 +407,70 @@
                     <% }) %>
             </div>
             <% } %>
-
-
                 <!-- Contenedor de las plantas disponibles END -->
 
                 <!-- Contenedor del jardín START -->
-                <div class="garden" id="garden" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="garden" id="garden">
+                    <% if (Array.isArray(plantasAdquiridas) && plantasAdquiridas.length> 0) { %>
+                        <% plantasAdquiridas.forEach(plant=> { %>
+                            <div class="plant-item">
+                                <img src="/images/plantas/<%= plant %>.jpg" alt="Plant <%= plant %>"
+                                    id="plant<%= plant %>-img">
+                            </div>
+                            <% }) %>
+                                <% } else { %>
+                                    <p>No tienes plantas adquiridas.</p>
+                                    <% } %>
+                </div>
                 <!-- Contenedor del jardín END -->
 
 
-            </div>
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        console.log("DOM content loaded");
-                        document.querySelectorAll('.buy-plant-btn').forEach(button => {
-                            button.addEventListener('click', function () {
-                                console.log("CLICKED");
-                                const plantId = this.dataset.plantId;
-                                const plantPrice = parseFloat(this.dataset.plantPrice);
-                                enviarDatosDeCompra(plantId, plantPrice);
-                            });
-                        });
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("DOM content loaded");
+            document.querySelectorAll('.buy-plant-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    console.log("CLICKED");
+                    const plantName = this.dataset.plantName;
+                    const plantPrice = parseFloat(this.dataset.plantPrice);
+                    enviarDatosDeCompra(plantName, plantPrice);
+                });
+            });
+        });
+
+
+        function enviarDatosDeCompra(plantName, plantPrice) {
+            console.log('Comprando la planta con Nombre:', plantName, 'y precio:', plantPrice);
+            fetch('/profile/comprarPlanta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    plantName: plantName,
+                    plantPrice: plantPrice
+                })
+            })
+                .catch(error => {
+                    return response.json().then(err => {
+                        throw new Error(err.error);
                     });
-                    
-
-                    function enviarDatosDeCompra(plantId, plantPrice) {
-                        console.log('Comprando la planta con ID:', plantId, 'y precio:', plantPrice);
-                        fetch('/profile/comprarPlanta', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                plantId: plantId,
-                                plantPrice: plantPrice
-                            })
-                        })
-                            .catch(error => {
-                                return response.json().then(err => {
-                                    throw new Error(err.error);
-                                }); 
-                            }) 
-                            .then(response => {
-                                if (!response.ok) {
-                                        alert('Insufficient funds to buy the plant');
-                                        location.reload(); 
-                                }
-                                return response.json(); 
-                            })
-                            .then(data => {
-                                console.log('Compra exitosa:', data);
-                                location.reload(); 
-                            });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        alert('Insufficient funds to buy the plant');
+                        location.reload();
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Compra exitosa:', data);
+                    location.reload();
+                });
+        }
 
-                </script>
-   
+    </script>
+
     <!-- Jardín End-->
     <%- include('footer') %>
