@@ -28,33 +28,56 @@ router.get('/', (req, res) => {
         return;
       }
 
-      // Inicializar variables para el renderizado
-      let error = null;
-      let awarded = 0; // Valor predeterminado para saldoAcumulado si no existe saldo
-      let goalGoal = 0;
-      // Verificar si existe el saldo
-      if (!cash) {
-        console.error('No se encontró saldo para el usuario.');
-        error = 'Saldo no encontrado';
-      } else {
-        console.log('Saldo del usuario:', cash.saldo);
-        awarded = cash.monedasAcumuladas;
-        console.log('Saldo acumulado:', awarded);
-        if (cash.goal != null) {
-          goalGoal = cash.goal;
+      db.all("SELECT plantasAdquiridas FROM usuarios WHERE id = ?", [user.id], (err, plantasCadenaTexto) => {
+        if (err) {
+          console.error('Error al obtener las plantas adquiridas:', err);
+          res.status(500).send('Error al cargar las plantas adquiridas.');
+          return;
         }
-      }
-      // Renderizar la página de perfil
-      res.render('profile', {
-        email: user.email,
-        username: user.nombre,
-        saldoAcumulado: awarded,
-        goalSet: goalGoal,
-        plantasDisponibles: plantsAvailable,
-        error: error,
-        user: req.session.user
+        let plantsAcquired = 0;
+        if (plantasCadenaTexto.length > 0) {
+          let plantasString = plantasCadenaTexto[0].plantasAdquiridas;
+
+          if (plantasString) {
+            plantsAcquired = plantasString.split(";");
+            plantsAcquired = plantsAcquired.pop(0);
+
+            console.log(plantsAcquired);
+          }
+        } else {
+          console.log('No se encontraron plantas adquiridas.');
+          //plantsAcquired; 
+        }
+        // Inicializar variables para el renderizado
+        let error = null;
+        let awarded = 0; // Valor predeterminado para saldoAcumulado si no existe saldo
+        let goalGoal = 0;
+        // Verificar si existe el saldo
+        if (!cash) {
+          console.error('No se encontró saldo para el usuario.');
+          error = 'Saldo no encontrado';
+        } else {
+          console.log('Saldo del usuario:', cash.saldo);
+          awarded = cash.monedasAcumuladas;
+          console.log('Saldo acumulado:', awarded);
+          if (cash.goal != null) {
+            goalGoal = cash.goal;
+          }
+        }
+        // Renderizar la página de perfil
+        res.render('profile', {
+          email: user.email,
+          username: user.nombre,
+          saldoAcumulado: awarded,
+          goalSet: goalGoal,
+          plantasDisponibles: plantsAvailable,
+          plantasAdquiridas: plantsAcquired,
+          error: error,
+          user: req.session.user
+        });
       });
-    });
+    }
+    );
   });
 });
 
@@ -188,7 +211,7 @@ router.post('/comprarPlanta', (req, res) => {
             return res.status(500).json({ error: 'Internal error while registering plant.' });
           }
 
-          console.log(`Compra registrada en la bbddd. Planta: ${plantId} Usuario: ${userId}`); 
+          console.log(`Compra registrada en la bbddd. Planta: ${plantId} Usuario: ${userId}`);
           res.status(200).json({ message: 'Plant successfully purchased.' });
         });
       });
