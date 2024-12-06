@@ -58,6 +58,22 @@ router.get('/', (req, res) => {
   });
 });
 
+router.post('/createAccount', function (req, res) {
+  const userId = req.session.user.id;
+
+  const insertSql = "INSERT INTO cuentas (saldo, notificaciones, oscuro, usuario_id, goal, monedasAcumuladas) VALUES (0, 0, 0, ?, 0, 0)";
+  db.run(insertSql, [userId], function (err) {
+    if (err) {
+      console.error('Error al crear la cuenta:', err.message);
+      return res.status(500).json({ error: 'Error al crear la cuenta.' });
+    }
+    console.log(`Cuenta creada con éxito para el usuario ${userId}`);
+    res.status(200).json({ message: 'Cuenta creada con éxito.' });
+  });
+});
+
+ 
+
 
 // Cuentas (AJAX)
 router.get('/getAccounts', function (req, res) {

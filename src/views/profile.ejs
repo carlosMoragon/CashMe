@@ -211,6 +211,33 @@
             </tbody>
         </table>
 
+        <button type="submit" class="btn btn-primary" id="createAccountBtn">Crear Cuenta</button>
+
+        <script>
+            document.getElementById('createAccountBtn').addEventListener('click', function () {
+                fetch('/profile/createAccount', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert('Error al crear la cuenta: ' + data.error);
+                        } else {
+                            alert(data.message);
+                            // Recargar las cuentas del usuario
+                            loadAccounts();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Hubo un error al crear la cuenta.');
+                    });
+            });
+        </script>
+
         <script>
             // Función para cargar las cuentas del usuario
             function loadAccounts() {

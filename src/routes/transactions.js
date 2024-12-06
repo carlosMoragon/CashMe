@@ -14,23 +14,38 @@ const db = new sqlite3.Database('../cashme', (err) => {
 // OBETENER TODAS LAS TRANSACCIONES
 router.get('/', (req, res) => {
     const user = req.session.user;
-    db.all('SELECT * FROM transacciones', [], (err, rows) => {
+
+    // COmpruebo si ha logueado
+    if (!user) {
+        return res.redirect('/login');
+    }
+
+    // Consultas anidadas para primero obtener la cuenta del usuario y luego las transacciones de esa cuenta
+    db.all('SELECT * FROM cuentas WHERE usuario_id = ?', [user.id], (err, cuentas) => {
         if (err) {
-            console.error('Error al obtener transacciones:', err.message);
-            res.status(500).send('Error en el servidor');
-        } else {
-            res.render('transactions', { transactions: rows, user });
+            console.error('Error al obtener cuentas:', err.message);
+            return res.status(500).send('Error en el servidor');
         }
+
+        db.all('SELECT * FROM transacciones WHERE id_cuenta = ?', [cuentas[0]?.id], (err, rows) => {
+            if (err) {
+                console.error('Error al obtener transacciones:', err.message);
+                return res.status(500).send('Error en el servidor');
+            }
+
+            res.render('transactions', { transactions: rows, user, cuentas });
+        });
     });
 });
 
 
 // AÑADIR UNA TRANSACCIÓN
 router.post('/add', (req, res) => {
-    const { tipo, dinero, descripcion, fecha } = req.body;
+    const { tipo, dinero, descripcion, fecha, id_cuenta } = req.body;
+
     db.run(
-        'INSERT INTO transacciones (tipo, dinero, descripcion, fecha) VALUES (?, ?, ?, ?)',
-        [tipo, dinero, descripcion, fecha],
+        'INSERT INTO transacciones (tipo, dinero, descripcion, fecha, id_cuenta) VALUES (?, ?, ?, ?, ?)',
+        [tipo, dinero, descripcion, fecha, id_cuenta],
         (err) => {
             if (err) {
                 console.error('Error al insertar transacción:', err.message);
@@ -41,7 +56,6 @@ router.post('/add', (req, res) => {
         }
     );
 });
-
 
 // ELIMINAR 
 router.post('/delete/:id', (req, res) => {

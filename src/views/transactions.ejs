@@ -30,6 +30,17 @@
                 <input type="date" name="fecha" id="fecha" required>
             </div>
 
+            <div class="form-group">
+                <label for="id_cuenta">Cuenta:</label>
+                <select name="id_cuenta" id="id_cuenta" required>
+                    <% cuentas.forEach(cuenta=> { %>
+                        <option value="<%= cuenta.id %>">
+                            <%= cuenta.nombre %> - Saldo: $<%= cuenta.saldo %>
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+
             <button type="submit" class="btn btn-primary">Añadir</button>
         </form>
     </div>
