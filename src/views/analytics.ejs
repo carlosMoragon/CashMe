@@ -16,7 +16,7 @@
     <!-- Analysis Section -->
     <div class="analysis-container">
         <div class="statistics">
-            <h2>Estadísticas últimos 12</h2>
+            <h2>Estadísticas últimos 12 meses</h2>
         </div>
 
         <div class="cards-container">
@@ -105,13 +105,13 @@
             const ctxNeto = document.getElementById('netoChart').getContext('2d');
 
             function getLast12Months() {
-                const currentDate = new Date();
-                const labels = [];
-                for (let i = 11; i >= 0; i--) {
-                    const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
-                    labels.push(date.toLocaleString('default', { month: 'long' }));
+                const months = [];
+                const date = new Date();
+                for (let i = 12; i > 0; i--) {
+                    const d = new Date(date.getFullYear(), date.getMonth() - i, 1);
+                    months.push(d.toLocaleString('default', { month: 'short' }));
                 }
-                return labels;
+                return months;
             }
 
             const labels = getLast12Months();
@@ -188,13 +188,18 @@
                                 data: data.data,
                                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                                 borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
+                                borderWidth: 2
                             }]
                         },
                         options: {
                             scales: {
                                 y: {
                                     beginAtZero: true
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
                                 }
                             }
                         }
