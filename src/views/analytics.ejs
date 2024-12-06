@@ -127,9 +127,9 @@
             function getLast12Months() {
                 const months = [];
                 const date = new Date();
-                for (let i = 13; i > 0; i--) {
+                for (let i = 11; i > -1; i--) {
                     const d = new Date(date.getFullYear(), date.getMonth() - i, 1);
-                    months.push(d.toLocaleString('default', { month: 'short' }));
+                    months.push(d.toISOString().slice(0, 7));
                 }
                 return months;
             }

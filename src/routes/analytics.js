@@ -31,7 +31,7 @@ router.get('/data/ingresos', (req, res) => {
         const data = [];
         const currentDate = new Date();
         // Iterative case: previous 12 months
-        for (let i = 13; i >= -1; i--) {
+        for (let i = 11; i >= 0; i--) {
             const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
             const month = date.toISOString().slice(0, 7);
             labels.push(month);
