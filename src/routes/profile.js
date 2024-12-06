@@ -119,46 +119,63 @@ router.post('/saveChallenge', function (req, res) {
   }
 });
 
-//Cargar saldo, acumulado y meta
-// router.post('/saveChallenge', function (req, res) {
+// Función para comprar una planta
+// router.post('/comprarPlanta', (req, res) => {
 //   try {
-//     const amount = req.body.amount;
-//     const userId = req.session.user.id;
-//     // console.log('amount:', amount);
-//     // console.log('userId:', userId);
+//     const user = req.session.user; // Obtener datos del usuario de la sesión
+//     const { plantId } = req.body; // ID de la planta seleccionada
+//     if (!user || !plantId) {
+//       return res.status(400).json({ error: 'Datos incompletos' });
+//     }
 
-//     const selectSql = "SELECT goal FROM cuentas WHERE usuario_id = ?";
-//     db.get(selectSql, [userId], function (err, row) {
-//       if (!row) {
-//         try {
-//           const insertSql = "INSERT INTO cuentas (usuario_id, saldo, goal) VALUES (?, ?, ?)";
-//           db.run(insertSql, [userId, 0.0, amount], function (err) {
-//             if (err) {
-//               console.error(err.message);
-//             } else {
-//               console.log(`Nueva fila insertada con el ID ${userId}`);
-//             }
-//           });
-//         } catch (error) {
-//           console.error(error);
-//           res.status(500).json({ error: 'Error inserting the challenge.' });
-//         }
-//       } else {
-//         let updatedGoal = parseFloat(row.goal) + parseFloat(amount);
-//         const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
-//         db.run(updateSql, [updatedGoal, userId], function (err) {
-//           if (err) {
-//             console.error(err.message);
-//           } else {
-//             console.log(`Fila actualizada con el ID ${userId}`);
-//             res.redirect('/profile');
-//           }
-//         });
+//     // Obtener saldo del usuario
+//     db.get('SELECT saldo FROM cuentas WHERE usuario_id = ?', [user.id], (err, cash) => {
+//       if (err) {
+//         console.error('Error al obtener el saldo del usuario:', err);
+//         return res.status(500).json({ error: 'Error al procesar la compra.' });
 //       }
+
+//       // Obtener precio de la planta
+//       db.get('SELECT evolucion FROM jardines WHERE id = ?', [plantId], (err, plant) => {
+//         const plantPrice = plant.evolucion;
+        
+//         // Validar si el usuario tiene saldo suficiente
+//         if (cash.saldo < plantPrice) {
+//           return res.status(400).json({ error: 'Saldo insuficiente para comprar esta planta.' });
+//         }
+
+//         // Actualizar saldo del usuario en la base de datos
+//         const newSaldo = cash.saldo - plantPrice;
+//         db.run(
+//           'UPDATE cuentas SET saldo = ? WHERE usuario_id = ?',
+//           [newSaldo, user.id],
+//           function (err) {
+//             if (err) {
+//               console.error('Error al actualizar el saldo del usuario:', err);
+//               return res.status(500).json({ error: 'Error al actualizar el saldo.' });
+//             }
+
+//             // Insertar la planta comprada en la tabla de jardines
+//             db.run(
+//               'INSERT INTO jardines (usuario_id, planta_id) VALUES (?, ?)',
+//               [user.id, plantId],
+//               function (err) {
+//                 if (err) {
+//                   console.error('Error al añadir la planta al jardín:', err);
+//                   return res.status(500).json({ error: 'Error al registrar la compra.' });
+//                 }
+
+//                 console.log(`Planta ID ${plantId} añadida al usuario ID ${user.id}.`);
+//                 res.redirect('/profile'); // Redirigir al perfil actualizado
+//               }
+//             );
+//           }
+//         );
+//       });
 //     });
 //   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Error processing the form.' });
+//     console.error('Error procesando la compra:', error);
+//     res.status(500).json({ error: 'Error interno del servidor.' });
 //   }
 // });
 
