@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Financiero</title>
+    <link href="/stylesheets/analytics.css" rel="stylesheet">
+    <link href="/stylesheets/paloma.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #054d1a;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section pre {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reporte Financiero</h1>
+    <div class="section">
+        <h2>Ingresos</h2>
+        <pre><%= JSON.stringify(ingresosData, null, 2) %></pre>
+    </div>
+    <div class="section">
+        <h2>Gastos</h2>
+        <pre><%= JSON.stringify(gastosData, null, 2) %></pre>
+    </div>
+    <div class="section">
+        <h2>Neto</h2>
+        <pre><%= JSON.stringify(netoData, null, 2) %></pre>
+    </div>
+    <div class="section">
+        <h2>Panel de Control Financiero</h2>
+        <pre><%= JSON.stringify(combinedData, null, 2) %></pre>
+    </div>
+</body>
+</html>
