@@ -416,13 +416,15 @@
                 <!-- Contenedor del jardín END -->
 
 
+                <div id="mensaje-error" style="display:none; color: red; font-weight: bold;"></div>
+
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
                         document.querySelectorAll('.buy-plant-btn').forEach(button => {
                             button.addEventListener('click', function () {
                                 const plantId = this.dataset.plantId;  
-                                const plantPrice = parseFloat(this.dataset.plantPrice);
-                                enviarDatosDeCompra(plantId, plantPrice);
+                                const plantPrice = parseFloat(this.dataset.plantPrice);  // Asegúrate de que el precio sea un número
+                                enviarDatosDeCompra(plantId, plantPrice);  // Llama a la función que maneja la compra
                             });
                         });
                     });
@@ -441,51 +443,31 @@
                         })
                         .then(response => {
                             if (!response.ok) {
-                                throw new Error('Error en la compra. Intenta nuevamente.');
+                                return response.json().then(err => {
+                                    throw new Error(err.error); // Extrae el error del mensaje JSON
+                                });
                             }
-                            return response.json();
+                            return response.json(); // Si todo va bien, pasa al siguiente .then
                         })
                         .then(data => {
                             console.log('Compra exitosa:', data);
-                            location.reload(); // Recarga la página
+                            location.reload(); // Recarga la página si la compra fue exitosa
                         })
                         .catch(error => {
-                            console.error('Hubo un problema con la compra:', error);
+                            console.error('Error en la compra:', error.message);
+                            mostrarAviso(error.message); // Llama a la función para mostrar el mensaje
                         });
                     }
-
-                    // Event listener para el botón de "Save Challenge"
-                    document.getElementById('saveChallenge').addEventListener('click', function () {
-                        const challengeAmount = document.getElementById('amount').value;
-                        if (!challengeAmount || isNaN(challengeAmount) || challengeAmount <= 0) {
-                            alert('Please enter a valid amount.');
-                            return;
-                        }
-
-                        // Enviar el valor al servidor usando Fetch API
-                        fetch('/saveChallenge', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ amount: challengeAmount })
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    alert('Challenge saved successfully!');
-                                    // Actualizar la interfaz con el saldo actualizado, si es necesario
-                                    document.getElementById('savedAmount').textContent = `Total Saved: € ${data.newBalance}`;
-                                    $('#setChallengeModal').modal('hide'); // Cerrar el modal
-                                } else {
-                                    alert('Error saving challenge.');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('An error occurred.');
-                            });
-                    });
+                
+                    function mostrarAviso(mensaje) {
+                        const errorDiv = document.getElementById('mensaje-error');
+                        errorDiv.textContent = mensaje; // Establece el mensaje de error
+                        errorDiv.style.display = 'block'; // Muestra el div con el mensaje
+                        setTimeout(() => {
+                            errorDiv.style.display = 'none'; // Oculta el mensaje después de 3 segundos
+                        }, 3000);
+                    }
+                    
                 </script>
     </div>
     <!-- Jardín End-->
