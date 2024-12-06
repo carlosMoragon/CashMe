@@ -166,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         console.log("Se EJECUTA");
         document.getElementById('div_create_chat').style.display = 'block';
+
     });
         
         // Al pulsar el botón de eliminar, se activa el modo de eliminar
@@ -214,6 +215,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Desactivar el modo de eliminación después de eliminar
                     isDeleting = false;
                     document.getElementById('div_delete_chat').style.display = 'none'; // Ocultar el div
+                    setTimeout(function() {
+                        location.reload();
+                    }, 500);
                 }
             });
         });
@@ -265,6 +269,9 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => console.error('Error al enviar el mensaje:', error));
         document.getElementById('div_create_chat').style.display = 'none';
+        setTimeout(function() {
+            location.reload();
+        }, 500);
     });
     
 
@@ -300,6 +307,58 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+    function getMessages() {
+        console.log("Ejecutando getMessages...");
+        fetch('/chat/getMessages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_header: chatHeader // Asegúrate de que `chatHeader` tiene un valor
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error en la solicitud: ${response.status}`);
+            }
+            return response.json(); // Obtener los datos de respuesta en JSON
+        })
+        .then(data => {
+            console.log('Mensajes recibidos:', data);
+            renderMessages(data); // Llamamos a la función para renderizar los mensajes
+        })
+        .catch(error => {
+            console.error('Error al obtener los mensajes:', error);
+        });
+    }
+    
+    function renderMessages(messages) {
+        console.log("Renderizando mensajes...");
+        const messagesContainer = document.querySelector('.message-list');
+        messagesContainer.innerHTML = ""; // Limpiar la lista actual de mensajes
+    
+        // Renderizar cada mensaje
+        messages.forEach(message => {
+            let item = document.createElement("li");
+            let contentDiv = document.createElement("div");
+            contentDiv.className = "content-message";
+            
+            let info_label = document.createElement("label");
+            info_label.textContent = message.contenido;
+            let author_label = document.createElement("label");
+            author_label.textContent = message.emisor;
+            let date_label = document.createElement("label");
+            date_label.textContent = message.fecha;
+    
+            contentDiv.appendChild(author_label);
+            contentDiv.appendChild(info_label);
+            contentDiv.appendChild(date_label);
+            item.appendChild(contentDiv);
+            messagesContainer.appendChild(item);
+        });
+    }
+    
 
 
 
