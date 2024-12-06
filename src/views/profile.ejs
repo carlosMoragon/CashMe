@@ -439,22 +439,20 @@
                                 plantPrice: plantPrice  
                             })
                         })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // Aquí puedes hacer algo si la compra es exitosa
-                                    alert(`¡Compra exitosa! ${data.message}`);
-                                } else {
-                                    // Manejo de errores, si es necesario
-                                    alert(`Error al comprar la planta: ${data.error}`);
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('Hubo un error al procesar la compra.');
-                            });
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error en la compra. Intenta nuevamente.');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Compra exitosa:', data);
+                            location.reload(); // Recarga la página
+                        })
+                        .catch(error => {
+                            console.error('Hubo un problema con la compra:', error);
+                        });
                     }
-
 
                     // Event listener para el botón de "Save Challenge"
                     document.getElementById('saveChallenge').addEventListener('click', function () {

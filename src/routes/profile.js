@@ -138,9 +138,7 @@ router.post('/saveChallenge', function (req, res) {
 router.post('/comprarPlanta', (req, res) => {
   const { plantId, plantPrice } = req.body;
   const userId = req.session.user.id;
-
-  console.log(`El Usuario ${userId} quiere comprar la planta ${plantId} por ${plantPrice} monedas.`); // "Debugging"
-
+  // console.log(`El Usuario ${userId} quiere comprar la planta ${plantId} por ${plantPrice} monedas.`); // "Debugging"
   try {
     const getTotalAcummulated = "SELECT monedasAcumuladas FROM cuentas WHERE usuario_id = ?";
     db.get(getTotalAcummulated, [userId], (err, row) => {
@@ -156,17 +154,15 @@ router.post('/comprarPlanta', (req, res) => {
 
       // Actualizar las monedas acumuladas
       const nuevoSaldo = totalAcumulado - plantPrice;
-
-      console.log(`Monedas restantes: ${nuevoSaldo}`); // "Debugging"
-
+      // console.log(`Monedas restantes: ${nuevoSaldo}`); // "Debugging"
+      
       const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
       db.run(updateTotalAcummulated, [nuevoSaldo, userId], function (err) {
         if (err) {
           console.error('Error updating accumulated coins:', err.message);
           return res.status(500).json({ error: 'Internal error while updating balance.' });
         }
-
-        console.log("Descuento de las monedas."); // "Debugging"
+        // console.log("Descuento de las monedas."); // "Debugging"
 
         // Obtener las plantas adquiridas por el usuario
         const selectQuery = "SELECT plantasAdquiridas FROM usuarios WHERE id = ?";
@@ -182,11 +178,9 @@ router.post('/comprarPlanta', (req, res) => {
             planta = '';
           }
 
-          console.log(`Plants acquired by user: ${planta}`); //Debbuging
-
+          // console.log(`Plants acquired by user: ${planta}`); //Debbuging
           let plantaAdd = planta + ';' + plantId;
-
-          console.log(`Plantas aquiridas: ${plantaAdd}`); //Hasta aqui funciona
+          // console.log(`Plantas aquiridas: ${plantaAdd}`); //Hasta aqui funciona
 
           const updateJardinUsuario = "UPDATE usuarios SET plantasAdquiridas = ? WHERE id = ?";
           db.run(updateJardinUsuario, [plantaAdd, userId], function (err) {
@@ -195,8 +189,8 @@ router.post('/comprarPlanta', (req, res) => {
               return res.status(500).json({ error: 'Internal error while registering plant.' });
             }
 
-            console.log(`Purchase successful: Plant ${plantId} added to user ${userId}`);
-            res.status(200).json({ message: 'Plant successfully purchased.' }); // Hasta aquí funciona
+            console.log(`Compra registrada en la bbddd. Planta: ${plantId} Usuario: ${userId}`); // Hasta aquí funciona
+            res.status(200).json({ message: 'Plant successfully purchased.' }); 
           });
         });
       });
