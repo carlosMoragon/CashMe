@@ -28,22 +28,23 @@ router.get('/', (req, res) => {
         return;
       }
 
-      db.all("SELECT plantasAdquiridas FROM usuarios WHERE id = ?", [user.id], (err, plantasCadenaTexto) => {
+      db.all("SELECT plantasAdquiridas FROM usuarios WHERE id = ?", [user.id], (err, plantas) => {
         if (err) {
           console.error('Error al obtener las plantas adquiridas:', err);
           res.status(500).send('Error al cargar las plantas adquiridas.');
           return;
         }
-        let plantsAcquired = 0;
-        if (plantasCadenaTexto.length > 0) {
-          let plantasString = plantasCadenaTexto[0].plantasAdquiridas;
+        let plantsAcquired;
+        let plantasString = plantas[0].plantasAdquiridas;
+        if (plantasString.length > 0) {
 
-          if (plantasString) {
-            plantsAcquired = plantasString.split(";");
-            plantsAcquired = plantsAcquired.pop(0);
+          plantsAcquired = plantasString.split(";");
+          plantsAcquired.shift();
+          
+          console.log("------------------------------------------------------------------------------------");
+          console.log(plantsAcquired);
+          console.log("------------------------------------------------------------------------------------");
 
-            console.log(plantsAcquired);
-          }
         } else {
           console.log('No se encontraron plantas adquiridas.');
           //plantsAcquired; 
