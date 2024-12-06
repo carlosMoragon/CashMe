@@ -267,25 +267,27 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('total-ingresos').textContent = data.total;
+                    document.getElementById('export-ingresos').textContent = data.total;
                 });
 
             fetch('/analytics/data/total-gastos')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('total-gastos').textContent = data.total;
+                    document.getElementById('export-gastos').textContent = data.total;
                 });
 
             fetch('/analytics/data/total-neto')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('total-neto').textContent = data.total;
+                    document.getElementById('export-neto').textContent = data.total;
                 });
 
             document.getElementById('export-html-button').addEventListener('click', function() {
-                const ingresosData = document.getElementById('export-ingresos').textContent;
-                const gastosData = document.getElementById('export-gastos').textContent;
-                const netoData = document.getElementById('export-neto').textContent;
-                const combinedData = document.getElementById('export-combined').textContent;
+                const ingresosTotal = document.getElementById('export-ingresos').textContent;
+                const gastosTotal = document.getElementById('export-gastos').textContent;
+                const netoTotal = document.getElementById('export-neto').textContent;
                 const customContent = document.getElementById('custom-content').textContent; // Fetch custom content
                 const link = document.createElement('a');
                 const blob = new Blob([`
@@ -329,17 +331,17 @@
                         <div class="section">
                             <h2>Ingresos</h2>
                             <p>Para mejorar el ahorro, es fundamental analizar y diversificar las fuentes de ingresos. Identifica oportunidades para aumentar tus ingresos principales, como negociaciones salariales o bonos, y considera generar ingresos adicionales a través de actividades complementarias, freelancing o inversiones pasivas. La clave es establecer un flujo de ingresos estable y sostenible que permita cubrir tus necesidades y generar un excedente para el ahorro.</p>
-                            <pre>${ingresosData}</pre>
+                            <pre>Total Ingresos: ${ingresosTotal}</pre>
                         </div>
                         <div class="section">
                             <h2>Gastos</h2>
                             <p>El control de los gastos es esencial para potenciar el ahorro. Revisa tus hábitos de consumo y prioriza lo realmente necesario sobre lo prescindible. Implementa estrategias como presupuestos mensuales, seguimiento de gastos diarios y negociaciones para reducir costos fijos, como servicios o alquiler. Opta por prácticas como comprar a largo plazo y evitar deudas de alto interés que erosionen tu capacidad de ahorro.</p>
-                            <pre>${gastosData}</pre>
+                            <pre>Total Gastos: ${gastosTotal}</pre>
                         </div>
                         <div class="section">
                             <h2>Neto</h2>
                             <p>La diferencia entre ingresos y gastos constituye la base del ahorro. Incrementar este margen requiere mantener un equilibrio entre aumentar ingresos y reducir gastos, asegurando siempre un excedente. Este margen puede destinarse a un fondo de emergencia, inversiones o metas financieras específicas, maximizando el crecimiento del capital a largo plazo.</p>
-                            <pre>${netoData}</pre>
+                            <pre>Total Neto: ${netoTotal}</pre>
                         </div>
                         <div class="section">
                             <h2>Contenido Personalizado</h2>
