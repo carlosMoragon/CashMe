@@ -255,3 +255,22 @@ canvas {
     width: 100% !important;
     height: 400px !important;
 }
+
+.export-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#export-html-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#export-html-button:hover {
+    background-color: #45a049;
+}

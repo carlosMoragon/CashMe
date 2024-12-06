@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
+const ejs = require('ejs');
+const fs = require('fs');
+const path = require('path');
+const { jsPDF } = require('jspdf');
+require('jspdf-autotable');
 
 // CONEXIÓN
 // Conectar a la base de datos
@@ -225,5 +230,64 @@ router.get('/data/total-neto', (req, res) => {
         });
     });
 });
+
+router.get('/export-pdf', async (req, res) => {
+    try {
+        const ingresosData = await getData('/data/ingresos');
+        const gastosData = await getData('/data/gastos');
+
+        const templatePath = path.join(__dirname, '../views/report_template.html');
+        const template = fs.readFileSync(templatePath, 'utf8');
+        const html = ejs.render(template, { ingresosData, gastosData });
+
+        const pdf = new jsPDF();
+        pdf.html(html, {
+            callback: function (doc) {
+                const pdfPath = path.join(__dirname, '../public/reporte_financiero.pdf');
+                doc.save(pdfPath);
+                res.download(pdfPath, 'reporte_financiero.pdf', (err) => {
+                    if (err) {
+                        res.status(500).send('Error al descargar el PDF');
+                    } else {
+                        fs.unlinkSync(pdfPath); // Delete the file after download
+                    }
+                });
+            },
+            x: 10,
+            y: 10
+        });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+router.get('/export-html', async (req, res) => {
+    try {
+        const ingresosData = await getData('/data/ingresos');
+        const gastosData = await getData('/data/gastos');
+
+        const templatePath = path.join(__dirname, '../views/report_template.html');
+        const template = fs.readFileSync(templatePath, 'utf8');
+        const html = ejs.render(template, { ingresosData, gastosData });
+
+        const htmlPath = path.join(__dirname, '../public/reporte_financiero.html');
+        fs.writeFileSync(htmlPath, html);
+
+        res.download(htmlPath, 'reporte_financiero.html', (err) => {
+            if (err) {
+                res.status(500).send('Error al descargar el HTML');
+            } else {
+                fs.unlinkSync(htmlPath); // Delete the file after download
+            }
+        });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+async function getData(endpoint) {
+    const response = await fetch(`http://localhost:3000/analytics${endpoint}`);
+    return response.json();
+}
 
 module.exports = router;

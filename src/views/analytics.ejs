@@ -107,6 +107,9 @@
                 <canvas id="combinedChart"></canvas>
             </div>
         </div>
+        <div class="export-button-container">
+            <button id="export-html-button">Exportar a HTML</button>
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -266,6 +269,14 @@
                 .then(data => {
                     document.getElementById('total-neto').textContent = data.total;
                 });
+
+            document.getElementById('export-html-button').addEventListener('click', function() {
+                const link = document.createElement('a');
+                const blob = new Blob(['<!DOCTYPE html><html><head><title>Exported HTML</title></head><body></body></html>'], { type: 'text/html' });
+                link.href = URL.createObjectURL(blob);
+                link.download = 'reporte_financiero.html';
+                link.click();
+            });
         });
     </script>
     <%- include('footer') %>
