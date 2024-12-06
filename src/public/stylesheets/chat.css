@@ -205,3 +205,8 @@
   text-align: center;  /* Centra el contenido dentro del div */
   box-sizing: border-box;  /* Incluye el padding en el tamaño total del div */
 }
+
+#check_usuarios{
+  height: 200px;
+  overflow-y: auto;
+}

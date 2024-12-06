@@ -274,4 +274,33 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
+    // Obtener los elementos relevantes
+    const searchInput = document.getElementById("search_content");
+    const searchButton = document.getElementById("search_button");
+    const userContainer = document.getElementById("check_usuarios");
+
+    // Función para filtrar los usuarios basados en el texto de búsqueda
+    searchButton.addEventListener("click", function(e) {
+        e.preventDefault(); // Prevenir el comportamiento por defecto del botón
+        const searchText = searchInput.value.trim().toLowerCase(); // Obtener el texto de búsqueda y convertirlo a minúsculas
+
+        // Obtener todos los usuarios (divs con clase .form-check)
+        const users = userContainer.querySelectorAll(".form-check");
+
+        // Recorrer cada usuario y verificar si el nombre coincide con el texto de búsqueda
+        users.forEach(user => {
+            const userName = user.querySelector('label').textContent.trim().toLowerCase(); // Obtener el nombre del usuario desde el texto del label
+            const regex = new RegExp(searchText, "i"); // Crear una expresión regular con el texto de búsqueda (insensible a mayúsculas/minúsculas)
+
+            // Mostrar o esconder el usuario según si coincide con la búsqueda
+            if (regex.test(userName)) {
+                user.style.display = "block"; // Mostrar el usuario
+            } else {
+                user.style.display = "none"; // Ocultar el usuario
+            }
+        });
+    });
+
+
+
 });
