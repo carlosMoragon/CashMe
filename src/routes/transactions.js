@@ -63,8 +63,14 @@ router.post('/add', (req, res) => {
                         return res.status(500).send('Error en el servidor'); 
                     }
 
+                    let nuevoSaldo;
                     if (row) {
-                        const nuevoSaldo = parseFloat(row.saldo) + parseFloat(dinero);  
+                        if (tipo === 'GASTO') {
+                            nuevoSaldo = parseFloat(row.saldo) - parseFloat(dinero);  
+                        } else {
+                            nuevoSaldo = parseFloat(row.saldo) + parseFloat(dinero);  
+                        }
+
                         db.run(
                             'UPDATE cuentas SET saldo = ? WHERE usuario_id = ?',
                             [nuevoSaldo, userId],
@@ -96,6 +102,7 @@ router.post('/add', (req, res) => {
         }
     );
 });
+
 
 
 
