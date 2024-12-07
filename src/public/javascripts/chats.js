@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     let isDeleting = false;
-
+    chats.innerHTML = '';
     chats.forEach(chat => {
         chat.addEventListener('click', (e) => {
             e.preventDefault();

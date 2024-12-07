@@ -47,8 +47,23 @@ router.get('/', async function(req, res, next) {
     // Obtener la lista de usuarios
     const usuarios = await getUsersName(req);
 
+    chats.forEach(element => {
+      console.log(element);
+    });
+
+    // Filtrar duplicados por título y última fecha
+    const uniqueChats = [];
+    const seen = new Set();
+    chats.forEach(chat => {
+      const uniqueKey = `${chat.chat_title}_${chat.last_message_date}`;
+      if (!seen.has(uniqueKey)) {
+        uniqueChats.push(chat);
+        seen.add(uniqueKey);
+      }
+    });
+
     // Renderiza la vista 'chat', pasando los datos
-    res.render('chat', { chats, usuario: req.session.user.nombre, usuarios , user: req.session.user});
+    res.render('chat', { chats: uniqueChats, usuario: req.session.user.nombre, usuarios , user: req.session.user});
   } catch (err) {
     console.error("Error al realizar la consulta:", err);
     return next(err);
@@ -97,6 +112,68 @@ function getTodayDate(){
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
+router.post('/deleteChat', function(req, res, next) {
+  // Verificar si el usuario está autenticado
+  if (!req.session || !req.session.user) {
+    console.error("Sesión no inicializada.");
+    return res.status(401).send("Usuario no autenticado.");
+  }
+
+  const chat = req.body.chatName; // Nombre del chat a desvincular
+  const usuario = req.session.user.nombre; // Nombre del usuario autenticado
+
+  // Paso 1: Obtener el ID del chat a partir de su nombre
+  db.get(
+    'SELECT id FROM chats WHERE titulo = ?',
+    [chat],
+    function(err, row) {
+      if (err) {
+        console.error("Error al buscar el chat:", err);
+        return next(err);
+      }
+
+      if (!row) {
+        return res.status(404).json({ error: 'Chat no encontrado.' });
+      }
+
+      const chatId = row.id;
+
+      // Paso 2: Verificar si el usuario está en ese chat
+      db.get(
+        'SELECT * FROM usuarios_chats WHERE chat_id = ? AND usuario_id = (SELECT id FROM usuarios WHERE nombre = ?)',
+        [chatId, usuario],
+        function(err, row) {
+          if (err) {
+            console.error("Error al verificar usuario en chat:", err);
+            return next(err);
+          }
+
+          if (!row) {
+            return res.status(403).json({ error: 'El usuario no pertenece a este chat.' });
+          }
+
+          // Paso 3: Desasociar al usuario del chat
+          db.run(
+            'DELETE FROM usuarios_chats WHERE chat_id = ? AND usuario_id = (SELECT id FROM usuarios WHERE nombre = ?)',
+            [chatId, usuario],
+            function(err) {
+              if (err) {
+                console.error("Error al desasociar usuario del chat:", err);
+                return next(err);
+              }
+
+              console.log(`Usuario ${usuario} desvinculado del chat ${chat}.`);
+              return res.status(200).json({ message: `Chat '${chat}' eliminado de tu lista.` });
+            }
+          );
+        }
+      );
+    }
+  );
+});
+
+
+/*
 router.post('/deleteChat', function(req, res, next){
   // Verificar si el usuario está autenticado
   if (!req.session || !req.session.user) {
@@ -180,7 +257,7 @@ router.post('/deleteChat', function(req, res, next){
     }
   );
 });
-
+*/
 
 router.post('/createChat', function (req, res, next) {
   console.log("SE EJECUTA");
