@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis</title>
+    <title>CashMe</title>
+    <link href="/images/logoCashMe.jpg" rel="icon">
+    <link href="/stylesheets/analytics.css" rel="stylesheet">
     <link href="/stylesheets/analytics.css" rel="stylesheet">
     <link href="/stylesheets/paloma.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <%- include('header') %>
-    <link href="/stylesheets/analytics.css" rel="stylesheet">
-    <link href="/stylesheets/paloma.css" rel="stylesheet">
 
     <!-- Analysis Section -->
     <div class="analysis-container">
@@ -332,15 +332,15 @@
                 let conclusionText = '';
                 const neto = parseFloat(netoTotal);
                 if (neto > 3000) {
-                    conclusionText = 'El esfuerzo constante y la disciplina financiera han dado excelentes resultados. Gracias a una planificación rigurosa, priorizando el control de los gastos y la generación de ingresos adicionales, has logrado acumular una cantidad considerable de ahorros. Este éxito resalta la importancia de un enfoque estratégico, estableciendo metas claras y ajustando hábitos financieros para maximizar la diferencia entre ingresos y gastos. Ahora, puedes plantearte objetivos más ambiciosos, como inversiones a largo plazo o alcanzar la libertad financiera';
+                    conclusionText = 'Constant effort and financial discipline have yielded excellent results. Thanks to rigorous planning, prioritizing expense control, and generating additional income, you have managed to accumulate a considerable amount of savings. This success highlights the importance of a strategic approach, setting clear goals, and adjusting financial habits to maximize the gap between income and expenses. Now, you can set more ambitious goals, such as long-term investments or achieving financial freedom.';
                 } else if (neto > 500) {
-                    conclusionText = 'Aunque el ahorro alcanzado es positivo, queda la sensación de que se podía haber logrado más. Quizá algunos gastos inesperados o decisiones menos óptimas afectaron el resultado final. Este escenario subraya la importancia de una mayor previsión y ajustes más estrictos en el control del presupuesto. A pesar de ello, el progreso realizado es valioso, y puedes usar esta experiencia para fortalecer tu enfoque y alcanzar un ahorro más significativo en el futuro.';
+                    conclusionText = 'Although the savings achieved are positive, there is a sense that more could have been accomplished. Perhaps some unexpected expenses or less optimal decisions affected the final result. This scenario underscores the importance of better foresight and stricter adjustments in budget control. Nevertheless, the progress made is valuable, and you can use this experience to strengthen your approach and achieve more significant savings in the future.';
                 } else if (neto > -500 && neto < 500) {
-                    conclusionText = 'El resultado muestra que el ahorro ha sido muy limitado, aunque se ha evitado incurrir en grandes pérdidas. Este equilibrio tenue refleja la necesidad de reevaluar las prioridades financieras y buscar maneras más efectivas de aumentar los ingresos y controlar los gastos. Aunque no es un resultado ideal, ofrece una oportunidad para aprender, ajustar hábitos y fortalecer el compromiso con los objetivos de ahorro.';
+                    conclusionText = 'The result shows that savings have been very limited, although large losses have been avoided. This delicate balance reflects the need to reassess financial priorities and seek more effective ways to increase income and control expenses. While it is not an ideal result, it offers an opportunity to learn, adjust habits, and strengthen the commitment to savings goals.';
                 } else if (neto < -500 && neto > -3000) {
-                    conclusionText = 'Aunque las finanzas cerraron con un saldo negativo, las pérdidas fueron manejables. Esto podría deberse a circunstancias imprevistas, como emergencias o inversiones que no generaron los resultados esperados. Sin embargo, el impacto fue moderado gracias a una gestión prudente que evitó que las pérdidas se salieran de control. Es una lección importante para reforzar el fondo de emergencia y evaluar con más cuidado las decisiones financieras futuras.';
+                    conclusionText = 'Although finances ended with a negative balance, the losses were manageable. This could be due to unforeseen circumstances, such as emergencies or investments that did not generate the expected results. However, the impact was moderate thanks to prudent management that prevented the losses from getting out of control. It is an important lesson to reinforce the emergency fund and evaluate financial decisions more carefully in the future.';
                 } else if (neto < -3000) {
-                    conclusionText = 'El balance final revela un desajuste significativo entre ingresos y gastos, reflejando una mala gestión financiera en el período analizado. Los gastos excedieron ampliamente los ingresos, lo que pudo haberse debido a decisiones impulsivas, falta de planificación o eventos inesperados sin respaldo económico suficiente. Este escenario exige una revisión profunda de las finanzas personales, priorizando ajustes drásticos en el presupuesto, generación de ingresos adicionales y la creación de hábitos más saludables para evitar caer en un ciclo de deudas o inestabilidad económica.';
+                    conclusionText = 'The final balance reveals a significant mismatch between income and expenses, reflecting poor financial management during the analyzed period. Expenses far exceeded income, which could have been due to impulsive decisions, lack of planning, or unexpected events without sufficient economic backup. This scenario demands a deep review of personal finances, prioritizing drastic adjustments in the budget, generating additional income, and creating healthier habits to avoid falling into a cycle of debt or economic instability.';
                 }
 
                 const link = document.createElement('a');
@@ -381,24 +381,24 @@
                         </style>
                     </head>
                     <body>
-                        <h1>Reporte Financiero</h1>
+                        <h1>Financial Report</h1>
                         <div class="section">
-                            <h2>Ingresos</h2>
-                            <p>Para mejorar el ahorro, es fundamental analizar y diversificar las fuentes de ingresos. Identifica oportunidades para aumentar tus ingresos principales, como negociaciones salariales o bonos, y considera generar ingresos adicionales a través de actividades complementarias, freelancing o inversiones pasivas. La clave es establecer un flujo de ingresos estable y sostenible que permita cubrir tus necesidades y generar un excedente para el ahorro.</p>
-                            <pre>Total Ingresos: ${ingresosTotal}</pre>
+                            <h2>Earnings</h2>
+                            <p>To improve savings, it is essential to analyze and diversify income sources. Identify opportunities to increase your primary income, such as salary negotiations or bonuses, and consider generating additional income through side activities, freelancing, or passive investments. The key is to establish a stable and sustainable income flow that allows you to cover your needs and generate a surplus for savings.</p>
+                            <pre>Total Earnings: ${ingresosTotal}</pre>
                         </div>
                         <div class="section">
-                            <h2>Gastos</h2>
-                            <p>El control de los gastos es esencial para potenciar el ahorro. Revisa tus hábitos de consumo y prioriza lo realmente necesario sobre lo prescindible. Implementa estrategias como presupuestos mensuales, seguimiento de gastos diarios y negociaciones para reducir costos fijos, como servicios o alquiler. Opta por prácticas como comprar a largo plazo y evitar deudas de alto interés que erosionen tu capacidad de ahorro.</p>
-                            <pre>Total Gastos: ${gastosTotal}</pre>
+                            <h2>Expenses</h2>
+                            <p>Expense control is essential to boost savings. Review your consumption habits and prioritize what is truly necessary over what is expendable. Implement strategies such as monthly budgets, daily expense tracking, and negotiations to reduce fixed costs, such as services or rent. Adopt practices like buying in bulk and avoiding high-interest debt that can erode your savings capacity.</p>
+                            <pre>Total Expenses: ${gastosTotal}</pre>
                         </div>
                         <div class="section">
-                            <h2>Neto</h2>
-                            <p>La diferencia entre ingresos y gastos constituye la base del ahorro. Incrementar este margen requiere mantener un equilibrio entre aumentar ingresos y reducir gastos, asegurando siempre un excedente. Este margen puede destinarse a un fondo de emergencia, inversiones o metas financieras específicas, maximizando el crecimiento del capital a largo plazo.</p>
-                            <pre>Total Neto: ${netoTotal}</pre>
+                            <h2>Net Profit</h2>
+                            <p>The difference between income and expenses forms the foundation of savings. Increasing this margin requires maintaining a balance between raising income and reducing expenses, always ensuring a surplus. This margin can be allocated to an emergency fund, investments, or specific financial goals, maximizing capital growth in the long term.</p>
+                            <pre>Total Net Profit: ${netoTotal}</pre>
                         </div>
                         <div class="section">
-                            <h2>Conclusión</h2>
+                            <h2>Summary</h2>
                             <p>${conclusionText}</p>
                         </div>
                     </body>
@@ -406,7 +406,7 @@
                 `], { type: 'text/html' });
 
                 link.href = URL.createObjectURL(blob);
-                link.download = 'reporte_financiero.html';
+                link.download = 'Financial_report.html';
                 link.click();
             });
         });
