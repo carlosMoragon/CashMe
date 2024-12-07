@@ -333,3 +333,48 @@ canvas {
     color: #333;
     line-height: 1.5;
 }
+
+/* Last Month Section */
+.last-month-section {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.last-month-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.last-month-header h3 {
+    font-size: 24px;
+    color: #054d1a;
+}
+
+.last-month-data {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.last-month-card {
+    background-color: #f4f4f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    width: 30%;
+    border-radius: 8px;
+}
+
+.last-month-card h3 {
+    color: #054d1a;
+    margin-bottom: 10px;
+}
+
+.last-month-card p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}

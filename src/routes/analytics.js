@@ -230,35 +230,41 @@ router.get('/data/total-neto', (req, res) => {
     });
 });
 
-router.get('/export-pdf', async (req, res) => {
-    try {
-        const ingresosData = await getData('/data/ingresos');
-        const gastosData = await getData('/data/gastos');
+// Fetch and display last month values
+router.get('/data/last-month', (req, res) => {
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    const lastMonthStr = lastMonth.toISOString().slice(0, 7);
 
-        const templatePath = path.join(__dirname, '../views/report_template.html');
-        const template = fs.readFileSync(templatePath, 'utf8');
-        const html = ejs.render(template, { ingresosData, gastosData });
+    const ingresosQuery = `
+        SELECT SUM(dinero) as total
+        FROM transacciones
+        WHERE tipo = 'INGRESO' AND strftime('%Y-%m', fecha) = ?
+    `;
+    const gastosQuery = `
+        SELECT SUM(dinero) as total
+        FROM transacciones
+        WHERE tipo = 'GASTO' AND strftime('%Y-%m', fecha) = ?
+    `;
 
-        const pdf = new jsPDF();
-        pdf.html(html, {
-            callback: function (doc) {
-                const pdfPath = path.join(__dirname, '../public/reporte_financiero.pdf');
-                doc.save(pdfPath);
-                res.download(pdfPath, 'reporte_financiero.pdf', (err) => {
-                    if (err) {
-                        res.status(500).send('Error al descargar el PDF');
-                    } else {
-                        fs.unlinkSync(pdfPath); // Delete the file after download
-                    }
-                });
-            },
-            x: 10,
-            y: 10
+    db.get(ingresosQuery, [lastMonthStr], (err, ingresosRow) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        db.get(gastosQuery, [lastMonthStr], (err, gastosRow) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            const totalNeto = (ingresosRow.total || 0) - (gastosRow.total || 0);
+            res.json({
+                ingresos: ingresosRow.total || 0,
+                gastos: gastosRow.total || 0,
+                neto: totalNeto
+            });
         });
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
+    });
 });
+
 
 router.get('/export-html', async (req, res) => {
     try {
