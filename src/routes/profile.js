@@ -28,33 +28,60 @@ router.get('/', (req, res) => {
         return;
       }
 
-      // Inicializar variables para el renderizado
-      let error = null;
-      let awarded = 0; // Valor predeterminado para saldoAcumulado si no existe saldo
-      let goalGoal = 0;
-      // Verificar si existe el saldo
-      if (!cash) {
-        console.error('No se encontró saldo para el usuario.');
-        error = 'Saldo no encontrado';
-      } else {
-        console.log('Saldo del usuario:', cash.saldo);
-        awarded = cash.monedasAcumuladas;
-        console.log('Saldo acumulado:', awarded);
-        if (cash.goal != null) {
-          goalGoal = cash.goal;
+      db.all("SELECT plantasAdquiridas FROM usuarios WHERE id = ?", [user.id], (err, plantas) => {
+        if (err) {
+          console.error('Error al obtener las plantas adquiridas:', err);
+          res.status(500).send('Error al cargar las plantas adquiridas.');
+          return;
         }
-      }
-      // Renderizar la página de perfil
-      res.render('profile', {
-        email: user.email,
-        username: user.nombre,
-        saldoAcumulado: awarded,
-        goalSet: goalGoal,
-        plantasDisponibles: plantsAvailable,
-        error: error,
-        user: req.session.user
+        let plantsAcquired;
+        let plantasString = plantas[0].plantasAdquiridas;
+        if (plantasString.length > 0) {
+          plantsAcquired = plantasString.split(";");
+          plantsAcquired.shift();
+          
+          // Tomar solo los últimos 5 elementos
+          if (plantsAcquired.length > 5) {
+            plantsAcquired = plantsAcquired.slice(-5);
+          }
+
+          console.log("------------------------------------------------------------------------------------");
+          console.log(plantsAcquired);
+          console.log("------------------------------------------------------------------------------------");
+        } else {
+          console.log('No plants were found yet. Start planting!');
+        }
+        
+        // Inicializar variables para el renderizado
+        let error = null;
+        let awarded = 0; 
+        let goalGoal = "None. Set a goal!"; 
+        // Verificar si existe el saldo
+        if (!cash) {
+          console.error('No balance found for the user.');
+          error = 'No balance found.';
+        } else {
+          // console.log('Saldo del usuario:', cash.saldo);
+          awarded = cash.monedasAcumuladas;
+          // console.log('Saldo acumulado:', awarded);
+          if (cash.goal != null) {
+            goalGoal = cash.goal;
+          }
+        }
+        // Renderizar la página de perfil
+        res.render('profile', {
+          email: user.email,
+          username: user.nombre,
+          saldoAcumulado: awarded,
+          goalSet: goalGoal,
+          plantasDisponibles: plantsAvailable,
+          plantasAdquiridas: plantsAcquired,
+          error: error,
+          user: req.session.user
+        });
       });
-    });
+    }
+    );
   });
 });
 
@@ -72,7 +99,7 @@ router.post('/createAccount', function (req, res) {
   });
 });
 
- 
+
 
 
 // Cuentas (AJAX)
@@ -114,17 +141,20 @@ router.post('/saveChallenge', function (req, res) {
           res.status(500).json({ error: 'Error inserting the challenge.' });
         }
       } else {
-        let updatedGoal = parseFloat(row.goal) + parseFloat(amount);
-        const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
-        db.run(updateSql, [updatedGoal, userId], function (err) {
-          if (err) {
-            console.error(err.message);
-          } else {
-            console.log(`Fila actualizada con el ID ${userId}`);
-            res.redirect('/profile');
-          }
-        });
-      }
+        if (row.goal == null) {
+          row.goal = 0.0;
+        }
+          let updatedGoal = parseFloat(row.goal) + parseFloat(amount);
+          const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
+          db.run(updateSql, [updatedGoal, userId], function (err) {
+            if (err) {
+              console.error(err.message);
+            } else {
+              console.log(`Fila actualizada con el ID ${userId}`);
+              res.redirect('/profile');
+            }
+         });
+        }
     });
   } catch (error) {
     console.error(error);
@@ -133,59 +163,70 @@ router.post('/saveChallenge', function (req, res) {
 });
 
 // Función para comprar una planta
+
+// Función para comprar una planta
 router.post('/comprarPlanta', (req, res) => {
-  const { plantId, plantPrice } = req.body; // Recibe datos del cliente
-  const userId = req.session.user.id; // Usuario autenticado
-  console.log(`Usuario ${userId} quiere comprar la planta ${plantId} por ${plantPrice} monedas.`);
+  const { plantName, plantPrice } = req.body;
+  const userId = req.session.user.id;
+  // console.log(`El Usuario ${userId} quiere comprar la planta ${plantName} por ${plantPrice} monedas.`); // "Debugging"
+  const getTotalAcummulated = "SELECT monedasAcumuladas FROM cuentas WHERE usuario_id = ?";
+  db.get(getTotalAcummulated, [userId], (err, row) => {
+    if (err) {
+      console.error('Error fetching accumulated balance:', err.message);
+      return res.status(500).json({ error: 'Internal error while fetching balance.' });
+    }
 
-  try {
-    const getTotalAcummulated = "SELECT monedasAcumuladas FROM cuentas WHERE usuario_id = ?";
-    db.get(getTotalAcummulated, [userId], (err, row) => {
+    const totalAcumulado = row.monedasAcumuladas;
+    if (totalAcumulado < plantPrice) {
+      return res.status(400).json({ error: 'Insufficient balance to purchase this plant.' });
+    }
+
+    // Actualizar las monedas acumuladas
+    const nuevoSaldo = parseFloat(totalAcumulado) - parseFloat(plantPrice);
+    // console.log(`Monedas restantes: ${nuevoSaldo}`); // "Debugging"
+
+    const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
+    db.run(updateTotalAcummulated, [nuevoSaldo, userId], function (err) {
       if (err) {
-        console.error('Error obteniendo saldo acumulado:', err.message);
-        return res.status(500).json({ error: 'Error interno al obtener saldo.' });
+        console.error('Error updating accumulated coins:', err.message);
+        return res.status(500).json({ error: 'Internal error while updating balance.' });
       }
+      // console.log("Descuento de las monedas."); // "Debugging"
 
-      const totalAcumulado = row.monedasAcumuladas;
-      if (totalAcumulado < plantPrice) {
-        return res.status(400).json({ error: 'Saldo insuficiente para comprar esta planta.' });
-      }
-
-      // Actualizar saldo
-      const nuevoSaldo = totalAcumulado - plantPrice;
-      console.log(`Nuevo saldo acumulado: ${nuevoSaldo}`);
-      const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
-      db.run(updateTotalAcummulated, [nuevoSaldo, userId], function (err) {
+      // Obtener las plantas adquiridas por el usuario
+      const selectQuery = "SELECT plantasAdquiridas FROM usuarios WHERE id = ?";
+      db.get(selectQuery, [userId], function (err, plants) {
         if (err) {
-          console.error('Error actualizando las monedas acumuladas:', err.message);
-          return res.status(500).json({ error: 'Error interno al actualizar saldo.' });
+          console.error('Error obteniendo las plantas actuales:', err.message);
+          return res.status(500).json({ error: 'Internal error while registering plant.' });
         }
-        
-        console.log("Descuento realizado con éxito.");
+        let planta;
+        if (plants.plantasAdquiridas != undefined & plants.plantasAdquiridas != null) {
+          planta = plants.plantasAdquiridas;
+        } else {
+          planta = '';
+        }
 
-        // Registrar la planta en el jardín
-        const updateJardines = "UPDATE jardines SET cuenta_id = ? WHERE id = ?";
-        db.run(updateJardines, [userId, plantId], function (err) {
+        // console.log(`Plants acquired by user: ${planta}`); //Debbuging
+        let plantaAdd = planta + ';' + plantName;
+        // console.log(`Plantas aquiridas: ${plantaAdd}`); //Hasta aqui funciona
+
+        const updateJardinUsuario = "UPDATE usuarios SET plantasAdquiridas = ? WHERE id = ?";
+        db.run(updateJardinUsuario, [plantaAdd, userId], function (err) {
           if (err) {
-            console.error('Error actualizando jardín:', err.message);
-            return res.status(500).json({ error: 'Error interno al registrar planta.' });
+            console.error('Error updating garden:', err.message);
+            return res.status(500).json({ error: 'Internal error while registering plant.' });
           }
 
-          console.log(`Compra exitosa: Planta ${plantId} agregada al usuario ${userId}`);
-          res.status(200).json({ message: 'Planta comprada con éxito.' });
+          console.log(`Compra registrada en la bbddd. Planta: ${plantName} Usuario: ${userId}`);
+          res.status(200).json({ message: 'Plant successfully purchased.' });
         });
       });
     });
-  } catch (error) {
-    console.error('Error procesando la compra:', error);
-    res.status(500).json({ error: 'Error interno del servidor.' });
-  }
+  });
 });
 
 
-// db.get('SELECT evolucion FROM jardines WHERE id = ?', [plantId], (err, plant) => {
-//   const plantPrice = plant.evolucion;
-// Actualizar saldo del usuario en la base de datos
 
 // Ruta para guardar la ruta de la imagen en la base de datos
 router.post('/save-avatar', (req, res) => {

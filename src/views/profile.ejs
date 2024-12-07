@@ -37,11 +37,11 @@
         }
     </style>
     <div class="row justify-content-center mt-4">
-        <% if (typeof error !=='undefined' || error=='' ) { %>
+        <% if (error && error.trim() !== '') { %>
             <div class="alert alert-danger" role="alert">
                 <%= error %>
             </div>
-            <% } %>
+        <% } %>
                 <% if (typeof message !=='undefined' ) { %>
                     <div class="alert alert-success" role="alert">
                         <%= message %>
@@ -332,6 +332,7 @@
             height: 100px;
             cursor: pointer;
         }
+
     </style>
     <!-- Personal Challenges and rewards Start -->
     <div class="container mt-5">
@@ -398,8 +399,8 @@
                 <% plantasDisponibles.forEach(plant=> { %>
                     <div class="plant-item">
                         <img src="/images/plantas/<%= plant.planta %>.jpg" alt="Plant <%= plant.planta %>"
-                            id="plant<%= plant.id %>-img" draggable="true" ondragstart="drag(event)">
-                        <button type="button" class="buy-plant-btn" data-plant-id="<%= plant.id %>"
+                            id="plant<%= plant.id %>-img">
+                        <button type="button" class="buy-plant-btn" data-plant-name="<%= plant.planta %>"
                             data-plant-price="<%= plant.evolucion %>">
                             Buy Plant: €<%= plant.evolucion %>
                         </button>
@@ -407,88 +408,69 @@
                     <% }) %>
             </div>
             <% } %>
-
-
                 <!-- Contenedor de las plantas disponibles END -->
 
                 <!-- Contenedor del jardín START -->
-                <div class="garden" id="garden" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="garden" id="garden">
+                    <% if (Array.isArray(plantasAdquiridas) && plantasAdquiridas.length > 0) { %>
+                        <% plantasAdquiridas.forEach(plant => { %>
+                            <div class="plant-item">
+                                <img src="/images/plantas/<%= plant %>.jpg" alt="Plant <%= plant %>" id="plant<%= plant %>-img">
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No tienes plantas adquiridas.</p>
+                    <% } %>
+                </div>
                 <!-- Contenedor del jardín END -->
 
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        document.querySelectorAll('.buy-plant-btn').forEach(button => {
-                            button.addEventListener('click', function () {
-                                const plantId = this.dataset.plantId;  
-                                const plantPrice = parseFloat(this.dataset.plantPrice);
-                                enviarDatosDeCompra(plantId, plantPrice);
-                            });
-                        });
-                    });
-
-                    function enviarDatosDeCompra(plantId, plantPrice) {
-                        console.log('Comprando la planta con ID:', plantId, 'y precio:', plantPrice);
-                        fetch('/profile/comprarPlanta', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json', 
-                            },
-                            body: JSON.stringify({
-                                plantId: plantId,  
-                                plantPrice: plantPrice  
-                            })
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // Aquí puedes hacer algo si la compra es exitosa
-                                    alert(`¡Compra exitosa! ${data.message}`);
-                                } else {
-                                    // Manejo de errores, si es necesario
-                                    alert(`Error al comprar la planta: ${data.error}`);
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('Hubo un error al procesar la compra.');
-                            });
-                    }
-
-
-                    // Event listener para el botón de "Save Challenge"
-                    document.getElementById('saveChallenge').addEventListener('click', function () {
-                        const challengeAmount = document.getElementById('amount').value;
-                        if (!challengeAmount || isNaN(challengeAmount) || challengeAmount <= 0) {
-                            alert('Please enter a valid amount.');
-                            return;
-                        }
-
-                        // Enviar el valor al servidor usando Fetch API
-                        fetch('/saveChallenge', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ amount: challengeAmount })
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    alert('Challenge saved successfully!');
-                                    // Actualizar la interfaz con el saldo actualizado, si es necesario
-                                    document.getElementById('savedAmount').textContent = `Total Saved: € ${data.newBalance}`;
-                                    $('#setChallengeModal').modal('hide'); // Cerrar el modal
-                                } else {
-                                    alert('Error saving challenge.');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('An error occurred.');
-                            });
-                    });
-                </script>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("DOM content loaded");
+            document.querySelectorAll('.buy-plant-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    console.log("CLICKED");
+                    const plantName = this.dataset.plantName;
+                    const plantPrice = parseFloat(this.dataset.plantPrice);
+                    enviarDatosDeCompra(plantName, plantPrice);
+                });
+            });
+        });
+
+
+        function enviarDatosDeCompra(plantName, plantPrice) {
+            console.log('Comprando la planta con Nombre:', plantName, 'y precio:', plantPrice);
+            fetch('/profile/comprarPlanta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    plantName: plantName,
+                    plantPrice: plantPrice
+                })
+            })
+                .catch(error => {
+                    return response.json().then(err => {
+                        throw new Error(err.error);
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        alert('Insufficient funds to buy the plant');
+                        location.reload();
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Compra exitosa:', data);
+                    location.reload();
+                });
+        }
+
+    </script>
+
     <!-- Jardín End-->
     <%- include('footer') %>

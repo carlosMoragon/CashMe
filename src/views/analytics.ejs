@@ -100,10 +100,34 @@
             </div>
         </div>
 
+        <!-- Mes Pasado Section -->
+        <div class="last-month-section">
+            <div class="last-month-header">
+                <h3>Mes Pasado</h3>
+            </div>
+            <div class="last-month-data">
+                <div class="last-month-card">
+                    <h3>Ingresos</h3>
+                    <p id="last-month-ingresos"></p>
+                    <p>Valor: <span id="last-month-ingresos-value"></span>$</p> <!-- Add value here -->
+                </div>
+                <div class="last-month-card">
+                    <h3>Gastos</h3>
+                    <p id="last-month-gastos"></p>
+                    <p>Valor: <span id="last-month-gastos-value"></span>$</p> <!-- Add value here -->
+                </div>
+                <div class="last-month-card">
+                    <h3>Neto</h3>
+                    <p id="last-month-neto"></p>
+                    <p>Valor: <span id="last-month-neto-value"></span>$</p> <!-- Add value here -->
+                </div>
+            </div>
+        </div>
+
         <!-- Financial Control Panel -->
         <div class="financial-control-panel">
             <h3>Panel de Control Financiero</h3>
-            <div class="chart-container">
+            <div class = "chart-container">
                 <canvas id="combinedChart"></canvas>
             </div>
         </div>
@@ -118,6 +142,7 @@
         <div id="export-combined"></div>
         <div id="custom-content"></div> <!-- Add this div for custom content -->
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctxIngresos = document.getElementById('ingresosChart').getContext('2d');
@@ -228,6 +253,22 @@
                         }
                     });
                     document.getElementById('export-neto').textContent = JSON.stringify(data);
+
+                    // Determine conclusion text based on neto value
+                    const neto = data.total;
+                    let conclusionText = '';
+                    if (neto > 3000) {
+                        conclusionText = 'Texto para neto > 3000';
+                    } else if (neto > 500) {
+                        conclusionText = 'Texto para neto > 500';
+                    } else if (neto > -500 && neto < 500) {
+                        conclusionText = 'Texto para -500 < neto < 500';
+                    } else if (neto < -500 && neto > -3000) {
+                        conclusionText = 'Texto para neto < -500';
+                    } else if (neto < -3000) {
+                        conclusionText = 'Texto para neto < -3000';
+                    }
+                    document.getElementById('conclusion-text').textContent = conclusionText;
                 });
 
             fetch('/analytics/data/combined')
@@ -284,11 +325,36 @@
                     document.getElementById('export-neto').textContent = data.total;
                 });
 
+            // Fetch and display last month values
+            fetch('/analytics/data/last-month')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('last-month-ingresos-value').textContent = data.ingresos;
+                    document.getElementById('last-month-gastos-value').textContent = data.gastos;
+                    document.getElementById('last-month-neto-value').textContent = data.neto;
+                });
+
             document.getElementById('export-html-button').addEventListener('click', function() {
                 const ingresosTotal = document.getElementById('export-ingresos').textContent;
                 const gastosTotal = document.getElementById('export-gastos').textContent;
                 const netoTotal = document.getElementById('export-neto').textContent;
                 const customContent = document.getElementById('custom-content').textContent; // Fetch custom content
+
+                // Determine conclusion text based on neto value
+                let conclusionText = '';
+                const neto = parseFloat(netoTotal);
+                if (neto > 3000) {
+                    conclusionText = 'El esfuerzo constante y la disciplina financiera han dado excelentes resultados. Gracias a una planificación rigurosa, priorizando el control de los gastos y la generación de ingresos adicionales, has logrado acumular una cantidad considerable de ahorros. Este éxito resalta la importancia de un enfoque estratégico, estableciendo metas claras y ajustando hábitos financieros para maximizar la diferencia entre ingresos y gastos. Ahora, puedes plantearte objetivos más ambiciosos, como inversiones a largo plazo o alcanzar la libertad financiera';
+                } else if (neto > 500) {
+                    conclusionText = 'Aunque el ahorro alcanzado es positivo, queda la sensación de que se podía haber logrado más. Quizá algunos gastos inesperados o decisiones menos óptimas afectaron el resultado final. Este escenario subraya la importancia de una mayor previsión y ajustes más estrictos en el control del presupuesto. A pesar de ello, el progreso realizado es valioso, y puedes usar esta experiencia para fortalecer tu enfoque y alcanzar un ahorro más significativo en el futuro.';
+                } else if (neto > -500 && neto < 500) {
+                    conclusionText = 'El resultado muestra que el ahorro ha sido muy limitado, aunque se ha evitado incurrir en grandes pérdidas. Este equilibrio tenue refleja la necesidad de reevaluar las prioridades financieras y buscar maneras más efectivas de aumentar los ingresos y controlar los gastos. Aunque no es un resultado ideal, ofrece una oportunidad para aprender, ajustar hábitos y fortalecer el compromiso con los objetivos de ahorro.';
+                } else if (neto < -500 && neto > -3000) {
+                    conclusionText = 'Aunque las finanzas cerraron con un saldo negativo, las pérdidas fueron manejables. Esto podría deberse a circunstancias imprevistas, como emergencias o inversiones que no generaron los resultados esperados. Sin embargo, el impacto fue moderado gracias a una gestión prudente que evitó que las pérdidas se salieran de control. Es una lección importante para reforzar el fondo de emergencia y evaluar con más cuidado las decisiones financieras futuras.';
+                } else if (neto < -3000) {
+                    conclusionText = 'El balance final revela un desajuste significativo entre ingresos y gastos, reflejando una mala gestión financiera en el período analizado. Los gastos excedieron ampliamente los ingresos, lo que pudo haberse debido a decisiones impulsivas, falta de planificación o eventos inesperados sin respaldo económico suficiente. Este escenario exige una revisión profunda de las finanzas personales, priorizando ajustes drásticos en el presupuesto, generación de ingresos adicionales y la creación de hábitos más saludables para evitar caer en un ciclo de deudas o inestabilidad económica.';
+                }
+
                 const link = document.createElement('a');
                 const blob = new Blob([`
                     <!DOCTYPE html>
@@ -344,12 +410,13 @@
                             <pre>Total Neto: ${netoTotal}</pre>
                         </div>
                         <div class="section">
-                            <h2>Contenido Personalizado</h2>
-                            <pre>${customContent}</pre>
+                            <h2>Conclusión</h2>
+                            <p>${conclusionText}</p>
                         </div>
                     </body>
                     </html>
                 `], { type: 'text/html' });
+
                 link.href = URL.createObjectURL(blob);
                 link.download = 'reporte_financiero.html';
                 link.click();
@@ -358,4 +425,4 @@
     </script>
     <%- include('footer') %>
 </body>
-</html>
+</html> 
