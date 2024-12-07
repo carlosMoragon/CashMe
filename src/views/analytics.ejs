@@ -16,7 +16,7 @@
     <!-- Analysis Section -->
     <div class="analysis-container">
         <div class="statistics">
-            <h2>Estadísticas últimos 12 meses</h2>
+            <h2>Statistics last 12 months</h2>
         </div>
 
         <div class="totals">
@@ -24,19 +24,19 @@
         </div>
         <div class="cards-container">
             <div class="card" data-toggle="modal" data-target="#ingresosModal">
-                <p class="heading">Ingresos</p>
+                <p class="heading">Earnings</p>
                 <p>Total: <span id="total-ingresos"></span>$</p> <!-- Add dollar symbol here -->
-                <p>Más información</p>
+                <p>More Information</p>
             </div>
             <div class="card" data-toggle="modal" data-target="#gastosModal">
-                <p class="heading">Gastos</p>
+                <p class="heading">Expenses</p>
                 <p>Total: <span id="total-gastos"></span>$</p> <!-- Add dollar symbol here -->
-                <p>Más información</p>
+                <p>More Information</p>
             </div>
             <div class="card" data-toggle="modal" data-target="#netoModal">
-                <p class="heading">Neto</p>
+                <p class="heading">Net Profit</p>
                 <p>Total: <span id="total-neto"></span>$</p> <!-- Add dollar symbol here -->
-                <p>Más información</p>
+                <p>More Information</p>
             </div>
         </div>
 
@@ -45,7 +45,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ingresosModalLabel">Ingresos - Últimos 12 meses</h5>
+                        <h5 class="modal-title" id="ingresosModalLabel">Earnings - Last 12 months</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -60,7 +60,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="gastosModalLabel">Gastos - Últimos 12 meses</h5>
+                        <h5 class="modal-title" id="gastosModalLabel">Expenses - Last 12 months</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -75,7 +75,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="netoModalLabel">Neto - Últimos 12 meses</h5>
+                        <h5 class="modal-title" id="netoModalLabel">Net Profit - Last 12 months</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -87,39 +87,40 @@
             </div>
         </div>
 
+
         <!-- Mes Pasado Section -->
         <div class="last-month-section">
             <div class="last-month-header">
-                <h3>Mes Pasado</h3>
+                <h3>Last Month</h3>
             </div>
             <div class="last-month-data">
                 <div class="last-month-card">
-                    <h3>Ingresos</h3>
+                    <h3>Earnings</h3>
                     <p id="last-month-ingresos"></p>
-                    <p>Valor: <span id="last-month-ingresos-value"></span>$</p> <!-- Add value here -->
+                    <p>Value: <span id="last-month-ingresos-value"></span>$</p> <!-- Add value here -->
                 </div>
                 <div class="last-month-card">
-                    <h3>Gastos</h3>
+                    <h3>Expenses</h3>
                     <p id="last-month-gastos"></p>
-                    <p>Valor: <span id="last-month-gastos-value"></span>$</p> <!-- Add value here -->
+                    <p>Value: <span id="last-month-gastos-value"></span>$</p> <!-- Add value here -->
                 </div>
                 <div class="last-month-card">
-                    <h3>Neto</h3>
+                    <h3>Net Profit</h3>
                     <p id="last-month-neto"></p>
-                    <p>Valor: <span id="last-month-neto-value"></span>$</p> <!-- Add value here -->
+                    <p>Value: <span id="last-month-neto-value"></span>$</p> <!-- Add value here -->
                 </div>
             </div>
         </div>
 
         <!-- Financial Control Panel -->
         <div class="financial-control-panel">
-            <h3>Panel de Control Financiero</h3>
+            <h3>Financial Dashboard</h3>
             <div class = "chart-container">
                 <canvas id="combinedChart"></canvas>
             </div>
         </div>
         <div class="export-button-container">
-            <button id="export-html-button">Exportar a HTML</button>
+            <button id="export-html-button">Export to HTML</button>
         </div>
     </div>
     <div id="export-data" style="display: none;">
