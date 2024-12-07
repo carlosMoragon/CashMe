@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+    //let mensaje_en_espera = false;
     const chats = document.querySelectorAll(".list-group a");
     const chatHeader = document.querySelector(".card .chat-header");
+
 
     let isDeleting = false;
 
@@ -9,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
 
             if (isDeleting) return;
-
+            
             // Obtener el título del chat seleccionado (nombre del usuario o chat)
             const userName = chat.querySelector('h6').innerText;
             
@@ -52,42 +54,100 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function renderMessage(content, emisor, date){
-        //const usuario = document.getElementById("users-display").textContent.split("Chats of ")[1];
-        let item = document.createElement("li");
-    
-        let contentDiv = document.createElement("div");
-        content.className = "content-message";
-    
-        let info_label = document.createElement("label");
-        info_label.textContent = content;
-        //info_label.className = "info-message";
-    
-        let author_label = document.createElement("label");
-        author_label.textContent = emisor;
-        //author_label.className = "author-message";
-    
-        let date_label = document.createElement("label");
-        date_label.textContent = date;
-        //date_label.className = "date-message";
-    
-        contentDiv.appendChild(author_label);
-        contentDiv.appendChild(info_label);
-        contentDiv.appendChild(date_label);
-        item.appendChild(contentDiv);
-    
-        if(emisor == usuario){
-            item.className = "my-message message";
-            info_label.className = "info-message";
-            author_label.className = "author-message my-message";
-            date_label.className = "date-message my-message";
+                
+            //const usuario = document.getElementById("users-display").textContent.split("Chats of ")[1];
+            let item = document.createElement("li");
+        
+            let contentDiv = document.createElement("div");
+            content.className = "content-message";
+        
+            let info_label = document.createElement("label");
+            info_label.textContent = content;
+            //info_label.className = "info-message";
+        
+            let author_label = document.createElement("label");
+            author_label.textContent = emisor;
+            //author_label.className = "author-message";
+        
+            let date_label = document.createElement("label");
+            date_label.textContent = date;
+            //date_label.className = "date-message";
+        
+            contentDiv.appendChild(author_label);
+            contentDiv.appendChild(info_label);
+            contentDiv.appendChild(date_label);
+            item.appendChild(contentDiv);
+        
+            if(emisor == usuario){
+                item.className = "my-message message";
+                info_label.className = "info-message";
+                author_label.className = "author-message my-message";
+                date_label.className = "date-message my-message";
+            }else{
+                item.className = "other-message message";
+                info_label.className = "info-message";
+                author_label.className = "author-message other-message";
+                date_label.className = "date-message other-message";
+            }
+        
+            messages.appendChild(item);
+        
+    }
+
+    function notificar(grupo){
+        chats.forEach(chat => {
+            console.log(`${grupo} y ${chat.querySelector('h6').innerText}`);
+            if(grupo == chat.querySelector('h6').innerText){
+                alert(`Notificación de ${grupo}`);
+                return;           
+            }
+        });
+    }
+
+    function renderIf(content, emisor, date, chat_header){
+        if(chat_header == document.querySelector(".card .chat-header").innerText){
+            //const usuario = document.getElementById("users-display").textContent.split("Chats of ")[1];
+            let item = document.createElement("li");
+                
+            let contentDiv = document.createElement("div");
+            content.className = "content-message";
+
+            let info_label = document.createElement("label");
+            info_label.textContent = content;
+            //info_label.className = "info-message";
+
+            let author_label = document.createElement("label");
+            author_label.textContent = emisor;
+            //author_label.className = "author-message";
+
+            let date_label = document.createElement("label");
+            date_label.textContent = date;
+            //date_label.className = "date-message";
+
+            contentDiv.appendChild(author_label);
+            contentDiv.appendChild(info_label);
+            contentDiv.appendChild(date_label);
+            item.appendChild(contentDiv);
+
+            if(emisor == usuario){
+                item.className = "my-message message";
+                info_label.className = "info-message";
+                author_label.className = "author-message my-message";
+                date_label.className = "date-message my-message";
+            }else{
+                item.className = "other-message message";
+                info_label.className = "info-message";
+                author_label.className = "author-message other-message";
+                date_label.className = "date-message other-message";
+            }
+
+            messages.appendChild(item);
         }else{
-            item.className = "other-message message";
-            info_label.className = "info-message";
-            author_label.className = "author-message other-message";
-            date_label.className = "date-message other-message";
+            notificar(chat_header);
+            //mensaje_en_espera = true;
         }
+        
     
-        messages.appendChild(item);
     }
 
     const socket = io();
@@ -137,14 +197,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const date = msg.date;
 
             if(content_message == "CREACIONCHAT" &&
-                chat_header == "" &&
+                chat_header != document.getElementById("users-display").textContent.split("Chats of ")[1] &&
                 emisor == "" &&
                 date == ""
             ){
                 location.reload();
+            }else if(content_message == "CREACIONCHAT" &&
+                chat_header == document.getElementById("users-display").textContent.split("Chats of ")[1] &&
+                emisor == "" &&
+                date == ""){
             }else{
                 console.log("Mensaje recibido");
-                renderMessage(content_message, emisor, date);
+                renderIf(content_message, emisor, date, chat_header);
             }
 
         });
@@ -353,7 +417,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         socket.emit('chat', {
             content_message: "CREACIONCHAT",
-            chat_header: "",
+            chat_header: document.getElementById("users-display").textContent.split("Chats of ")[1],
             emisor: "",
             date: ""
         });
@@ -396,57 +460,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-    function getMessages() {
-        console.log("Ejecutando getMessages...");
-        fetch('/chat/getMessages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                chat_header: chatHeader // Asegúrate de que `chatHeader` tiene un valor
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.status}`);
-            }
-            return response.json(); // Obtener los datos de respuesta en JSON
-        })
-        .then(data => {
-            console.log('Mensajes recibidos:', data);
-            renderMessages(data); // Llamamos a la función para renderizar los mensajes
-        })
-        .catch(error => {
-            console.error('Error al obtener los mensajes:', error);
-        });
-    }
-    
-    function renderMessages(messages) {
-        console.log("Renderizando mensajes...");
-        const messagesContainer = document.querySelector('.message-list');
-        messagesContainer.innerHTML = ""; // Limpiar la lista actual de mensajes
-    
-        // Renderizar cada mensaje
-        messages.forEach(message => {
-            let item = document.createElement("li");
-            let contentDiv = document.createElement("div");
-            contentDiv.className = "content-message";
-            
-            let info_label = document.createElement("label");
-            info_label.textContent = message.contenido;
-            let author_label = document.createElement("label");
-            author_label.textContent = message.emisor;
-            let date_label = document.createElement("label");
-            date_label.textContent = message.fecha;
-    
-            contentDiv.appendChild(author_label);
-            contentDiv.appendChild(info_label);
-            contentDiv.appendChild(date_label);
-            item.appendChild(contentDiv);
-            messagesContainer.appendChild(item);
-        });
-    }
     
 
 
