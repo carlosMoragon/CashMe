@@ -4,16 +4,56 @@
     <div class="container" id="top">
         <h1>Services </h1>
         <div class="ServiceNum">
-            <!-- Statistics Start -->
-            <h2 id="adminStatistics">Statistics</h2>
-            <!-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-                style="color: #333; border-color: #333;">
-                <canvas class="my-4 w-100" id="myChart" width="880" height="371"
-                    style="display: block; box-sizing: border-box; height: 330px; width: 782px;"></canvas>
-            </div>
+             <!-- Statistics Start -->
+        <h2 id="adminStatistics">Statistics</h2>
+        <div>
+            <h3>Ingresos y Gastos de los últimos 30 días</h3>
+            <canvas id="barChart" width="400" height="200"></canvas>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="/routes/adminHome.js"></script> -->
-            <!-- Statistics End-->
+        </div>
+        <script>
+            fetch('/adminHome/get-transacciones')
+                .then(response => response.json())
+                .then(data => {
+                    const fechas = data.fechas;
+                    const ingresos = data.ingresos;
+                    const gastos = data.gastos;
+                    
+                    console.log('Datos de mierda que tampoco llegan', fechas);
+
+                    const ctx = document.getElementById('barChart').getContext('2d');
+                    const barChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: fechas,
+                            datasets: [{
+                                label: 'Ingresos',
+                                data: ingresos, 
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }, {
+                                label: 'Gastos',
+                                data: gastos,  
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar los datos de transacciones:', error);
+                });
+        </script>
+        <!-- Statistics End-->
            
             <!-- User List Start-->
             <h2 id="userList"> User List </h2>
@@ -91,7 +131,8 @@
         </div>
 
     </div>
-
+    
+    
     <!-- Dashboard Stop -->
 
     <%- include('footer') %>
