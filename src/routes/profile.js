@@ -54,7 +54,8 @@ router.get('/', (req, res) => {
         // Inicializar variables para el renderizado
         let error = null;
         let awarded = 0; // Valor predeterminado para saldoAcumulado si no existe saldo
-        let goalGoal = 0;
+        // let goalGoal = 0; 
+        let goalGoal = "None. Set a goal!"; 
         // Verificar si existe el saldo
         if (!cash) {
           console.error('No se encontró saldo para el usuario.');
@@ -140,17 +141,20 @@ router.post('/saveChallenge', function (req, res) {
           res.status(500).json({ error: 'Error inserting the challenge.' });
         }
       } else {
-        let updatedGoal = parseFloat(row.goal) + parseFloat(amount);
-        const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
-        db.run(updateSql, [updatedGoal, userId], function (err) {
-          if (err) {
-            console.error(err.message);
-          } else {
-            console.log(`Fila actualizada con el ID ${userId}`);
-            res.redirect('/profile');
-          }
-        });
-      }
+        if (row.goal == null) {
+          row.goal = 0.0;
+        }
+          let updatedGoal = parseFloat(row.goal) + parseFloat(amount);
+          const updateSql = "UPDATE cuentas SET goal = ? WHERE usuario_id = ?";
+          db.run(updateSql, [updatedGoal, userId], function (err) {
+            if (err) {
+              console.error(err.message);
+            } else {
+              console.log(`Fila actualizada con el ID ${userId}`);
+              res.redirect('/profile');
+            }
+         });
+        }
     });
   } catch (error) {
     console.error(error);

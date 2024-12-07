@@ -79,10 +79,11 @@ router.post('/add', (req, res) => {
                                     console.error('Error al actualizar el saldo:', err.message);
                                     return res.status(500).send('Error en el servidor');
                                 }
-                                
-                                if (nuevoSaldo >= row.goal & tipo != 'GASTO') {
+
+                                // Si el saldo alcanza o supera el goal, actualizamos las monedas acumuladas
+                                if (nuevoSaldo >= row.goal && tipo != 'GASTO') {
                                     const monedasAcumuladas = (row.monedasAcumuladas || 0) + (nuevoSaldo * 0.45);
-                                    
+
                                     // Actualizamos las monedas acumuladas
                                     db.run(
                                         'UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?',
@@ -93,6 +94,19 @@ router.post('/add', (req, res) => {
                                                 return res.status(500).send('Error en el servidor');
                                             }
                                             console.log('Monedas acumuladas actualizadas con éxito');
+                                        }
+                                    );
+
+                                    // Si el goal se alcanza o supera, ponemos goal a NULL 
+                                    db.run(
+                                        'UPDATE cuentas SET goal = NULL WHERE usuario_id = ?',
+                                        [userId],
+                                        (err) => {
+                                            if (err) {
+                                                console.error('Error al actualizar el goal:', err.message);
+                                                return res.status(500).send('Error en el servidor');
+                                            }
+                                            console.log('Goal actualizado a NULL');
                                             return res.redirect('/transactions');
                                         }
                                     );
@@ -104,7 +118,7 @@ router.post('/add', (req, res) => {
                     } else {
                         db.run(
                             'INSERT INTO cuentas (saldo, notificaciones, oscuro, usuario_id, goal, monedasAcumuladas) VALUES (?, ?, ?, ?, ?, ?)',
-                            [dinero, 0, 0, userId, 0, 0],  // Aseguramos que goal y monedasAcumuladas existan en la nueva cuenta
+                            [dinero, 0, 0, userId, 0, 0],  
                             (err) => {
                                 if (err) {
                                     console.error('Error al insertar el registro:', err.message);
@@ -120,6 +134,7 @@ router.post('/add', (req, res) => {
         }
     );
 });
+
 
 
 
