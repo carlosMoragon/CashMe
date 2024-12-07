@@ -55,7 +55,7 @@ router.post('/add', (req, res) => {
 
             // Luego de insertar la transacción, busca el saldo actual de la cuenta
             db.get(
-                'SELECT saldo FROM cuentas WHERE usuario_id = ?',
+                'SELECT saldo, goal, monedasAcumuladas FROM cuentas WHERE usuario_id = ?',
                 [userId],
                 (err, row) => {
                     if (err) {
@@ -79,21 +79,39 @@ router.post('/add', (req, res) => {
                                     console.error('Error al actualizar el saldo:', err.message);
                                     return res.status(500).send('Error en el servidor');
                                 }
-                                console.log('Saldo actualizado con éxito');
-                                return res.redirect('/transactions');  
+                                
+                                if (nuevoSaldo >= row.goal & tipo != 'GASTO') {
+                                    const monedasAcumuladas = (row.monedasAcumuladas || 0) + (nuevoSaldo * 0.45);
+                                    
+                                    // Actualizamos las monedas acumuladas
+                                    db.run(
+                                        'UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?',
+                                        [monedasAcumuladas, userId],
+                                        (err) => {
+                                            if (err) {
+                                                console.error('Error al actualizar las monedas acumuladas:', err.message);
+                                                return res.status(500).send('Error en el servidor');
+                                            }
+                                            console.log('Monedas acumuladas actualizadas con éxito');
+                                            return res.redirect('/transactions');
+                                        }
+                                    );
+                                } else {
+                                    return res.redirect('/transactions');
+                                }
                             }
                         );
                     } else {
                         db.run(
-                            'INSERT INTO cuentas (saldo, notificaciones, oscuro, usuario_id) VALUES (?, ?, ?, ?)',
-                            [dinero, 0, 0, userId],
+                            'INSERT INTO cuentas (saldo, notificaciones, oscuro, usuario_id, goal, monedasAcumuladas) VALUES (?, ?, ?, ?, ?, ?)',
+                            [dinero, 0, 0, userId, 0, 0],  // Aseguramos que goal y monedasAcumuladas existan en la nueva cuenta
                             (err) => {
                                 if (err) {
                                     console.error('Error al insertar el registro:', err.message);
                                     return res.status(500).send('Error en el servidor');
                                 }
                                 console.log('Registro insertado con éxito');
-                                return res.redirect('/transactions');  
+                                return res.redirect('/transactions');
                             }
                         );
                     }
@@ -105,6 +123,11 @@ router.post('/add', (req, res) => {
 
 
 
+//Cuando se ingresa dinero en la cuenta. Se verifica con el goal  const selectSql = "SELECT goal FROM cuentas WHERE usuario_id = ?";
+//del usuario.
+// Cuando el dinero en saldo, de la cuenta es igual o mayor al goal. Se va a meter el ese saldo actual *0.45 en monedasacumuladas.
+// const nuevoSaldo = totalAcumulado - plantPrice;
+    // const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
 
 // ELIMINAR 
 router.post('/delete/:id', (req, res) => {

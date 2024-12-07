@@ -178,7 +178,7 @@ router.post('/comprarPlanta', (req, res) => {
     }
 
     // Actualizar las monedas acumuladas
-    const nuevoSaldo = totalAcumulado - plantPrice;
+    const nuevoSaldo = parseFloat(totalAcumulado) - parseFloat(plantPrice);
     // console.log(`Monedas restantes: ${nuevoSaldo}`); // "Debugging"
 
     const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
