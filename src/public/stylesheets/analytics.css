@@ -274,3 +274,41 @@ canvas {
 #export-html-button:hover {
     background-color: #45a049;
 }
+
+/* Last Month Data Section */
+.last-month-header {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.last-month-header h3 {
+    font-size: 24px;
+    color: #054d1a;
+    margin-bottom: 10px;
+}
+
+.last-month-data {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.last-month-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    width: 30%;
+    border-radius: 8px;
+}
+
+.last-month-card h3 {
+    color: #054d1a;
+    margin-bottom: 10px;
+}
+
+.last-month-card p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
