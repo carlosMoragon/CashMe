@@ -35,12 +35,11 @@
                 <select name="id_cuenta" id="id_cuenta" required>
                     <% cuentas.forEach(cuenta=> { %>
                         <option value="<%= cuenta.id %>">
-                            <%= cuenta.nombre %> - Saldo: $<%= cuenta.saldo %>
+                            <%= cuenta.id %> - Saldo: $<%= cuenta.saldo %>
                         </option>
                         <% }); %>
                 </select>
             </div>
-
             <button type="submit" class="btn btn-primary">Añadir</button>
         </form>
     </div>
@@ -117,14 +116,17 @@
 
 <!-- Historial de transacciones -->
 <div class="transactions-container">
-    <h2>Historial de Transacciones</h2>
     <ul class="transactions-list">
         <% if (transactions.length > 0) { %>
             <% transactions.forEach(transaction => { %>
                 <li class="transaction-item <%= transaction.tipo === 'INGRESO' ? 'income' : 'expense' %>">
                     <div class="transaction-info">
-                        <strong><%= transaction.tipo === 'INGRESO' ? 'Ingreso' : 'Gasto' %></strong>: 
-                        $<%= transaction.dinero.toFixed(2) %> - <%= transaction.descripcion %> (<%= transaction.fecha %>)
+                        <% cuentas.forEach(cuenta=> { %> 
+                            <% if (cuenta.id === transaction.id_cuenta) { %>
+                                <strong>Cuenta <%= cuenta.id %> - <%= transaction.tipo === 'INGRESO' ? 'Ingreso' : 'Gasto' %></strong>: 
+                                $<%= transaction.dinero.toFixed(2) %> <%= transaction.descripcion %> (<%= transaction.fecha %>)
+                            <% } %>
+                        <% }); %>   
                     </div>
                     <form action="/transactions/delete/<%= transaction.id %>" method="POST" class="delete-form">
                         <button type="submit" class="btn btn-danger">Eliminar</button>
