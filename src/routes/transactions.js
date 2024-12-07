@@ -15,13 +15,16 @@ const db = new sqlite3.Database('../cashme', (err) => {
 router.get('/', (req, res) => {
     const user = req.session.user;
 
-    // COmpruebo si ha logueado
+    // Compruebo si ha iniciado sesión
     if (!user) {
         return res.redirect('/login');
     }
 
-    // Consultas anidadas para primero obtener la cuenta del usuario y luego las transacciones de esa cuenta
-        db.all('SELECT * FROM cuentas WHERE usuario_id = ?', [user.id], (err, cuentas) => {
+    // Leer el parámetro opcional para filtrar por cuenta
+    const selectedCuentaId = req.query.id_cuenta;
+
+    // Consultar las cuentas del usuario
+    db.all('SELECT * FROM cuentas WHERE usuario_id = ?', [user.id], (err, cuentas) => {
         if (err) {
             console.error('Error al obtener cuentas:', err.message);
             return res.status(500).send('Error en el servidor');
@@ -29,23 +32,33 @@ router.get('/', (req, res) => {
 
         // Si no hay cuentas, devolver la vista sin transacciones
         if (cuentas.length === 0) {
-            return res.render('transactions', { transactions: [], user, cuentas });
+            return res.render('transactions', { transactions: [], user, cuentas, selectedCuentaId });
         }
 
-        // Obtener los IDs de las cuentas
-        const cuentaIds = cuentas.map(cuenta => cuenta.id);
+        // Construir la consulta para obtener las transacciones
+        let query = 'SELECT * FROM transacciones WHERE id_cuenta IN (' + cuentas.map(() => '?').join(',') + ')';
+        const params = cuentas.map(cuenta => cuenta.id);
 
-        // Usar una consulta SQL para obtener las transacciones de todas las cuentas
-        db.all(
-            'SELECT * FROM transacciones WHERE id_cuenta IN (' + cuentaIds.map(() => '?').join(',') + ')',
-            cuentaIds,
-            (err, rows) => {
-                if (err) {
-                    console.error('Error al obtener transacciones:', err.message);
-                    return res.status(500).send('Error en el servidor');
-                }
+        if (selectedCuentaId) {
+            query = 'SELECT * FROM transacciones WHERE id_cuenta = ?';
+            params.length = 0; 
+            params.push(selectedCuentaId); 
+        }
 
-                res.render('transactions', { transactions: rows, user, cuentas });
+        // Consultar las transacciones
+        db.all(query, params, (err, transactions) => {
+            if (err) {
+                console.error('Error al obtener transacciones:', err.message);
+                return res.status(500).send('Error en el servidor');
+            }
+
+            // Renderizar la vista con las transacciones filtradas
+            res.render('transactions', {
+                transactions,
+                user,
+                cuentas,
+                selectedCuentaId, 
+            });
         });
     });
 });

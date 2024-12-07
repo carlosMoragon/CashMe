@@ -4,11 +4,11 @@
 <div class="container" style="display: flex; gap: 20px; align-items: flex-start;">
     <!-- Formulario de transacciones -->
     <div>
-        <h1>Registro de Ingresos y Gastos</h1>
+        <h1>Add Transaction</h1>
 
         <form action="/transactions/add" method="POST" class="transaction-form">
             <div class="form-group">
-                <label for="tipo">Tipo:</label>
+                <label for="tipo">Type:</label>
                 <select name="tipo" id="tipo" required>
                     <option value="INGRESO">Ingreso</option>
                     <option value="GASTO">Gasto</option>
@@ -16,31 +16,31 @@
             </div>
 
             <div class="form-group">
-                <label for="dinero">Cantidad:</label>
+                <label for="dinero">Amount:</label>
                 <input type="number" name="dinero" id="dinero" step="0.01" placeholder="Cantidad" required>
             </div>
 
             <div class="form-group">
-                <label for="descripcion">Descripción:</label>
+                <label for="descripcion">Description:</label>
                 <input type="text" name="descripcion" id="descripcion" placeholder="Descripción">
             </div>
 
             <div class="form-group">
-                <label for="fecha">Fecha:</label>
+                <label for="fecha">Date:</label>
                 <input type="date" name="fecha" id="fecha" required>
             </div>
 
             <div class="form-group">
-                <label for="id_cuenta">Cuenta:</label>
+                <label for="id_cuenta">Account:</label>
                 <select name="id_cuenta" id="id_cuenta" required>
                     <% cuentas.forEach(cuenta=> { %>
                         <option value="<%= cuenta.id %>">
-                            <%= cuenta.id %> - Saldo: $<%= cuenta.saldo %>
+                            <%= cuenta.id %> - Balance: $<%= cuenta.saldo %>
                         </option>
                         <% }); %>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Añadir</button>
+            <button type="submit" class="btn btn-primary">Add</button>
         </form>
     </div>
 
@@ -116,27 +116,40 @@
 
 <!-- Historial de transacciones -->
 <div class="transactions-container">
+    <h2>Transaction History</h2>
+    <form action="/transactions" method="GET" id="filter-form">
+        <select name="id_cuenta" id="id_cuenta" onchange="document.getElementById('filter-form').submit();">
+            <option value="">All Accounts</option>
+            <% cuentas.forEach(cuenta=> { %>
+                <option value="<%= cuenta.id %>" <%=cuenta.id==selectedCuentaId ? 'selected' : '' %>>
+                    Account <%= cuenta.id %> - Balance: $<%= cuenta.saldo %>
+                </option>
+                <% }); %>
+        </select>
+    </form>
+    <br>
     <ul class="transactions-list">
-        <% if (transactions.length > 0) { %>
-            <% transactions.forEach(transaction => { %>
+        <% if (transactions.length> 0) { %>
+            <% transactions.forEach(transaction=> { %>
                 <li class="transaction-item <%= transaction.tipo === 'INGRESO' ? 'income' : 'expense' %>">
                     <div class="transaction-info">
-                        <% cuentas.forEach(cuenta=> { %> 
-                            <% if (cuenta.id === transaction.id_cuenta) { %>
-                                <strong>Cuenta <%= cuenta.id %> - <%= transaction.tipo === 'INGRESO' ? 'Ingreso' : 'Gasto' %></strong>: 
-                                $<%= transaction.dinero.toFixed(2) %> <%= transaction.descripcion %> (<%= transaction.fecha %>)
-                            <% } %>
-                        <% }); %>   
+                        <% cuentas.forEach(cuenta=> { %>
+                            <% if (cuenta.id===transaction.id_cuenta) { %>
+                                <strong>Cuenta <%= cuenta.id %> - <%= transaction.tipo==='INGRESO' ? 'Ingreso' : 'Gasto'
+                                            %></strong>:
+                                $<%= transaction.dinero.toFixed(2) %> (<%= transaction.descripcion %>) [<%=
+                                            transaction.fecha %>]
+                                            <% } %>
+                                                <% }); %>
                     </div>
                     <form action="/transactions/delete/<%= transaction.id %>" method="POST" class="delete-form">
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>
                 </li>
-            <% }); %>
-        <% } else { %>
-            <p>No hay transacciones registradas.</p>
-        <% } %>
+                <% }); %>
+                    <% } else { %>
+                        <p>No hay transacciones registradas.</p>
+                        <% } %>
     </ul>
 </div>
-
 <%- include('footer') %>
