@@ -51,19 +51,19 @@ router.get('/', (req, res) => {
         } else {
           console.log('No plants were found yet. Start planting!');
         }
+        
         // Inicializar variables para el renderizado
         let error = null;
-        let awarded = 0; // Valor predeterminado para saldoAcumulado si no existe saldo
-        // let goalGoal = 0; 
+        let awarded = 0; 
         let goalGoal = "None. Set a goal!"; 
         // Verificar si existe el saldo
         if (!cash) {
-          console.error('No se encontró saldo para el usuario.');
-          error = 'Saldo no encontrado';
+          console.error('No balance found for the user.');
+          error = 'No balance found.';
         } else {
-          console.log('Saldo del usuario:', cash.saldo);
+          // console.log('Saldo del usuario:', cash.saldo);
           awarded = cash.monedasAcumuladas;
-          console.log('Saldo acumulado:', awarded);
+          // console.log('Saldo acumulado:', awarded);
           if (cash.goal != null) {
             goalGoal = cash.goal;
           }
