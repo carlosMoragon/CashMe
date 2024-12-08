@@ -9990,6 +9990,93 @@ h6,
   box-shadow: 0 6% 15% rgba(0, 0, 0, 0.3);
 }
 
+/* Import excels */
+.importExpenses {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.importExpenses h1 {
+  margin-bottom: 20px;
+}
+
+.importExpenses .button-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.importExpenses #result {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.importExpenses table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.importExpenses th, .importExpenses td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.importExpenses th {
+  background-color: #f4f4f4;
+}
+
+/* Estilo general para los botones en importExpenses */
+.importExpenses button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Efecto de hover */
+.importExpenses button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Efecto de foco */
+.importExpenses button:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(38, 143, 255, 0.5);
+}
+
+
+.importExpenses button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+
+.importExpenses #save-import-btn {
+  background-color: #28a745;
+}
+
+.importExpenses #save-import-btn:hover {
+  background-color: #218838;
+}
+
+.importExpenses #import-btn {
+  background-color: #0c5460;
+}
+
+.importExpenses #import-btn:hover {
+  background-color: #218838;
+}
+
+
 @keyframes colorChange {
   0% { background: linear-gradient(45deg, #ff6ec4, #7873f5); }
   25% { background: linear-gradient(45deg, #78ffd6, #a8e063); }

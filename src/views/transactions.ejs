@@ -35,7 +35,7 @@
                 <select name="id_cuenta" id="id_cuenta" required>
                     <% cuentas.forEach(cuenta=> { %>
                         <option value="<%= cuenta.id %>">
-                            <%= cuenta.id %> - Balance: $<%= cuenta.saldo %>
+                            <%= cuenta.id %> - Balance: €<%= cuenta.saldo %>
                         </option>
                         <% }); %>
                 </select>
@@ -122,7 +122,7 @@
             <option value="">All Accounts</option>
             <% cuentas.forEach(cuenta=> { %>
                 <option value="<%= cuenta.id %>" <%=cuenta.id==selectedCuentaId ? 'selected' : '' %>>
-                    Account <%= cuenta.id %> - Balance: $<%= cuenta.saldo %>
+                    Account <%= cuenta.id %> - Balance: €<%= cuenta.saldo %>
                 </option>
                 <% }); %>
         </select>
@@ -152,4 +152,132 @@
                         <% } %>
     </ul>
 </div>
+
+<!-- Import Data Start -->
+<div class=" importExpenses container mt-5">
+    <h1>Import Expenses</h1>
+    <input type="file" id="fileInput" accept=".xls,.xlsx">
+    <button id="import-btn" onclick="importKutxabankData()">Import</button>
+    <div id="result"></div>
+
+    <!-- Select account and save button -->
+    <div id="importControls" style="display: none;">
+        <h2> Select an Account </h2>
+        <select name="id_cuenta" id="id_cuenta" onchange="">
+            <option value="">All Accounts</option>
+            <% cuentas.forEach(cuenta=> { %>
+                <option value="<%= cuenta.id %>" <%=cuenta.id==selectedCuentaId ? 'selected' : '' %>>
+                    Account <%= cuenta.id %> - Balance: €<%= cuenta.saldo %>
+                </option>
+            <% }); %>
+        </select>
+        <button id="save-import-btn" onclick="saveImportData()">Save Imported Data</button>
+    </div>
+</div>
+<!-- Import Data End -->
+
+<script>
+    let importedData = [];
+
+    function importKutxabankData() {
+        const fileInput = document.getElementById('fileInput');
+        if (!fileInput.files.length) {
+            alert('Please select a file first.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        fetch('/transactions/importKutxabank', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error processing the request: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Imported data:', data);
+            importedData = data; // Store the imported data for later use
+            displayDataAsTable(data);
+
+            // Show the select and save button after successful import
+            document.getElementById('importControls').style.display = 'block';
+        })
+        .catch(error => {
+            console.log('Error importing the data:', error);
+            alert('There was a problem importing the data. Please try again.');
+        });
+    }
+
+    function displayDataAsTable(data) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = ''; 
+
+        const table = document.createElement('table');
+        table.classList.add('table', 'table-bordered', 'table-hover');
+
+        // Create table headers
+        const headers = Object.keys(data[0]);
+        let thead = table.createTHead();
+        let row = thead.insertRow();
+        headers.forEach(header => {
+            let th = document.createElement('th');
+            th.textContent = header;
+            row.appendChild(th);
+        });
+
+        // Create table body
+        let tbody = table.createTBody();
+        data.forEach(item => {
+            let row = tbody.insertRow();
+            headers.forEach(header => {
+                let cell = row.insertCell();
+                cell.textContent = item[header];
+            });
+        });
+
+        resultDiv.appendChild(table);
+    }
+
+    function saveImportData() {
+        if (importedData.length === 0) {
+            alert('No data to save. Please import data first.');
+            return;
+        }
+
+        const accountSelect = document.getElementById('id_cuenta');
+        const selectedAccountId = accountSelect.value;
+
+        if (!selectedAccountId) {
+            alert('Please select an account to save the data.');
+            return;
+        }
+
+        fetch('/transactions/add-import', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                transactions: importedData,
+                accountId: selectedAccountId // Asegúrate de que este valor se obtenga de 'id_cuenta'
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error saving the imported data: ' + response.statusText);
+            }
+            alert('Imported data saved successfully');
+        })
+        .catch(error => {
+            console.error('Error saving imported data:', error);
+            alert('There was a problem saving the data. Please try again.');
+        });
+    }
+</script>
+
 <%- include('footer') %>
