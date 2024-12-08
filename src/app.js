@@ -21,6 +21,7 @@ var adminHomeRouter = require('./routes/adminHome');
 var adminGardenRouter = require('./routes/adminGarden');
 var analyticsRouter = require('./routes/analytics');
 var transactionsRouter = require('./routes/transactions');
+var stocksRouter = require('./routes/stocks');
 
 
 var app = express();
@@ -57,6 +58,7 @@ app.use('/adminHome', checkAdmin, adminHomeRouter);
 app.use('/adminGarden', checkAdmin, adminGardenRouter);
 app.use('/analytics', checkAuthenticated, analyticsRouter);
 app.use('/transactions', checkAuthenticated, transactionsRouter);
+app.use('/stocks', stocksRouter);
 
 
 // Middleware para verificar si el usuario está logueado
@@ -87,6 +89,11 @@ app.get('/logout', (req, res) => {
     console.log("==> The user has log out")
     res.redirect('/'); 
   });
+});
+
+// Renderiza la vista stocks.ejs cuando accedas a /stocks
+app.get("/stocks", (req, res) => {
+  res.render("stocks");
 });
 
 // catch 404 and forward to error handler

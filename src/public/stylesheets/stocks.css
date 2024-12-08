@@ -1,0 +1,33 @@
+/* Ajustes para el área verde */
+.green-background {
+  background-color: #28a745; /* Verde similar al utilizado */
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px auto;
+  max-width: 900px; /* Ajustar el ancho si es necesario */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.green-background h1 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.green-background table {
+  background-color: #ffffff;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.green-background th,
+.green-background td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.green-background th {
+  background-color: #000000;
+  color: #fff;
+}

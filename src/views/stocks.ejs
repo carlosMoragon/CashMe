@@ -1,0 +1,27 @@
+<%- include('header') %>
+<link href="/stylesheets/stocks.css" rel="stylesheet">
+<link href="/stylesheets/owl.carousel.min.css" rel="stylesheet">
+<script src="/javascripts/stocks_script.js" defer></script>
+<script src="/javascripts/main.js" defer></script>
+
+<div class="green-background">
+  <h1>Bolsa de España - Vista Previa</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Índice</th>
+        <th>Valor</th>
+        <th>Cambio</th>
+        <th>Última actualización</th>
+      </tr>
+    </thead>
+    <tbody id="stockTable">
+      <tr>
+        <td colspan="4" class="text-center">Cargando datos...</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<%- include('footer') %>
