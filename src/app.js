@@ -22,7 +22,6 @@ var adminGardenRouter = require('./routes/adminGarden');
 var analyticsRouter = require('./routes/analytics');
 var transactionsRouter = require('./routes/transactions');
 var stocksRouter = require('./routes/stocks');
-var importRouter = require('./routes/import');
 
 
 var app = express();
@@ -60,7 +59,6 @@ app.use('/adminGarden', checkAdmin, adminGardenRouter);
 app.use('/analytics', checkAuthenticated, analyticsRouter);
 app.use('/transactions', checkAuthenticated, transactionsRouter);
 app.use('/stocks', stocksRouter);
-app.use('/import', stocksRouter);
 
 
 

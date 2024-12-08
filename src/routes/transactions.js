@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 const XLSX = require('xlsx');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 
 // CONEXIÓN
@@ -145,6 +146,7 @@ const storage = multer.diskStorage({
         cb(null, 'uploads/'); // Carpeta de destino para guardar archivos
     },
     filename: (req, file, cb) => {
+        req.session.filename = Date.now() + path.extname(file.originalname);
         cb(null, Date.now() + path.extname(file.originalname)); // Nombre único para evitar colisiones
     }
 });
@@ -153,7 +155,6 @@ const upload = multer({ storage });
 
 // Importar datos Kutxabank
 router.post('/importKutxabank', upload.single('file'), (req, res) => {
-    console.log('Entra en import Kutxabank');
     try {
         if (!req.file) {
             return res.status(400).send('No file uploaded');
@@ -180,16 +181,24 @@ router.post('/importKutxabank', upload.single('file'), (req, res) => {
             })
             .map(row => {
                 const fecha = row[0];
-                const fechaTransformada = new Date(fecha.split('/').reverse().join('/'));
 
                 return {
-                    fecha: fechaTransformada,
+                    fecha: fecha,
                     concepto: row[1]?.trim() || '',
                     fecha_valor: row[2] || '',
                     importe: (typeof row[3] === 'number' && !isNaN(row[3]) ? row[3].toFixed(2) : '0.00'),
                     saldo: (typeof row[4] === 'number' && !isNaN(row[4]) ? row[4].toFixed(2) : '0.00'),
                 };
             });
+
+        // Eliminar el archivo después de procesarlo
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error('Error al eliminar el archivo:', err);
+            } else {
+                console.log('Archivo eliminado correctamente');
+            }
+        });
 
         res.json(structuredData);
     } catch (error) {
@@ -264,7 +273,12 @@ router.post('/add-import', (req, res) => {
         }
     });
 
-    res.status(200).send('Transactions imported and balances updated successfully');
+    res.status(200).send(`
+        <script>
+            window.location.reload();
+        </script>
+    `);
+    
 });
 
 

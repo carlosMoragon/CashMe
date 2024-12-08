@@ -272,6 +272,8 @@
                 throw new Error('Error saving the imported data: ' + response.statusText);
             }
             alert('Imported data saved successfully');
+            // Recargar página
+            window.location.reload();
         })
         .catch(error => {
             console.error('Error saving imported data:', error);
