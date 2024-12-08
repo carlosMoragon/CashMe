@@ -18,81 +18,55 @@ router.get('/', function(req, res, next) {
   res.render('analytics', { user: req.session.user });
 });
 
+
 router.get('/data/ingresos', (req, res) => {
-    const query = `
-        SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
-        GROUP BY strftime('%Y-%m', fecha)
-        ORDER BY strftime('%Y-%m', fecha)
-    `;
-    db.all(query, [], (err, rows) => {
+    db.all('SELECT id FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        console.log(rows); // Verifica qué datos se están obteniendo
-        const labels = [];
-        const data = [];
-        const currentDate = new Date();
-        // Iterative case: previous 12 months
-        for (let i = 11; i >= 0; i--) {
-            const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
-            const month = date.toISOString().slice(0, 7);
-            labels.push(month);
-            const row = rows.find(row => row.month === month);
-            data.push(row ? row.total : 0);
-        }
-        res.json({ labels, data });
+        const accountIds = rows.map(row => row.id);
+        const query = `
+            SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
+            FROM transacciones
+            WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})
+            GROUP BY strftime('%Y-%m', fecha)
+            ORDER BY strftime('%Y-%m', fecha)
+        `;
+        db.all(query, [], (err, rows) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            console.log(rows); // Verifica qué datos se están obteniendo
+            const labels = [];
+            const data = [];
+            const currentDate = new Date();
+            // Iterative case: previous 12 months
+            for (let i = 11; i >= 0; i--) {
+                const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+                const month = date.toISOString().slice(0, 7);
+                labels.push(month);
+                const row = rows.find(row => row.month === month);
+                data.push(row ? row.total : 0);
+            }
+            res.json({ labels, data });
+        });
     });
 });
 
 router.get('/data/gastos', (req, res) => {
-    const query = `
-        SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
-        GROUP BY strftime('%Y-%m', fecha)
-        ORDER BY strftime('%Y-%m', fecha)
-    `;
-    db.all(query, [], (err, rows) => {
+    db.all('SELECT id FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        const labels = [];
-        const data = [];
-        const currentDate = new Date();
-        // Iterative case: previous 12 months
-        for (let i = 11; i >= 0; i--) {
-            const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
-            const month = date.toISOString().slice(0, 7);
-            labels.push(month);
-            const row = rows.find(row => row.month === month);
-            data.push(row ? row.total : 0);
-        }
-        res.json({ labels, data });
-    });
-});
-
-router.get('/data/neto', (req, res) => {
-    const ingresosQuery = `
-        SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
-        GROUP BY strftime('%Y-%m', fecha)
-        ORDER BY strftime('%Y-%m', fecha)
-    `;
-    const gastosQuery = `
-        SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
-        GROUP BY strftime('%Y-%m', fecha)
-        ORDER BY strftime('%Y-%m', fecha)
-    `;
-    db.all(ingresosQuery, [], (err, ingresosRows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        db.all(gastosQuery, [], (err, gastosRows) => {
+        const accountIds = rows.map(row => row.id);
+        const query = `
+            SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
+            FROM transacciones
+            WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})
+            GROUP BY strftime('%Y-%m', fecha)
+            ORDER BY strftime('%Y-%m', fecha)
+        `;
+        db.all(query, [], (err, rows) => {
             if (err) {
                 return res.status(500).json({ error: err.message });
             }
@@ -104,55 +78,106 @@ router.get('/data/neto', (req, res) => {
                 const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
                 const month = date.toISOString().slice(0, 7);
                 labels.push(month);
-                const ingresoRow = ingresosRows.find(row => row.month === month);
-                const gastoRow = gastosRows.find(row => row.month === month);
-                const ingreso = ingresoRow ? ingresoRow.total : 0;
-                const gasto = gastoRow ? gastoRow.total : 0;
-                data.push(ingreso - gasto);
+                const row = rows.find(row => row.month === month);
+                data.push(row ? row.total : 0);
             }
             res.json({ labels, data });
         });
     });
 });
 
-router.get('/data/combined', (req, res) => {
-    const ingresosQuery = `
-        SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
-        GROUP BY strftime('%Y-%m', fecha)
-        ORDER BY strftime('%Y-%m', fecha)
-    `;
-    const gastosQuery = `
-        SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
-        GROUP BY strftime('%Y-%m', fecha)
-        ORDER BY strftime('%Y-%m', fecha)
-    `;
-    db.all(ingresosQuery, [], (err, ingresosRows) => {
+router.get('/data/neto', (req, res) => {
+    db.all('SELECT id FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        db.all(gastosQuery, [], (err, gastosRows) => {
+        const accountIds = rows.map(row => row.id);
+        const ingresosQuery = `
+            SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
+            FROM transacciones
+            WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})
+            GROUP BY strftime('%Y-%m', fecha)
+            ORDER BY strftime('%Y-%m', fecha)
+        `;
+        const gastosQuery = `
+            SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
+            FROM transacciones
+            WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})
+            GROUP BY strftime('%Y-%m', fecha)
+            ORDER BY strftime('%Y-%m', fecha)
+        `;
+        db.all(ingresosQuery, [], (err, ingresosRows) => {
             if (err) {
                 return res.status(500).json({ error: err.message });
             }
-            const labels = [];
-            const ingresos = [];
-            const gastos = [];
-            const currentDate = new Date();
-            // Iterative case: previous 12 months
-            for (let i = 11; i >= 0; i--) {
-                const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
-                const month = date.toISOString().slice(0, 7);
-                labels.push(month);
-                const ingresoRow = ingresosRows.find(row => row.month === month);
-                const gastoRow = gastosRows.find(row => row.month === month);
-                ingresos.push(ingresoRow ? ingresoRow.total : 0);
-                gastos.push(gastoRow ? gastoRow.total : 0);
+            db.all(gastosQuery, [], (err, gastosRows) => {
+                if (err) {
+                    return res.status(500).json({ error: err.message });
+                }
+                const labels = [];
+                const data = [];
+                const currentDate = new Date();
+                // Iterative case: previous 12 months
+                for (let i = 11; i >= 0; i--) {
+                    const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+                    const month = date.toISOString().slice(0, 7);
+                    labels.push(month);
+                    const ingresoRow = ingresosRows.find(row => row.month === month);
+                    const gastoRow = gastosRows.find(row => row.month === month);
+                    const ingreso = ingresoRow ? ingresoRow.total : 0;
+                    const gasto = gastoRow ? gastoRow.total : 0;
+                    data.push(ingreso - gasto);
+                }
+                res.json({ labels, data });
+            });
+        });
+    });
+});
+
+router.get('/data/combined', (req, res) => {
+    db.all('SELECT id FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        const accountIds = rows.map(row => row.id);
+        const ingresosQuery = `
+            SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
+            FROM transacciones
+            WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})
+            GROUP BY strftime('%Y-%m', fecha)
+            ORDER BY strftime('%Y-%m', fecha)
+        `;
+        const gastosQuery = `
+            SELECT strftime('%Y-%m', fecha) as month, SUM(dinero) as total
+            FROM transacciones
+            WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})
+            GROUP BY strftime('%Y-%m', fecha)
+            ORDER BY strftime('%Y-%m', fecha)
+        `;
+        db.all(ingresosQuery, [], (err, ingresosRows) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
             }
-            res.json({ labels, ingresos, gastos });
+            db.all(gastosQuery, [], (err, gastosRows) => {
+                if (err) {
+                    return res.status(500).json({ error: err.message });
+                }
+                const labels = [];
+                const ingresos = [];
+                const gastos = [];
+                const currentDate = new Date();
+                // Iterative case: previous 12 months
+                for (let i = 11; i >= 0; i--) {
+                    const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+                    const month = date.toISOString().slice(0, 7);
+                    labels.push(month);
+                    const ingresoRow = ingresosRows.find(row => row.month === month);
+                    const gastoRow = gastosRows.find(row => row.month === month);
+                    ingresos.push(ingresoRow ? ingresoRow.total : 0);
+                    gastos.push(gastoRow ? gastoRow.total : 0);
+                }
+                res.json({ labels, ingresos, gastos });
+            });
         });
     });
 });
@@ -178,44 +203,45 @@ router.get('/expenses', async (req, res) => {
 });
 
 router.get('/data/total-ingresos', (req, res) => {
-    const query = `
-        SELECT SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
-    `;
-    db.get(query, [], (err, row) => {
+    db.all('SELECT id FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.json({ total: row.total });
+        const accountIds = rows.map(row => row.id);
+        const query = `SELECT SUM(dinero) as total FROM transacciones WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})`;
+        db.get(query, [], (err, row) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ total: row.total });
+        });
     });
 });
 
 router.get('/data/total-gastos', (req, res) => {
-    const query = `
-        SELECT SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
-    `;
-    db.get(query, [], (err, row) => {
+    db.all('SELECT id FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.json({ total: row.total });
+        const accountIds = rows.map(row => row.id);
+        const query = `SELECT SUM(dinero) as total FROM transacciones WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})`;
+        db.get(query, [], (err, row) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ total: row.total });
+        });
     });
 });
 
 router.get('/data/total-neto', (req, res) => {
-    const ingresosQuery = `
-        SELECT SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months')
-    `;
-    const gastosQuery = `
-        SELECT SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months')
-    `;
+    db.all('SELECT id FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        const accountIds = rows.map(row => row.id);
+    const ingresosQuery = `SELECT SUM(dinero) as total FROM transacciones WHERE tipo = 'INGRESO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})`;
+    const gastosQuery = `SELECT SUM(dinero) as total FROM transacciones WHERE tipo = 'GASTO' AND fecha >= date('now', '-12 months') AND id_cuenta IN (${accountIds.join(',')})`;
     db.get(ingresosQuery, [], (err, ingresosRow) => {
         if (err) {
             return res.status(500).json({ error: err.message });
@@ -229,6 +255,7 @@ router.get('/data/total-neto', (req, res) => {
         });
     });
 });
+});
 
 // Fetch and display last month values
 router.get('/data/last-month', (req, res) => {
@@ -236,30 +263,28 @@ router.get('/data/last-month', (req, res) => {
     lastMonth.setMonth(lastMonth.getMonth() - 1);
     const lastMonthStr = lastMonth.toISOString().slice(0, 7);
 
-    const ingresosQuery = `
-        SELECT SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'INGRESO' AND strftime('%Y-%m', fecha) = ?
-    `;
-    const gastosQuery = `
-        SELECT SUM(dinero) as total
-        FROM transacciones
-        WHERE tipo = 'GASTO' AND strftime('%Y-%m', fecha) = ?
-    `;
-
-    db.get(ingresosQuery, [lastMonthStr], (err, ingresosRow) => {
+    db.all('SELECT id FROM cuentas WHERE usuario_id = ?', [req.session.user.id], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        db.get(gastosQuery, [lastMonthStr], (err, gastosRow) => {
+        const accountIds = rows.map(row => row.id);
+        const ingresosQuery = `SELECT SUM(dinero) as total FROM transacciones WHERE tipo = 'INGRESO' AND strftime('%Y-%m', fecha) = ? AND id_cuenta IN (${accountIds.join(',')})`;
+        const gastosQuery = `
+            SELECT SUM(dinero) as total FROM transacciones WHERE tipo = 'GASTO' AND strftime('%Y-%m', fecha) = ? AND id_cuenta IN (${accountIds.join(',')})`;
+        db.get(ingresosQuery, [lastMonthStr], (err, ingresosRow) => {
             if (err) {
                 return res.status(500).json({ error: err.message });
             }
-            const totalNeto = (ingresosRow.total || 0) - (gastosRow.total || 0);
-            res.json({
-                ingresos: ingresosRow.total || 0,
-                gastos: gastosRow.total || 0,
-                neto: totalNeto
+            db.get(gastosQuery, [lastMonthStr], (err, gastosRow) => {
+                if (err) {
+                    return res.status(500).json({ error: err.message });
+                }
+                const totalNeto = (ingresosRow.total || 0) - (gastosRow.total || 0);
+                res.json({
+                    ingresos: ingresosRow.total || 0,
+                    gastos: gastosRow.total || 0,
+                    neto: totalNeto
+                });
             });
         });
     });
@@ -278,7 +303,7 @@ router.get('/export-html', async (req, res) => {
         const htmlPath = path.join(__dirname, '../public/reporte_financiero.html');
         fs.writeFileSync(htmlPath, html);
 
-        res.download(htmlPath, 'reporte_financiero.html', (err) => {
+        res.download(htmlPath, 'Financial_report.html', (err) => {
             if (err) {
                 res.status(500).send('Error al descargar el HTML');
             } else {
