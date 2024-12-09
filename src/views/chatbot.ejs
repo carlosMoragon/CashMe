@@ -1,0 +1,309 @@
+<%- include('header') %>
+<style>
+    body,
+    html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background-color: #f8f9fa;
+    }
+
+    .chat-card {
+        width: 100%;
+        max-width: 800px;
+        height: 80vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        background-color: #fff;
+    }
+
+    .chat-card-header {
+        background-color: #28a745;
+        color: #fff;
+        padding: 20px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+
+    .chat-card-body {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background-color: #f1f1f1;
+    }
+
+    .chat-message {
+        display: flex;
+        margin-bottom: 15px;
+    }
+
+    .message-content {
+        padding: 10px 15px;
+        border-radius: 20px;
+        max-width: 70%;
+        word-break: break-word;
+        white-space: pre-wrap;
+        position: relative;
+        animation: fadeInUp 0.3s forwards;
+    }
+
+    .bot-message {
+        justify-content: flex-start;
+    }
+
+    .bot-message .message-content {
+        background-color: #e2e3e5;
+        color: #333;
+    }
+
+    .user-message {
+        justify-content: flex-end;
+    }
+
+    .user-message .message-content {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .typing-indicator {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .dot {
+        height: 8px;
+        width: 8px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        animation: blink 1.4s infinite both;
+    }
+
+    .dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+        0% {
+            opacity: 0.2;
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0.2;
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .chat-card-footer {
+        padding: 20px;
+        border-top: 1px solid #ddd;
+        background-color: #fff;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    #send-btn {
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .chat-card {
+            height: 90vh;
+        }
+
+        .message-content {
+            max-width: 85%;
+        }
+    }
+</style>
+
+<!-- Estructura HTML del Chatbot -->
+<div class="main-container">
+    <div class="chat-card">
+        <!-- Cabecera del Chatbot -->
+        <div class="chat-card-header">
+            <h1 class="h5 mb-0">CashMeBot</h1>
+            <span class="badge bg-success-light text-white rounded-pill shadow-sm">Online</span>
+        </div>
+
+        <!-- Contenedor de Mensajes -->
+        <div class="chat-card-body" id="messages-container">
+            <div id="messages" class="d-flex flex-column"></div>
+        </div>
+
+        <!-- Pie de Página con Formulario -->
+        <div class="chat-card-footer">
+            <form id="chat-form" aria-label="Formulario de chat">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <div class="form-group mb-2">
+                    <label for="message" class="sr-only">Mensaje</label>
+                    <textarea id="message" name="message" rows="1" maxlength="200" placeholder="Escribe tu mensaje..."
+                        class="form-control bg-light" required aria-required="true"></textarea>
+                </div>
+                <div id="status-message" class="text-muted small mb-2" aria-live="polite"></div>
+                <button type="submit" id="send-btn" disabled class="btn btn-success btn-block">
+                    Enviar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript Integrado -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const chatForm = document.getElementById('chat-form');
+        const messagesDiv = document.getElementById('messages');
+        const messagesContainer = document.getElementById('messages-container');
+        const messageInput = document.getElementById('message');
+        const sendButton = document.getElementById('send-btn');
+        const statusMessage = document.getElementById('status-message');
+
+        const formatTextToHTML = (text) => {
+            const div = document.createElement('div');
+            div.textContent = text;
+            let formattedText = div.innerHTML
+                .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+                .replace(/\*(.*?)\*/g, '<i>$1</i>');
+            return formattedText;
+        };
+
+        const appendMessage = (text, sender) => {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message', sender === 'user' ? 'user-message' : 'bot-message');
+
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
+            contentDiv.innerHTML = formatTextToHTML(text);
+
+            messageDiv.appendChild(contentDiv);
+            messagesDiv.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        };
+
+        const appendTypingIndicator = () => {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('typing-indicator', 'bot-message');
+
+            const dot1 = document.createElement('span');
+            dot1.classList.add('dot');
+            const dot2 = document.createElement('span');
+            dot2.classList.add('dot');
+            const dot3 = document.createElement('span');
+            dot3.classList.add('dot');
+
+            typingDiv.appendChild(dot1);
+            typingDiv.appendChild(dot2);
+            typingDiv.appendChild(dot3);
+
+            typingDiv.id = 'typing-indicator';
+            messagesDiv.appendChild(typingDiv);
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        };
+
+        const removeTypingIndicator = () => {
+            const typingDiv = document.getElementById('typing-indicator');
+            if (typingDiv) {
+                messagesDiv.removeChild(typingDiv);
+            }
+        };
+
+        const toggleSendButton = () => {
+            sendButton.disabled = !messageInput.value.trim();
+        };
+
+        messageInput.addEventListener('input', toggleSendButton);
+
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                chatForm.requestSubmit();
+            }
+        });
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                alert('Por favor, escribe un mensaje válido.');
+                return;
+            }
+
+            appendMessage(message, 'user');
+            messageInput.value = '';
+            toggleSendButton();
+
+            try {
+                appendTypingIndicator();
+                statusMessage.textContent = 'CashMeBot está respondiendo...';
+                sendButton.disabled = true;
+
+                const response = await fetch('/chatbot/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'CSRF-Token': '<%= csrfToken %>'
+                    },
+                    body: JSON.stringify({ message }),
+                });
+
+                if (!response.ok) throw new Error('Error en el servidor');
+
+                const data = await response.json();
+                removeTypingIndicator();
+
+                if (data.reply) {
+                    appendMessage(data.reply, 'bot');
+                } else {
+                    appendMessage('No se recibió una respuesta del bot.', 'bot');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                removeTypingIndicator();
+                appendMessage('Error al enviar el mensaje.', 'bot');
+            } finally {
+                statusMessage.textContent = '';
+                sendButton.disabled = !messageInput.value.trim();
+            }
+        });
+    });
+</script>
+
+
+<%- include('footer') %>
