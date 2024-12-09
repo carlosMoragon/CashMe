@@ -9492,13 +9492,6 @@ h6,
   text-align: center;
 }
 
-.back-to-top {
-  position: fixed;
-  display: none;
-  right: 45px;
-  bottom: 45px;
-  z-index: 11;
-}
 
 .nav-bar::before {
   position: absolute;
@@ -10075,6 +10068,15 @@ h6,
 .importExpenses #import-btn:hover {
   background-color: #218838;
 }
+
+.back-to-top-footer {
+  position: fixed;
+  display: none;
+  right: 45px;
+  bottom: 45px;
+  z-index: 11;
+}
+
 
 
 @keyframes colorChange {

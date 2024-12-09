@@ -1,5 +1,29 @@
-<!-- Footer Start -->
-        
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+<!-- Back to Top Button -->
+<a href="#top" class="btn btn-lg btn-primary btn-lg-square back-to-top-footer">
+   <i class="fa fa-angle-double-up"></i>
+</a>
+
+<script>
+    // Back to top button functionality
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.back-to-top-footer').fadeIn('slow');
+        } else {
+            $('.back-to-top-footer').fadeOut('slow');
+        }
+    });
+
+    $('.back-to-top-footer').click(function () {
+        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
+        return false;
+    });
+</script>
+<!-- Back to Top end-->
+
+<!-- Footer Start -->       
 <footer>
     <div class="container-fluid bg-dark text-white py-5" style="margin-top: 90px;">
         <h1 class="text-primary">Cash<span class="text-white">Me</span></h1>
@@ -17,12 +41,7 @@
 
 <!-- Footer End -->
 
-
-<!-- Back to Top -->
-<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
 <!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <script src="../static/lib/owlcarousel/owl.carousel.min.js"></script>
 <script src="../static/lib/tempusdominus/js/moment.min.js"></script>
