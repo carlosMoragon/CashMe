@@ -37,11 +37,14 @@ router.post('/loginClient', function (req, res, next) {
             id: row.id,
             email: row.email,
             nombre: row.nombre,
-            admin: row.admin
+            admin: row.admin,
+            active: row.activo
           };
 
           if (req.session.user.admin){
             res.redirect('../adminHome');
+          }else if(req.session.user.active==0){
+            res.redirect('../blockedUser');
           }else{
             res.redirect('../profile');
           }
