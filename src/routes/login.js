@@ -67,22 +67,40 @@ router.post('/registerClient', function (req, res, next) {
   const nombre = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
-  const isAdmin = req.body.isAdmin === 'on'; // Checkbox devuelve 'on' si está marcado
-  const adminKey = req.body.adminKey || null; // Clave de administrador (si aplica)
+  const isAdmin = req.body.isAdmin === 'on'; 
+  const adminKey = req.body.adminKey || null;
 
-  console.log("entra en registerclient");
+  // Validación en Servidor
+  let errors = [];
+
+  //Nombre: al menos dos palabras
+  if (!nombre || nombre.split(/\s+/).length < 2) {
+    errors.push('Name must contain at least two words.');
+  }
+
+  // Contraseña: Al menos un num
+  if (!password) {
+    errors.push('Password is required.');
+  } else if (!/\d/.test(password)) {
+    errors.push('Password must contain at least one number.');
+  }
+
+  
+  if (errors.length > 0) {
+    return res.render('login', { error: 'Please correct the errors and try again.' });
+  }
 
   // Validar clave de administrador si el usuario selecciona la opción
   if (isAdmin && adminKey !== ADMIN_SECRET_KEY) {
-    console.error('Clave de administrador incorrecta.');
-    return res.render('login', { error: 'Clave de administrador incorrecta. Inténtalo de nuevo.' });
+    console.error('Incorrect Admin Key');
+    return res.render('login', { error: 'Incorrect Admin Key, try again later. ' });
   }
 
   // Hashear la contraseña antes de guardarla
   bcrypt.hash(password, saltRounds, function(err, hash) {
     if (err) {
-      console.error('Error al hashear la contraseña:', err);
-      return res.render('login', { error: 'Error al hashear la contraseña. Inténtalo de nuevo.' });
+      console.error('Error hashing the password:', err);
+      return res.render('login', { error: 'Error hashing the password. Please try again.' });
     }
 
     const adminFlag = isAdmin ? 1 : 0;
@@ -92,8 +110,8 @@ router.post('/registerClient', function (req, res, next) {
       [nombre, email, hash, adminFlag],
       function (err) {
         if (err) {
-          console.error('Error al registrar cliente:', err.message);
-          return res.render('login', { error: 'Error al registrar el cliente. Por favor, verifica los datos e inténtalo de nuevo.' });
+          console.error('Error registering client:', err.message);
+          return res.render('login', { error: 'Error registering the client. Please check the data and try again.' });
         }
 
         req.session.user = {
@@ -102,7 +120,6 @@ router.post('/registerClient', function (req, res, next) {
           nombre: nombre,
           admin: adminFlag
         };
-        console.log("guarda la info");
 
         if (adminFlag){
           res.redirect('../adminHome');

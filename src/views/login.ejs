@@ -43,11 +43,7 @@
 </style>
 
 <!-- Log In Start -->
-<div class="container-fluid py-5" id="main-container" style="
-    <% if (typeof register !== 'undefined') { %>
-        <%= register ? 'display: none;' : 'display: block;' %>
-    <% } %>
-    ">
+<div class="container-fluid py-5" id="main-container" style = " <% if (typeof register !== 'undefined') { %> <%= register ? 'display: none;' : 'display: block;' %> <% } %> ">
     <div class="container py-5">
         <div class="text-center mb-3 pb-3">
             <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Log In</h6>
@@ -95,7 +91,6 @@
 <!-- Log In End -->
 
 <!-- Registration Form -->
-<!-- Modified Registration Form -->
 <div class="container-fluid py-5" id="newFormContainer" style="
     <% if (typeof register !== 'undefined') { %>
         <%= register ? 'display: block;' : 'display: none;' %>
@@ -150,6 +145,7 @@
                 <div class="text-center mt-4">
                     <button class="btn btn-secondary py-3 px-4" type="button" id="hideNewFormBtn">Already have an account? Log in here</button>
                 </div>
+                <script src="/public/javascript/validateRegister.js"></script>
             </div>
         </div>
     </div>
@@ -163,6 +159,55 @@
     const hideNewFormBtn = document.getElementById('hideNewFormBtn');
     const registerForm = document.getElementById('RegisterForm');
     const loginForm = document.forms['sentLogIn'];
+
+    registerForm.addEventListener('submit', function(event) {
+        let isValid = true;
+        const name = document.getElementById('newName');
+        const email = document.getElementById('newEmail');
+        const password = document.getElementById('newPassword');
+        const nameError = document.getElementById('nameError');
+        const emailError = email.nextElementSibling;
+        const passwordError = password.nextElementSibling;
+
+        // Validar nombre (al menos dos palabras)
+        if (!name.value || name.value.split(/\s+/).length < 2) {
+            nameError.textContent = "Please enter your full name (at least two words).";
+            nameError.style.display = 'block';
+            isValid = false;
+        } else {
+            nameError.style.display = 'none';
+        }
+
+        // Validar email
+        if (!email.value) {
+            emailError.textContent = "Please enter your email.";
+            emailError.style.display = 'block';
+            isValid = false;
+        } else if (!/\S+@\S+\.\S+/.test(email.value)) {
+            emailError.textContent = "Please enter a valid email.";
+            emailError.style.display = 'block';
+            isValid = false;
+        } else {
+            emailError.style.display = 'none';
+        }
+
+        // Validar contraseña (al menos un número)
+        if (!password.value) {
+            passwordError.textContent = "Please enter your password.";
+            passwordError.style.display = 'block';
+            isValid = false;
+        } else if (!/\d/.test(password.value)) {
+            passwordError.textContent = "Password must contain at least one number.";
+            passwordError.style.display = 'block';
+            isValid = false;
+        } else {
+            passwordError.style.display = 'none';
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Evita el envío si hay errores
+        }
+    });
 
 
     // Show the login form and hide the register form
