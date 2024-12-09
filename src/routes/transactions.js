@@ -227,7 +227,9 @@ router.post('/add-import', (req, res) => {
         const tipo = parseFloat(transaction.importe) < 0 ? 'GASTO' : 'INGRESO';
         const dinero = parseFloat(Math.abs(parseFloat(transaction.importe)).toFixed(2)); // Redondeo a 2 decimales
         const descripcion = transaction.concepto;
-        const fecha = transaction.fecha_valor;
+        // Fecha con "-" en vez de con "/"
+        const fechaParts = transaction.fecha_valor.split('/');
+        const fecha = `${fechaParts[2]}-${fechaParts[1]}-${fechaParts[0]}`;
 
         console.log(`Transaction ${index + 1} type: ${tipo} Amount: ${dinero} Description: ${descripcion}`);
 
