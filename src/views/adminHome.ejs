@@ -63,7 +63,7 @@
                 <% usuarios.forEach(usuario => { %> 
                     <div class="user-delete-list">
                         <div class="user-list row w-100">
-                            <div class="list-group-item col-11 list-group-item-action d-flex gap-3 py-2 mb-2 rounded-lg shadow-sm" aria-current="true">
+                            <div class="list-group-item col-10 list-group-item-action d-flex gap-3 py-2 mb-2 rounded-lg shadow-sm" aria-current="true">
                                 <% if (usuario.photo_path) { %>
                                     <img src="<%= usuario.photo_path %>" alt="Photo of <%= usuario.nombre %>" width="32" height="32"
                                         class="rounded-circle flex-shrink-0" style="margin-right: 10px;">
@@ -80,13 +80,26 @@
                                             <%= usuario.nombre %>
                                         </p>
                                     </div>
-                                    <small class="opacity-50 text-nowrap">Active</small>
+                                    <% if (usuario.activo == 1) { %>
+                                        <small class="opacity-50 text-nowrap">Active</small>
+                                    <% } else if (usuario.activo == 0) { %>
+                                        <small class="opacity-50 text-nowrap" style="color:red;">Blocked</small>
+                                    <% } %>                                    
                                 </div>
                             </div>
                             <!-- Delete Button -->
                             <div class="col-1 d-flex align-items-center" style="height: auto;">
                                 <button class="btn btn-danger deleteUser" data-id="<%= usuario.id %>">Delete</button>
                             </div>
+                            <% if (usuario.activo == 1) { %>
+                                <div class="col-1 d-flex align-items-center" style="height: auto;">
+                                    <button class="btn btn-warning blockUser" data-id="<%= usuario.id %>">Block</button>
+                                </div>
+                            <% } else if (usuario.activo == 0) { %>
+                                <div class="col-1 d-flex align-items-center" style="height: auto;">
+                                    <button class="btn btn-warning blockUser" data-id="<%= usuario.id %>">Activate</button>
+                                </div>
+                            <% } %> 
                         </div>
                     </div>
                 <% }); %>
@@ -97,7 +110,7 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const errorContainer = document.getElementById('errorContainer');
 
-                document.querySelectorAll('.deleteUser').forEach(button => {
+            document.querySelectorAll('.deleteUser').forEach(button => {
                     button.addEventListener('click', function () {
                         const userId = this.getAttribute('data-id'); // Obtener ID del usuario
                         console.log('User ID:', userId); // Verifica que el ID se esté obteniendo
@@ -135,8 +148,65 @@
                             errorContainer.classList.remove('d-none');
                         });
                     });
+            });
+
+            document.querySelectorAll('.blockUser').forEach(button => {
+                button.addEventListener('click', function () {
+                    const userId = this.getAttribute('data-id'); 
+                    console.log('User ID:', userId); 
+
+                    if (!userId) {
+                        alert('User ID is missing.');
+                        return;
+                    }
+
+                    fetch(`/adminHome/block-active-user/${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const errorContainer = document.querySelector('#error-container'); // Asume que hay un contenedor de errores con este ID
+                        if (data.error) {
+                            if (errorContainer) {
+                                errorContainer.textContent = data.error;
+                                errorContainer.classList.remove('d-none');
+                            }
+                        } else {
+                            if (errorContainer) {
+                                errorContainer.classList.add('d-none');
+                            }
+       
+                            const userElement = document.querySelector(`.blockUser[data-id="${userId}"]`).closest('.user-list');
+                            if (userElement) {
+                                const statusElement = userElement.querySelector('small.opacity-50');
+                                if (data.newStatus === 0) {
+                                    statusElement.textContent = 'Blocked';
+                                    statusElement.style.color = 'red';
+                                } else if (data.newStatus === 1) {
+                                    statusElement.textContent = 'Active';
+                                    statusElement.style.color = '';
+                                }
+                            }
+                            window.location.reload();
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        const errorContainer = document.querySelector('#error-container');
+                        if (errorContainer) {
+                            errorContainer.textContent = 'An unexpected error occurred. Please try again.';
+                            errorContainer.classList.remove('d-none');
+                        }
+                    });
                 });
             });
+
+        });
+
+            
         </script>        
         <!-- User List End-->
             
