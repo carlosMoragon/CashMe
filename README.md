@@ -24,7 +24,7 @@ Cashme es una aplicación desarrollada con Node.js y Express para gestionar fina
 1. Clona el repositorio:
 
    ```bash
-   git clone https://github.com/tu_usuario/cashme.git
+   git clone https://github.com/carlosMoragon/CashMe
    cd cashme
    ```
 
@@ -54,7 +54,7 @@ Cashme es una aplicación desarrollada con Node.js y Express para gestionar fina
 
 ## Licencia
 
-Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+Proyecto sin licencia y con fines educativos
 
 ---
 
