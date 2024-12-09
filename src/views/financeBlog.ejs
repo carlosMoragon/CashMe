@@ -3,6 +3,25 @@
         <h1>Finance Blog</h1>
         <p class="lead">Discover tips and reflections on finances</p>
     </header>
+    <div class="green-background">
+        <h1>Spanish Stock Market - Preview</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Value</th>
+                    <th>Change</th>
+                    <th>Last Update</th>
+                </tr>
+            </thead>
+            <tbody id="stockTable">
+                <tr>
+                    <td colspan="4" class="text-center">Loading data...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
     <main class="container mt-5">
         <div class="row">
             <% if (entradas.length > 0) { %>
@@ -59,6 +78,10 @@
     
     
     <!-- Blog End -->
+    <link href="/stylesheets/stocks.css" rel="stylesheet">
+    <link href="/stylesheets/owl.carousel.min.css" rel="stylesheet">
+    <script src="/javascripts/stocks_script.js" defer></script>
+    <script src="/javascripts/main.js" defer></script>
 
 
         

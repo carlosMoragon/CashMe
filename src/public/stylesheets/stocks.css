@@ -1,10 +1,10 @@
 /* Ajustes para el área verde */
 .green-background {
-  background-color: #28a745; /* Verde similar al utilizado */
+  background-color: #7AB730; 
   padding: 20px;
   border-radius: 10px;
   margin: 20px auto;
-  max-width: 900px; /* Ajustar el ancho si es necesario */
+  max-width: 900px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
