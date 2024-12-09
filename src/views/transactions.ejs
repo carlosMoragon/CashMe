@@ -10,19 +10,19 @@
             <div class="form-group">
                 <label for="tipo">Type:</label>
                 <select name="tipo" id="tipo" required>
-                    <option value="INGRESO">Ingreso</option>
-                    <option value="GASTO">Gasto</option>
+                    <option value="INGRESO">Income</option>
+                    <option value="GASTO">Expense</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="dinero">Amount:</label>
-                <input type="number" name="dinero" id="dinero" step="0.01" placeholder="Cantidad" required>
+                <input type="number" name="dinero" id="dinero" step="0.01" placeholder="Amount" required>
             </div>
 
             <div class="form-group">
                 <label for="descripcion">Description:</label>
-                <input type="text" name="descripcion" id="descripcion" placeholder="Descripción">
+                <input type="text" name="descripcion" id="descripcion" placeholder="Description">
             </div>
 
             <div class="form-group">
@@ -115,7 +115,7 @@
 </div>
 
 <!-- Historial de transacciones -->
-<div class="transactions-container">
+<div class="transactions-container" style="margin: 2% 10%";>
     <h2>Transaction History</h2>
     <form action="/transactions" method="GET" id="filter-form">
         <select name="id_cuenta" id="id_cuenta" onchange="document.getElementById('filter-form').submit();">
@@ -135,23 +135,29 @@
                     <div class="transaction-info">
                         <% cuentas.forEach(cuenta=> { %>
                             <% if (cuenta.id===transaction.id_cuenta) { %>
-                                <strong>Cuenta <%= cuenta.id %> - <%= transaction.tipo==='INGRESO' ? 'Ingreso' : 'Gasto'
+                                <strong>Account <%= cuenta.id %> - <%= transaction.tipo==='INGRESO' ? 'Income' : 'Expense'
                                             %></strong>:
-                                $<%= transaction.dinero.toFixed(2) %> (<%= transaction.descripcion %>) [<%=
+                                <%= transaction.dinero.toFixed(2) %>€ (<%= transaction.descripcion %>) [<%=
                                             transaction.fecha %>]
                                             <% } %>
                                                 <% }); %>
                     </div>
                     <form action="/transactions/delete/<%= transaction.id %>" method="POST" class="delete-form">
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                 </li>
                 <% }); %>
                     <% } else { %>
-                        <p>No hay transacciones registradas.</p>
+                        <p>There are no transactions registered</p>
                         <% } %>
     </ul>
+
+    <button id="exportTransactions" onclick="exportTransactions()" class="btn btn-primary" <%= !selectedCuentaId ? 'disabled' : '' %>>
+        Export Transactions
+    </button>
+    
 </div>
+
 
 <!-- Import Data Start -->
 <div class=" importExpenses container mt-5">
@@ -163,7 +169,7 @@
     <!-- Select account and save button -->
     <div id="importControls" style="display: none;">
         <h2> Select an Account </h2>
-        <select name="id_cuenta" id="id_cuenta" onchange="">
+        <select name="id_cuenta" id="id_cuentaImport" onchange="">
             <option value="">All Accounts</option>
             <% cuentas.forEach(cuenta=> { %>
                 <option value="<%= cuenta.id %>" <%=cuenta.id==selectedCuentaId ? 'selected' : '' %>>
@@ -249,7 +255,7 @@
             return;
         }
 
-        const accountSelect = document.getElementById('id_cuenta');
+        const accountSelect = document.getElementById('id_cuentaImport');
         const selectedAccountId = accountSelect.value;
 
         if (!selectedAccountId) {
@@ -278,6 +284,40 @@
         .catch(error => {
             console.error('Error saving imported data:', error);
             alert('There was a problem saving the data. Please try again.');
+        });
+    }
+
+    function exportTransactions() {
+        const accountSelect = document.getElementById('id_cuenta');
+        const selectedAccountId = accountSelect.value;
+
+        if (!selectedAccountId) {
+            alert('Please select an account to export transactions.');
+            return;
+        }
+
+        fetch(`/transactions/export-csv/${selectedAccountId}`, {
+            method: 'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error exporting transactions: ' + response.statusText);
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `transactions_${selectedAccountId}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error('Error exporting transactions:', error);
+            alert('There was a problem exporting the transactions. Please try again.');
         });
     }
 </script>

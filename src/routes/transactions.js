@@ -5,6 +5,8 @@ const XLSX = require('xlsx');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { Parser } = require('json2csv');
+
 
 
 // CONEXIÓN
@@ -216,10 +218,6 @@ router.post('/add-import', (req, res) => {
         return res.status(400).send('No valid transactions received');
     }
 
-    console.log("========= IMPORTED DATA ==========");
-    console.log(transactions);
-    console.log("==================================");
-
     const userId = req.session.user.id;
 
     transactions.forEach((transaction, index) => {
@@ -282,6 +280,57 @@ router.post('/add-import', (req, res) => {
     `);
     
 });
+
+
+// Exportar Gastos a un CSV
+router.get('/export-csv/:id_cuentaParam', (req, res) => {
+    console.log("Entra en export-csv");
+    const { id_cuentaParam } = req.params;
+
+    const query = 'SELECT tipo, dinero, descripcion, fecha, id_cuenta FROM transacciones WHERE id_cuenta = ?';
+
+    db.all(query, [id_cuentaParam], (err, results) => {
+        if (err) {
+            console.error('Error al consultar la base de datos:', err);
+            return res.status(500).send('Error al obtener las transacciones.');
+        }
+
+        if (results.length === 0) {
+            return res.status(404).send('No se encontraron transacciones para esta cuenta.');
+        }
+
+        
+        console.log("========= RESULT ==========");
+        console.log(results);
+        console.log("==================================");
+
+
+        try {
+            const fields = ['tipo', 'dinero', 'descripcion', 'fecha', 'id_cuenta'];
+            const parser = new Parser({ fields });
+
+            const csv = parser.parse(results);
+
+            // archivo temporal
+            const filePath = `./transactions_${id_cuentaParam}.csv`;
+            fs.writeFileSync(filePath, csv);
+
+            // Envía como descarga
+            res.download(filePath, `transactions_${id_cuentaParam}.csv`, (err) => {
+                if (err) {
+                    console.error('Error al enviar el archivo:', err);
+                }
+
+                // Elimina archivo
+                fs.unlinkSync(filePath);
+            });
+        } catch (error) {
+            console.error('Error al generar el CSV:', error);
+            res.status(500).send('Error al generar el archivo CSV.');
+        }
+    });
+});
+
 
 
 module.exports = router;

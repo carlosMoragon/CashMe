@@ -64,7 +64,6 @@ app.use('/stocks', stocksRouter);
 
 // Middleware para verificar si el usuario está logueado
 function checkAuthenticated(req, res, next) {
-  console.log(req.session); 
   if (!req.session.user) {  
     console.log("User not authenticated")
     return res.redirect('/login'); 
