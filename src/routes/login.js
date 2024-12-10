@@ -121,7 +121,8 @@ router.post('/registerClient', function (req, res, next) {
           id: this.lastID, 
           email: email,
           nombre: nombre,
-          admin: adminFlag
+          admin: adminFlag,
+          active: row.activo
         };
 
         if (adminFlag){
