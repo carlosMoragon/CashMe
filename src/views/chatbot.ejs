@@ -171,12 +171,12 @@
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="form-group mb-2">
                     <label for="message" class="sr-only">Mensaje</label>
-                    <textarea id="message" name="message" rows="1" maxlength="200" placeholder="Escribe tu mensaje..."
+                    <textarea id="message" name="message" rows="1" maxlength="200" placeholder="Write your message..."
                         class="form-control bg-light" required aria-required="true"></textarea>
                 </div>
                 <div id="status-message" class="text-muted small mb-2" aria-live="polite"></div>
                 <button type="submit" id="send-btn" disabled class="btn btn-success btn-block">
-                    Enviar
+                    Send
                 </button>
             </form>
         </div>
@@ -271,7 +271,7 @@
 
             try {
                 appendTypingIndicator();
-                statusMessage.textContent = 'CashMeBot está respondiendo...';
+                statusMessage.textContent = 'CashMeBot is anwsering...';
                 sendButton.disabled = true;
 
                 const response = await fetch('/chatbot/send', {
