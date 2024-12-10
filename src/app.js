@@ -23,6 +23,7 @@ var analyticsRouter = require('./routes/analytics');
 var transactionsRouter = require('./routes/transactions');
 var blockedUserRouter = require('./routes/blockedUser');
 var chatbotRouter = require('./routes/chatbot');
+var stocksRouter = require('./routes/stocks');
 
 
 var app = express();
@@ -61,6 +62,7 @@ app.use('/analytics', checkAuthenticated, analyticsRouter);
 app.use('/transactions', checkAuthenticated, transactionsRouter);
 app.use('/blockedUser', blockedUserRouter);
 app.use('/chatbot', chatbotRouter);
+app.use('/stocks', stocksRouter);
 
 
 
