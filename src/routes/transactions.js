@@ -157,6 +157,7 @@ const upload = multer({ storage });
 
 // Importar datos Kutxabank
 router.post('/importKutxabank', upload.single('file'), (req, res) => {
+    console.log("Importando datos...");
     try {
         if (!req.file) {
             return res.status(400).send('No file uploaded');
@@ -284,7 +285,7 @@ router.post('/add-import', (req, res) => {
 
 // Exportar Gastos a un CSV
 router.get('/export-csv/:id_cuentaParam', (req, res) => {
-    console.log("Entra en export-csv");
+    console.log("Importando datos...");
     const { id_cuentaParam } = req.params;
 
     const query = 'SELECT tipo, dinero, descripcion, fecha, id_cuenta FROM transacciones WHERE id_cuenta = ?';
