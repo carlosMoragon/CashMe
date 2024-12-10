@@ -251,7 +251,7 @@ router.get('/data/total-neto', (req, res) => {
                 return res.status(500).json({ error: err.message });
             }
             const totalNeto = ingresosRow.total - gastosRow.total;
-            res.json({ total: totalNeto });
+            res.json({ total: totalNeto.toFixed(2) });
         });
     });
 });
