@@ -126,7 +126,8 @@ router.post('/send', csrfProtection, [
                         return res.status(500).json({ error: 'Modelo generativo no disponible.' });
                     }
 
-                    const prompt = `Eres un analista financiero y un usuario te ha pedido ayuda con una consulta acerca de sus finanzas personales básicas (gastos, ingresos y beneficio neto). Proporciona una respuesta clara y concisa a la siguiente consulta del usuario, evitando extenderte demasiado. Si es necesario, invita al usuario a hacer preguntas adicionales para mayor claridad. Consulta del usuario: "${message}"\n\nResumen financiero de los últimos 12 meses:\n${financialSummary}`;
+                    const prompt = `You are a financial analyst, and a user has asked for your help with a query about their basic personal finances (expenses, income, and net profit). Provide a clear and concise response to the user's query, avoiding unnecessary details. If needed, invite the user to ask additional questions for clarification.
+                                    User's query:  "${message}"\n\nFinancial summary for the last 12 months:\n${financialSummary}`;
 
                     const result = await model.generateContent([prompt]);
 
