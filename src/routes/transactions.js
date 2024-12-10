@@ -115,7 +115,7 @@ router.post('/add', (req, res) => {
                         const nuevoSaldo = row.saldo;
                         // Si el saldo alcanza o supera el goal, actualizamos las monedas acumuladas
                         if (nuevoSaldo >= row.goal && tipo != 'GASTO') {
-                            const monedasAcumuladas = (row.monedasAcumuladas || 0) + (nuevoSaldo * 0.45);
+                            const monedasAcumuladas = (row.monedasAcumuladas || 0) + (row.goal * 0.45);
 
                             // Actualizamos las monedas acumuladas
                             db.run(
