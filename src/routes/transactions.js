@@ -48,8 +48,8 @@ router.get('/', (req, res) => {
 
         if (selectedCuentaId) {
             query = 'SELECT * FROM transacciones WHERE id_cuenta = ?';
-            params.length = 0; 
-            params.push(selectedCuentaId); 
+            params.length = 0;
+            params.push(selectedCuentaId);
         }
 
         // Consultar las transacciones
@@ -64,7 +64,7 @@ router.get('/', (req, res) => {
                 transactions,
                 user,
                 cuentas,
-                selectedCuentaId, 
+                selectedCuentaId,
             });
         });
     });
@@ -101,8 +101,54 @@ router.post('/add', (req, res) => {
                 console.log('Saldo actualizado correctamente');
                 res.redirect('/transactions');
             }
+
+            db.get(
+                'SELECT saldo, goal, monedasAcumuladas FROM cuentas WHERE usuario_id = ?',
+                [userId],
+                (err, row) => {
+                    if (err) {
+                        console.error('Error al buscar el registro:', err.message);
+                        return res.status(500).send('Error en el servidor');
+                    }
+
+                    if (row) {
+                        const nuevoSaldo = row.saldo;
+                        // Si el saldo alcanza o supera el goal, actualizamos las monedas acumuladas
+                        if (nuevoSaldo >= row.goal && tipo != 'GASTO') {
+                            const monedasAcumuladas = (row.monedasAcumuladas || 0) + (nuevoSaldo * 0.45);
+
+                            // Actualizamos las monedas acumuladas
+                            db.run(
+                                'UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?',
+                                [monedasAcumuladas, userId],
+                                (err) => {
+                                    if (err) {
+                                        console.error('Error al actualizar las monedas acumuladas:', err.message);
+                                        return res.status(500).send('Error en el servidor');
+                                    }
+                                    console.log('Monedas acumuladas actualizadas con éxito');
+                                }
+                            );
+                            // Si el goal se alcanza o supera, ponemos goal a NULL 
+                            db.run(
+                                'UPDATE cuentas SET goal = NULL WHERE usuario_id = ?',
+                                [userId],
+                                (err) => {
+                                    if (err) {
+                                        console.error('Error al actualizar el goal:', err.message);
+                                        return res.status(500).send('Error en el servidor');
+                                    }
+                                    console.log('Goal actualizado a NULL');
+                                }
+                            );
+                        } else {
+                            return res.redirect('/transactions');
+                        }
+                    }
+
+                });
         });
-    }
+    };
 
     if (tipo === 'GASTO') {
         db.run('UPDATE cuentas SET saldo = ROUND(saldo - ?, 2) WHERE id = ?', [dinero, id_cuenta], (err) => {
@@ -123,7 +169,7 @@ router.post('/add', (req, res) => {
 //del usuario.
 // Cuando el dinero en saldo, de la cuenta es igual o mayor al goal. Se va a meter el ese saldo actual *0.45 en monedasacumuladas.
 // const nuevoSaldo = totalAcumulado - plantPrice;
-    // const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
+// const updateTotalAcummulated = "UPDATE cuentas SET monedasAcumuladas = ? WHERE usuario_id = ?";
 
 // ELIMINAR 
 router.post('/delete/:id', (req, res) => {
@@ -279,7 +325,7 @@ router.post('/add-import', (req, res) => {
             window.location.reload();
         </script>
     `);
-    
+
 });
 
 
@@ -300,7 +346,7 @@ router.get('/export-csv/:id_cuentaParam', (req, res) => {
             return res.status(404).send('No se encontraron transacciones para esta cuenta.');
         }
 
-        
+
         console.log("========= RESULT ==========");
         console.log(results);
         console.log("==================================");
