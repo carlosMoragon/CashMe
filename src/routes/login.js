@@ -109,8 +109,8 @@ router.post('/registerClient', function (req, res, next) {
     const adminFlag = isAdmin ? 1 : 0;
 
     db.run(
-      'INSERT INTO usuarios (nombre, email, password, admin) VALUES (?, ?, ?, ?)',
-      [nombre, email, hash, adminFlag],
+      'INSERT INTO usuarios (nombre, email, password, admin, activo) VALUES (?, ?, ?, ?,?)',
+      [nombre, email, hash, adminFlag, 1],
       function (err) {
         if (err) {
           console.error('Error registering client:', err.message);
@@ -122,7 +122,7 @@ router.post('/registerClient', function (req, res, next) {
           email: email,
           nombre: nombre,
           admin: adminFlag,
-          active: row.activo
+          active: 1
         };
 
         if (adminFlag){
