@@ -6,8 +6,8 @@
 | 2      | Iniciar sesión como administrador                  | Sí     |                                                                                |
 | 3      | Página de invitado                                 | Sí     |                                                                                |
 | 4      | Registrar un usuario                               | Sí     |                                                                                |
-| 5      | Generar reporte financiero                         | No     | Requiere integración con datos avanzados para cumplir con los estándares esperados. |
-| 6      | Cuadro de Mando principal con gastos y clasificaciones | Sí     |                                                                                |
+| 5      | Generar reporte financiero                         | Sí     |                                                                                |
+| 6      | Cuadro de Mando principal con gastos y clasificaciones | Sí     |                                                                            |
 | 7      | Visualizar mi saldo                                | Sí     |                                                                                |
 | 8      | Registrar gastos/ingresos                          | Sí     |                                                                                |
 | 9      | Importar Gastos/Ingresos                           | Sí     |                                                                                |
