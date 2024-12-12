@@ -219,17 +219,16 @@
             fetch('/analytics/data/neto')
                 .then(response => response.json())
                 .then(data => {
-                    const netoTotal = data.total;
                     new Chart(ctxNeto, {
                         type: 'bar',
                         data: {
-                            labels: labels,
+                            labels: data.labels,
                             datasets: [{
                                 label: 'Neto',
-                                data: [netoTotal], 
+                                data: data.data,
                                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                                 borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 2
+                                borderWidth: 1
                             }]
                         },
                         options: {

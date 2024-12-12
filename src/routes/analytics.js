@@ -117,7 +117,6 @@ router.get('/data/neto', (req, res) => {
                 const labels = [];
                 const data = [];
                 const currentDate = new Date();
-                // Iterative case: previous 12 months
                 for (let i = 11; i >= 0; i--) {
                     const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
                     const month = date.toISOString().slice(0, 7);
